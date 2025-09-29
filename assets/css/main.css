@@ -1,0 +1,49 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+:root {
+  --maasai-purple: #6b21a8;
+  --maasai-red: #dc2626;
+  --maasai-orange: #f97316;
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, var(--maasai-red), var(--maasai-orange), var(--maasai-purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.btn-maasai {
+  background: linear-gradient(135deg, var(--maasai-red), var(--maasai-orange), var(--maasai-purple));
+  color: #fff;
+}
+
+/* Underline hover indicator using Maasai gradient */
+.link-underline {
+  position: relative;
+}
+.link-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  height: 2px;
+  width: 0;
+  background: linear-gradient(90deg, var(--maasai-red), var(--maasai-orange), var(--maasai-purple));
+  transition: width .25s ease;
+}
+.link-underline:hover::after {
+  width: 100%;
+}
+@keyframes spin-slow {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 10s linear infinite;
+}
