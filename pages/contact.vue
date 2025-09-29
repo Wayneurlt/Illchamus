@@ -2,10 +2,15 @@
   <div>
     <Navbar />
 
-    <section class="pt-28 pb-8 bg-white">
+    <section class="pt-28 pb-12 bg-gradient-to-b from-orange-50/60 to-white">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 class="text-4xl font-bold tracking-tight text-gray-900">Contact Us</h1>
-        <p class="mt-4 text-gray-600 max-w-3xl">We'd love to hear from you. Reach out to partner, volunteer, or ask questions.</p>
+        <h1 class="text-4xl font-bold tracking-tight text-gray-900">Get In Touch</h1>
+        <p class="mt-4 text-gray-700 max-w-3xl">Tell us a bit about yourself and how we can help. We typically reply within 1–2 business days.</p>
+        <div class="mt-6 flex flex-wrap gap-3">
+          <span class="px-3 py-1 rounded-full text-xs font-semibold text-white btn-maasai">Partnerships</span>
+          <span class="px-3 py-1 rounded-full text-xs font-semibold text-white btn-maasai">Volunteering</span>
+          <span class="px-3 py-1 rounded-full text-xs font-semibold text-white btn-maasai">Donations</span>
+        </div>
       </div>
     </section>
 
@@ -13,7 +18,7 @@
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-8">
         <!-- Contact details -->
         <div class="rounded-2xl border border-gray-200 p-6">
-          <h2 class="text-lg font-semibold text-gray-900">Get in touch</h2>
+          <h2 class="text-lg font-semibold text-gray-900">Reach us directly</h2>
           <div class="mt-4 space-y-4 text-gray-700">
             <div class="flex items-start gap-3"><Icon name="mdi:map-marker" class="h-5 w-5 text-purple-600 mt-0.5" /><span>Baringo County, Kenya</span></div>
             <div class="flex items-start gap-3"><Icon name="mdi:phone" class="h-5 w-5 text-purple-600 mt-0.5" /><span>+254 732 847 605</span></div>
@@ -23,16 +28,29 @@
             <a href="https://facebook.com/" class="px-3 py-2 rounded-lg text-sm font-semibold text-white btn-maasai">Facebook</a>
             <a href="https://instagram.com/" class="px-3 py-2 rounded-lg text-sm font-semibold text-white btn-maasai">Instagram</a>
           </div>
+          <div class="mt-6 grid grid-cols-2 gap-3">
+            <div class="rounded-xl border border-orange-100 p-4 bg-orange-50/30">
+              <p class="text-xs text-gray-600">Response time</p>
+              <p class="font-semibold text-gray-900">1–2 business days</p>
+            </div>
+            <div class="rounded-xl border border-orange-100 p-4 bg-orange-50/30">
+              <p class="text-xs text-gray-600">Office hours</p>
+              <p class="font-semibold text-gray-900">Mon–Fri, 9am–5pm</p>
+            </div>
+          </div>
         </div>
 
         <!-- Contact form with enhanced UI & validation -->
         <form @submit.prevent="onSubmit" class="rounded-2xl border border-gray-200 p-6 bg-white">
-          <div class="grid sm:grid-cols-2 gap-4">
+          <div v-if="success" class="mb-4 rounded-lg border border-green-200 bg-green-50 p-3 text-sm text-green-800">Thanks! Your email app will open with your message prefilled.</div>
+
+          <h3 class="text-sm font-semibold text-gray-900">Your details</h3>
+          <div class="mt-3 grid sm:grid-cols-2 gap-4">
             <div>
               <label class="block text-sm font-medium text-gray-700" for="firstName">First name</label>
               <div class="relative mt-1">
                 <Icon name="heroicons:user-20-solid" class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                <input id="firstName" v-model="form.firstName" type="text" required class="w-full pl-9 rounded-lg border-gray-300 focus:border-purple-500 focus:ring-purple-500" placeholder="Jane" />
+                <input id="firstName" v-model="form.firstName" type="text" required class="w-full pl-9 rounded-lg border-gray-300 focus:border-purple-500 focus:ring-purple-500" placeholder="Jane" autofocus />
               </div>
               <p v-if="errors.firstName" class="mt-1 text-xs text-red-600">{{ errors.firstName }}</p>
             </div>
@@ -60,15 +78,18 @@
               </div>
             </div>
             <div class="sm:col-span-2">
-              <label class="block text-sm font-medium text-gray-700" for="subject">Subject</label>
-              <select id="subject" v-model="form.subject" required class="mt-1 w-full rounded-lg border-gray-300 focus:border-purple-500 focus:ring-purple-500">
+              <h3 class="text-sm font-semibold text-gray-900">Your message</h3>
+              <div class="mt-3">
+                <label class="block text-sm font-medium text-gray-700" for="subject">Subject</label>
+                <select id="subject" v-model="form.subject" required class="mt-1 w-full rounded-lg border-gray-300 focus:border-purple-500 focus:ring-purple-500">
                 <option disabled value="">Select a subject</option>
                 <option>Partnership</option>
                 <option>Volunteering</option>
                 <option>Donation</option>
                 <option>General</option>
-              </select>
-              <p v-if="errors.subject" class="mt-1 text-xs text-red-600">{{ errors.subject }}</p>
+                </select>
+                <p v-if="errors.subject" class="mt-1 text-xs text-red-600">{{ errors.subject }}</p>
+              </div>
             </div>
             <div class="sm:col-span-2">
               <div class="flex items-center justify-between">
@@ -86,8 +107,11 @@
             </div>
             <p v-if="errors.consent" class="sm:col-span-2 -mt-2 text-xs text-red-600">{{ errors.consent }}</p>
           </div>
+          <!-- reCAPTCHA placeholder -->
+          <div class="mt-4 rounded-lg border border-gray-200 bg-gray-50 p-4 text-sm text-gray-600">Security check (reCAPTCHA placeholder)</div>
+
           <div class="mt-5 flex flex-wrap items-center gap-3">
-            <button type="submit" :disabled="submitting" class="inline-flex items-center px-5 py-3 rounded-lg text-sm font-semibold text-white btn-maasai transition-colors disabled:opacity-60 disabled:cursor-not-allowed">
+            <button type="submit" :disabled="submitting" class="inline-flex items-center px-5 py-3 rounded-lg text-sm font-semibold text-white btn-maasai transition-all disabled:opacity-60 disabled:cursor-not-allowed hover:-translate-y-0.5 shadow-md hover:shadow-lg">
               <Icon name="heroicons:paper-airplane-20-solid" class="mr-2 h-4 w-4" />
               {{ submitting ? 'Sending…' : 'Send Message' }}
             </button>
@@ -95,7 +119,6 @@
             <a href="tel:+254732847605" class="px-4 py-2 rounded-lg text-sm font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200">Call us</a>
             <a href="https://wa.me/254732847605" target="_blank" rel="noopener" class="px-4 py-2 rounded-lg text-sm font-semibold text-white btn-maasai">WhatsApp</a>
           </div>
-          <p v-if="success" class="mt-3 text-sm text-green-700">Thanks! Your email app will open with your message prefilled.</p>
         </form>
       </div>
     </section>
