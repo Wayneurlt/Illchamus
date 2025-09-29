@@ -24,7 +24,7 @@
         
         <!-- CTA Buttons -->
         <div class="flex flex-col sm:flex-row gap-6 justify-center items-center">
-          <button class="btn-maasai">
+          <button class="btn-maasai px-6 py-3 md:px-8 md:py-3 rounded-full font-bold text-base md:text-lg shadow-lg hover:shadow-xl transition-transform duration-300 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-400">
             Join Us
           </button>
           <button class="btn-secondary">
