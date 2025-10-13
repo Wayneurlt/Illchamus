@@ -1,5 +1,5 @@
 <template>
-  <section id="programs" class="py-20 bg-gradient-to-b from-white to-orange-50/40">
+  <section id="programs" class="py-20 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-16">
         <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
@@ -12,7 +12,7 @@
       
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         <!-- Youth Mentorship -->
-        <div class="card-hover bg-white rounded-2xl overflow-hidden shadow-lg border border-orange-100">
+        <div class="card-hover bg-white rounded-2xl overflow-hidden shadow-lg border border-red-100">
           <div class="relative h-48 overflow-hidden">
             <img 
               src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2071&q=80" 
@@ -32,7 +32,7 @@
         </div>
         
         <!-- Health Initiatives -->
-        <div class="card-hover bg-white rounded-2xl overflow-hidden shadow-lg border border-orange-100">
+        <div class="card-hover bg-white rounded-2xl overflow-hidden shadow-lg border border-red-100">
           <div class="relative h-48 overflow-hidden">
             <img 
               src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2031&q=80" 
@@ -52,7 +52,7 @@
         </div>
         
         <!-- Cultural Festivals -->
-        <div class="card-hover bg-white rounded-2xl overflow-hidden shadow-lg border border-orange-100">
+        <div class="card-hover bg-white rounded-2xl overflow-hidden shadow-lg border border-red-100">
           <div class="relative h-48 overflow-hidden">
             <img 
               src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" 
@@ -72,7 +72,7 @@
         </div>
         
         <!-- Economic Development -->
-        <div class="card-hover bg-white rounded-2xl overflow-hidden shadow-lg border border-orange-100">
+        <div class="card-hover bg-white rounded-2xl overflow-hidden shadow-lg border border-red-100">
           <div class="relative h-48 overflow-hidden">
             <img 
               src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2011&q=80" 
@@ -92,7 +92,7 @@
         </div>
         
         <!-- Environmental Conservation -->
-        <div class="card-hover bg-white rounded-2xl overflow-hidden shadow-lg border border-orange-100">
+        <div class="card-hover bg-white rounded-2xl overflow-hidden shadow-lg border border-red-100">
           <div class="relative h-48 overflow-hidden">
             <img 
               src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" 
@@ -112,7 +112,7 @@
         </div>
         
         <!-- Women's Empowerment -->
-        <div class="card-hover bg-white rounded-2xl overflow-hidden shadow-lg">
+        <div class="card-hover bg-white rounded-2xl overflow-hidden shadow-lg border border-red-100">
           <div class="relative h-48 overflow-hidden">
             <img 
               src="https://images.unsplash.com/photo-1594736797933-d0401ba2fe65?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" 
