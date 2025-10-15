@@ -21,35 +21,45 @@
     <div
       class="absolute inset-0 transition-opacity duration-700 pointer-events-none"
       :class="
-        isPlaying ? 'bg-white/50 opacity-100' : 'bg-white opacity-100'
+        isPlaying ? 'bg-white/30 opacity-100' : 'opacity-0'
       "
       aria-hidden="true"
     ></div>
 
     <!-- Content wrapper -->
-    <div class="relative z-10 px-6 md:px-10 max-w-3xl w-full">
+    <div class="relative z-10 px-6 md:px-10 max-w-4xl w-full">
       <!-- Heading lines as separate elements for staggered animation -->
       <h1 class="font-extrabold leading-tight tracking-tight">
         <span
           ref="line1"
-          class="block text-4xl md:text-6xl text-gray-900"
+          class="block text-5xl md:text-6xl lg:text-7xl text-gray-900"
         >
-          Preserving Illchamus
+          Preserving <span class="">Illchamus </span>
         </span>
 
-        <span ref="line2" class="block text-4xl md:text-6xl mt-4">
+        <span ref="line2" class="block text-5xl md:text-6xl lg:text-7xl mt-4">
           <span class="gradient-text">Culture & Empowering</span>
         </span>
 
-        <span ref="line3" class="block text-4xl md:text-6xl mt-2 text-gray-900">
+        <span ref="line3" class="block text-5xl md:text-6xl lg:text-7xl mt-2 text-gray-900">
           Our Community
         </span>
       </h1>
 
       <!-- Subtitle -->
-      <p ref="subtitle" class="text-xl font-bold md:text-2xl text-black mb-8 max-w-4xl mx-auto leading-relaxed">
+      <p ref="subtitle" class="text-sm font-bold md:text-2xl lg:text-3xl text-black mb-8 max-w-5xl mx-auto leading-relaxed">
         We are committed to protecting our heritage, supporting families, and building a brighter future in Baringo County, Kenya.
       </p>
+
+      <!-- CTA Buttons -->
+      <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
+        <NuxtLink to="/donate" class="btn-maasai px-8 py-3 rounded-full font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5">
+          Donate Now
+        </NuxtLink>
+        <NuxtLink to="/about" class="bg-white/20 backdrop-blur-sm border-2 border-white/30 text-gray-900 hover:bg-white/30 hover:border-white/50 px-8 py-3 rounded-full font-bold text-lg transition-all duration-300 hover:-translate-y-0.5">
+          Learn More
+        </NuxtLink>
+      </div>
 
       <!-- Play / Pause Button centered under heading -->
       <div class="flex justify-center">
@@ -60,11 +70,11 @@
           :aria-label="
             isPlaying ? 'Pause background video' : 'Play background video'
           "
-          class="mt-10 group relative flex items-center justify-center w-16 h-16 md:w-20 md:h-20 btn-maasai rounded-full shadow-xl transform-gpu transition-transform focus:outline-none focus:ring-4 focus:ring-orange-200"
+          class="group relative flex items-center justify-center w-16 h-16 md:w-20 md:h-20 bg-white/20 backdrop-blur-sm border-2 border-white/30 rounded-full shadow-xl transform-gpu transition-transform focus:outline-none focus:ring-4 focus:ring-white/50 hover:bg-white/30 hover:border-white/50"
         >
           <Icon
             :icon="isPlaying ? 'mdi:pause' : 'mdi:play'"
-            class="text-white text-2xl md:text-3xl transform transition-transform duration-200"
+            class="text-gray-900 text-2xl md:text-3xl transform transition-transform duration-200"
             aria-hidden="true"
           />
           <!-- subtle focus/active visual (screen readers still get aria-label) -->

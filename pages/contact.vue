@@ -41,76 +41,88 @@
         </div>
 
         <!-- Contact form with enhanced UI & validation -->
-        <form @submit.prevent="onSubmit" class="rounded-2xl border border-gray-200 p-6 bg-white">
-          <div v-if="success" class="mb-4 rounded-lg border border-green-200 bg-green-50 p-3 text-sm text-green-800">Thanks! Your email app will open with your message prefilled.</div>
+        <form @submit.prevent="onSubmit" class="rounded-2xl border border-gray-200 p-8 bg-white">
+          <div v-if="success" class="mb-6 rounded-lg border border-green-200 bg-green-50 p-4 text-sm text-green-800">Thanks! Your email app will open with your message prefilled.</div>
 
-          <h3 class="text-sm font-semibold text-gray-900">Your details</h3>
-          <div class="mt-3 grid sm:grid-cols-2 gap-4">
-            <div>
-              <label class="block text-sm font-medium text-gray-700" for="firstName">First name</label>
-              <div class="relative mt-1">
-                <Icon name="heroicons:user-20-solid" class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                <input id="firstName" v-model="form.firstName" type="text" required class="w-full pl-9 rounded-lg border-gray-300 focus:border-purple-500 focus:ring-purple-500" placeholder="Jane" autofocus />
+          <h3 class="text-xl font-bold text-gray-900 mb-6">Your Details</h3>
+          <div class="space-y-6">
+            <!-- Name fields row -->
+            <div class="grid sm:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-base font-semibold text-gray-800 mb-2" for="firstName">First Name</label>
+                <div class="relative">
+                  <Icon name="heroicons:user-20-solid" class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <input id="firstName" v-model="form.firstName" type="text" required class="w-full pl-9 pr-4 py-3 text-base text-gray-900 rounded-lg border-gray-300 focus:border-purple-500 focus:ring-purple-500" placeholder="Enter your first name" autofocus />
+                </div>
+                <p v-if="errors.firstName" class="mt-2 text-xs text-red-600">{{ errors.firstName }}</p>
               </div>
-              <p v-if="errors.firstName" class="mt-1 text-xs text-red-600">{{ errors.firstName }}</p>
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700" for="lastName">Last name</label>
-              <div class="relative mt-1">
-                <Icon name="heroicons:user-20-solid" class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                <input id="lastName" v-model="form.lastName" type="text" required class="w-full pl-9 rounded-lg border-gray-300 focus:border-purple-500 focus:ring-purple-500" placeholder="Doe" />
-              </div>
-              <p v-if="errors.lastName" class="mt-1 text-xs text-red-600">{{ errors.lastName }}</p>
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700" for="email">Email</label>
-              <div class="relative mt-1">
-                <Icon name="heroicons:envelope-20-solid" class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                <input id="email" v-model="form.email" type="email" required class="w-full pl-9 rounded-lg border-gray-300 focus:border-purple-500 focus:ring-purple-500" placeholder="you@example.com" />
-              </div>
-              <p v-if="errors.email" class="mt-1 text-xs text-red-600">{{ errors.email }}</p>
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700" for="phone">Phone (optional)</label>
-              <div class="relative mt-1">
-                <Icon name="heroicons:phone-20-solid" class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                <input id="phone" v-model="form.phone" type="tel" class="w-full pl-9 rounded-lg border-gray-300 focus:border-purple-500 focus:ring-purple-500" placeholder="+254 7xx xxx xxx" />
+              <div>
+                <label class="block text-base font-semibold text-gray-800 mb-2" for="lastName">Last Name</label>
+                <div class="relative">
+                  <Icon name="heroicons:user-20-solid" class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <input id="lastName" v-model="form.lastName" type="text" required class="w-full pl-9 pr-4 py-3 text-base text-gray-900 rounded-lg border-gray-300 focus:border-purple-500 focus:ring-purple-500" placeholder="Enter your last name" />
+                </div>
+                <p v-if="errors.lastName" class="mt-2 text-xs text-red-600">{{ errors.lastName }}</p>
               </div>
             </div>
-            <div class="sm:col-span-2">
-              <h3 class="text-sm font-semibold text-gray-900">Your message</h3>
-              <div class="mt-3">
-                <label class="block text-sm font-medium text-gray-700" for="subject">Subject</label>
-                <select id="subject" v-model="form.subject" required class="mt-1 w-full rounded-lg border-gray-300 focus:border-purple-500 focus:ring-purple-500">
+
+            <!-- Contact fields row -->
+            <div class="grid sm:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-base font-semibold text-gray-800 mb-2" for="email">Email Address</label>
+                <div class="relative">
+                  <Icon name="heroicons:envelope-20-solid" class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <input id="email" v-model="form.email" type="email" required class="w-full pl-9 pr-4 py-3 text-base text-gray-900 rounded-lg border-gray-300 focus:border-purple-500 focus:ring-purple-500" placeholder="Enter your email address" />
+                </div>
+                <p v-if="errors.email" class="mt-2 text-xs text-red-600">{{ errors.email }}</p>
+              </div>
+              <div>
+                <label class="block text-base font-semibold text-gray-800 mb-2" for="phone">Phone Number <span class="text-gray-500 font-normal">(Optional)</span></label>
+                <div class="relative">
+                  <Icon name="heroicons:phone-20-solid" class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <input id="phone" v-model="form.phone" type="tel" class="w-full pl-9 pr-4 py-3 text-base text-gray-900 rounded-lg border-gray-300 focus:border-purple-500 focus:ring-purple-500" placeholder="Enter your phone number" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Subject field -->
+            <div>
+              <h3 class="text-xl font-bold text-gray-900 mb-4">Your Message</h3>
+              <label class="block text-base font-semibold text-gray-800 mb-2" for="subject">Subject</label>
+              <select id="subject" v-model="form.subject" required class="w-full px-4 py-3 text-base text-gray-900 rounded-lg border-gray-300 focus:border-purple-500 focus:ring-purple-500">
                 <option disabled value="">Select a subject</option>
                 <option>Partnership</option>
                 <option>Volunteering</option>
                 <option>Donation</option>
                 <option>General</option>
-                </select>
-                <p v-if="errors.subject" class="mt-1 text-xs text-red-600">{{ errors.subject }}</p>
-              </div>
+              </select>
+              <p v-if="errors.subject" class="mt-2 text-xs text-red-600">{{ errors.subject }}</p>
             </div>
-            <div class="sm:col-span-2">
-              <div class="flex items-center justify-between">
-                <label class="block text-sm font-medium text-gray-700" for="message">Message</label>
-                <span class="text-xs text-gray-500">{{ form.message.length }}/1000</span>
+
+            <!-- Message field -->
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <label class="block text-base font-semibold text-gray-800" for="message">Message</label>
+                <span class="text-sm text-gray-600 font-medium">{{ form.message.length }}/1000</span>
               </div>
-              <textarea id="message" v-model="form.message" rows="6" maxlength="1000" required class="mt-1 w-full rounded-lg border-gray-300 focus:border-purple-500 focus:ring-purple-500" placeholder="How can we help?" />
-              <p v-if="errors.message" class="mt-1 text-xs text-red-600">{{ errors.message }}</p>
+              <textarea id="message" v-model="form.message" rows="6" maxlength="1000" required class="w-full px-4 py-3 text-base text-gray-900 rounded-lg border-gray-300 focus:border-purple-500 focus:ring-purple-500" placeholder="Tell us how we can help you..." />
+              <p v-if="errors.message" class="mt-2 text-xs text-red-600">{{ errors.message }}</p>
             </div>
+
             <!-- Honey pot -->
             <input v-model="form._hp" type="text" class="hidden" tabindex="-1" autocomplete="off" />
-            <div class="sm:col-span-2 flex items-center gap-2">
-              <input id="consent" v-model="form.consent" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-purple-600 focus:ring-purple-500" />
-              <label for="consent" class="text-sm text-gray-700">I agree to the terms and privacy policy</label>
+
+            <!-- Consent checkbox -->
+            <div class="flex items-start gap-3 pt-2">
+              <input id="consent" v-model="form.consent" type="checkbox" class="h-5 w-5 rounded border-gray-300 text-purple-600 focus:ring-purple-500 mt-0.5" />
+              <label for="consent" class="text-base text-gray-800 leading-relaxed font-medium">I agree to the terms and privacy policy</label>
             </div>
-            <p v-if="errors.consent" class="sm:col-span-2 -mt-2 text-xs text-red-600">{{ errors.consent }}</p>
+            <p v-if="errors.consent" class="text-xs text-red-600">{{ errors.consent }}</p>
           </div>
           <!-- reCAPTCHA placeholder -->
-          <div class="mt-4 rounded-lg border border-gray-200 bg-gray-50 p-4 text-sm text-gray-600">Security check (reCAPTCHA placeholder)</div>
+          <div class="mt-8 rounded-lg border border-gray-200 bg-gray-50 p-4 text-base text-gray-700 font-medium">Security verification will appear here</div>
 
-          <div class="mt-5 flex flex-wrap items-center gap-3">
+          <div class="mt-8 flex flex-wrap items-center gap-4">
             <button type="submit" :disabled="submitting" class="inline-flex items-center px-5 py-3 rounded-lg text-sm font-semibold text-white btn-maasai transition-all disabled:opacity-60 disabled:cursor-not-allowed hover:-translate-y-0.5 shadow-md hover:shadow-lg">
               <Icon name="heroicons:paper-airplane-20-solid" class="mr-2 h-4 w-4" />
               {{ submitting ? 'Sending…' : 'Send Message' }}

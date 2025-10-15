@@ -81,9 +81,9 @@
                     <span>Preservation of cultural heritage sites</span>
                   </div>
                 </div>
-                <button class="mt-8 bg-white text-red-600 hover:bg-red-50 px-6 py-3 rounded-xl font-medium transition-colors">
+                <NuxtLink to="/donate" class="inline-block mt-8 bg-white text-red-600 hover:bg-red-50 px-6 py-3 rounded-xl font-medium transition-colors">
                   Join Our Mission
-                </button>
+                </NuxtLink>
               </div>
             </div>
           </div>

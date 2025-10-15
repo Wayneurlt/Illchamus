@@ -55,9 +55,9 @@
             <div class="md:w-2/3 mb-8 md:mb-0">
               <h3 class="text-2xl md:text-3xl font-bold mb-4">Join Us in Making a Difference</h3>
               <p class="mb-6">Your support can help us expand our programs and reach more members of the Illchamus community. Together, we can create lasting change.</p>
-              <button class="bg-white text-red-600 hover:bg-red-50 px-8 py-3 rounded-full font-medium transition-colors shadow-lg">
+              <NuxtLink to="/donate" class="inline-block bg-white text-red-600 hover:bg-red-50 px-8 py-3 rounded-full font-medium transition-colors shadow-lg">
                 Donate Now
-              </button>
+              </NuxtLink>
             </div>
             <div class="md:w-1/3">
               <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTd8fGNvbW11bml0eSUyMHN1cHBvcnR8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60" 

@@ -23,7 +23,7 @@
               <p class="mt-2 text-sm text-gray-600">{{ post.excerpt }}</p>
               <div class="mt-4 flex items-center justify-between">
                 <span v-if="post.tag" class="px-2 py-1 text-xs rounded-full text-white btn-maasai">{{ post.tag }}</span>
-                <NuxtLink to="/blog" class="inline-flex items-center text-sm font-semibold text-purple-700 hover:text-purple-800">Read more <Icon name="heroicons:arrow-right-20-solid" class="ml-1 h-4 w-4" /></NuxtLink>
+                <NuxtLink :to="`/blog/${post.slug}`" class="inline-flex items-center text-sm font-semibold text-purple-700 hover:text-purple-800">Read more <Icon name="heroicons:arrow-right-20-solid" class="ml-1 h-4 w-4" /></NuxtLink>
               </div>
             </div>
           </article>
@@ -38,12 +38,12 @@
 <script setup>
 useHead({ title: 'Blog • Illchamus Community CBO' })
 const posts = [
-  { date: 'Nov 2023', title: `First Charity Visit to Israel Faith Children's Home`, excerpt: 'We connected with children, provided essentials, and strengthened our commitment to lasting impact.', image: 'https://images.unsplash.com/photo-1560251180-1b0b3f0b1e5a?q=80&w=2070&auto=format&fit=crop', tag: 'Events' },
-  { date: 'Jan 2024', title: 'Scholarship Drive Launch', excerpt: 'Launching scholarships and mentorship to empower learners for long-term success.', image: 'https://images.unsplash.com/photo-1496307653780-42ee777d4833?q=80&w=1974&auto=format&fit=crop', tag: 'Education' },
-  { date: 'Mar 2024', title: 'Community Wellness Program', excerpt: 'Integrating mental health support into schools and community groups.', image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=1974&auto=format&fit=crop', tag: 'Wellness' },
-  { date: 'Jun 2024', title: 'Computer Literacy Bootcamp', excerpt: 'Digital skilling for youth to prepare for modern careers.', image: 'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=1975&auto=format&fit=crop', tag: 'Skills' },
-  { date: 'Sep 2024', title: 'Cultural Heritage Day', excerpt: 'Celebrating Illchamus traditions with music, art, and storytelling.', image: 'https://images.unsplash.com/photo-1498654200943-1088dd4438ae?q=80&w=1974&auto=format&fit=crop', tag: 'Culture' },
-  { date: 'Dec 2024', title: 'Holiday Food Drive', excerpt: 'Providing essential supplies to families across Baringo County.', image: 'https://images.unsplash.com/photo-1573495804683-641191e042ea?q=80&w=1974&auto=format&fit=crop', tag: 'Relief' }
+  { slug: 'first-charity-visit', date: 'Nov 2023', title: `First Charity Visit to Israel Faith Children's Home`, excerpt: 'We connected with children, provided essentials, and strengthened our commitment to lasting impact.', image: 'https://images.unsplash.com/photo-1560251180-1b0b3f0b1e5a?q=80&w=2070&auto=format&fit=crop', tag: 'Events' },
+  { slug: 'scholarship-drive-launch', date: 'Jan 2024', title: 'Scholarship Drive Launch', excerpt: 'Launching scholarships and mentorship to empower learners for long-term success.', image: 'https://images.unsplash.com/photo-1496307653780-42ee777d4833?q=80&w=1974&auto=format&fit=crop', tag: 'Education' },
+  { slug: 'community-wellness-program', date: 'Mar 2024', title: 'Community Wellness Program', excerpt: 'Integrating mental health support into schools and community groups.', image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=1974&auto=format&fit=crop', tag: 'Wellness' },
+  { slug: 'computer-literacy-bootcamp', date: 'Jun 2024', title: 'Computer Literacy Bootcamp', excerpt: 'Digital skilling for youth to prepare for modern careers.', image: 'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=1975&auto=format&fit=crop', tag: 'Skills' },
+  { slug: 'cultural-heritage-day', date: 'Sep 2024', title: 'Cultural Heritage Day', excerpt: 'Celebrating Illchamus traditions with music, art, and storytelling.', image: 'https://images.unsplash.com/photo-1498654200943-1088dd4438ae?q=80&w=1974&auto=format&fit=crop', tag: 'Culture' },
+  { slug: 'holiday-food-drive', date: 'Dec 2024', title: 'Holiday Food Drive', excerpt: 'Providing essential supplies to families across Baringo County.', image: 'https://images.unsplash.com/photo-1573495804683-641191e042ea?q=80&w=1974&auto=format&fit=crop', tag: 'Relief' }
 ]
 </script>
 
