@@ -1,12 +1,12 @@
 <template>
-  <section id="gallery" class="py-20 bg-white overflow-hidden">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <section id="gallery" class="py-12 sm:py-16 md:py-20 bg-white overflow-hidden">
+    <div class="max-w-7xl mx-auto px-2 sm:px-4 md:px-6 lg:px-8">
       <!-- Header -->
-      <div class="text-center mb-16">
-        <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+      <div class="text-center mb-8 sm:mb-12 md:mb-16">
+        <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 sm:mb-6">
           Community <span class="gradient-text">Gallery</span>
         </h2>
-        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+        <p class="text-base sm:text-lg md:text-xl text-gray-600 max-w-3xl mx-auto px-4">
           Capturing the spirit and beauty of our community through moments of
           joy, celebration, and togetherness.
         </p>
@@ -14,15 +14,15 @@
 
       <!-- Infinite Sliding Grid -->
       <div ref="sliderWrapper" class="relative w-full overflow-hidden">
-        <div ref="sliderTrack" class="flex items-start space-x-12">
+        <div ref="sliderTrack" class="flex items-start" style="gap: 0.5rem;">
           <!-- Duplicate 2 sets for continuous slide -->
           <div
             v-for="n in 2"
             :key="n"
-            class="grid-container w-[1200px] md:w-[1400px] flex-shrink-0"
+            class="grid-container w-[280px] sm:w-[500px] md:w-[700px] lg:w-[900px] xl:w-[1100px] flex-shrink-0"
           >
             <div
-              class="columns-1 md:columns-2 lg:columns-3 xl:columns-4 gap-6 space-y-6"
+              class="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-2 sm:gap-3 md:gap-4 lg:gap-6 space-y-2 sm:space-y-3 md:space-y-4 lg:space-y-6"
             >
               <div
                 v-for="(image, index) in galleryImages"
@@ -30,7 +30,7 @@
                 class="masonry-item break-inside-avoid"
               >
                 <div
-                  class="relative overflow-hidden rounded-2xl shadow-lg group cursor-pointer"
+                  class="relative overflow-hidden rounded-xl sm:rounded-2xl shadow-md sm:shadow-lg group cursor-pointer"
                 >
                   <img
                     :src="image.url"
@@ -41,12 +41,12 @@
                     class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                   ></div>
                   <div
-                    class="absolute bottom-4 left-4 right-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    class="absolute bottom-2 sm:bottom-4 left-2 sm:left-4 right-2 sm:right-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                   >
-                    <h3 class="text-lg font-semibold mb-1">
+                    <h3 class="text-sm sm:text-lg font-semibold mb-1">
                       {{ image.title }}
                     </h3>
-                    <p class="text-sm text-white/90">{{ image.description }}</p>
+                    <p class="text-xs sm:text-sm text-white/90">{{ image.description }}</p>
                   </div>
                 </div>
               </div>
@@ -59,7 +59,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import { gsap } from "gsap";
 
 const galleryImages = ref([
@@ -118,14 +118,59 @@ const sliderTrack = ref(null);
 onMounted(() => {
   const track = sliderTrack.value;
 
-  const totalWidth = track.scrollWidth / 2;
+  // Responsive animation speed based on screen size
+  const getAnimationDuration = () => {
+    if (window.innerWidth < 640) return 50; // Mobile: faster
+    if (window.innerWidth < 1024) return 60; // Tablet: medium
+    return 70; // Desktop: slower
+  };
 
-  // Infinite horizontal scroll animation
-  gsap.to(track, {
-    x: -totalWidth,
-    duration: 80, // slower or faster speed
-    ease: "none",
-    repeat: -1,
+  const startAnimation = () => {
+    // Wait for DOM to be fully rendered
+    setTimeout(() => {
+      // Get the actual width of one set of items (first half)
+      const firstSet = track.children[0];
+      if (!firstSet) return;
+      
+      // Calculate total width including gap
+      const gap = window.innerWidth < 640 ? 4 : 8; // 0.25rem or 0.5rem in pixels
+      const totalWidth = firstSet.offsetWidth + gap;
+      
+      // Kill any existing animation
+      gsap.killTweensOf(track);
+      
+      // Reset position to ensure smooth restart
+      gsap.set(track, { x: 0 });
+      
+      // Infinite horizontal scroll animation
+      gsap.to(track, {
+        x: -totalWidth,
+        duration: getAnimationDuration(),
+        ease: "none",
+        repeat: -1,
+      });
+    }, 100);
+  };
+
+  // Start the animation
+  startAnimation();
+
+  // Update animation on resize with debounce
+  let resizeTimeout;
+  const handleResize = () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+      startAnimation();
+    }, 100);
+  };
+
+  window.addEventListener('resize', handleResize);
+  
+  // Cleanup
+  onUnmounted(() => {
+    window.removeEventListener('resize', handleResize);
+    clearTimeout(resizeTimeout);
+    gsap.killTweensOf(track);
   });
 });
 </script>
@@ -138,7 +183,42 @@ onMounted(() => {
 }
 
 .grid-container {
-  /* Keeps the masonry set width fixed to prevent scaling up */
-  max-width: 1400px;
+  /* Responsive masonry container */
+  max-width: 100%;
+}
+
+/* Ensure smooth infinite scrolling */
+#gallery .flex {
+  will-change: transform;
+}
+
+/* Prevent layout shifts during animation */
+@media (max-width: 640px) {
+  #gallery .flex {
+    gap: 0.25rem !important;
+  }
+}
+
+/* Improve masonry layout on mobile */
+@media (max-width: 640px) {
+  .masonry-item {
+    margin-bottom: 0.5rem;
+  }
+  
+  .grid-container {
+    width: 260px !important;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 768px) {
+  .masonry-item {
+    margin-bottom: 0.75rem;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .masonry-item {
+    margin-bottom: 1rem;
+  }
 }
 </style>
