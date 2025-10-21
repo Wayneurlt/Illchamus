@@ -3,7 +3,7 @@
     <Navbar />
 
     <!-- Hero -->
-    <section class="pt-28 pb-16 bg-white">
+    <section class="pt-32 pb-16 bg-white">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="max-w-4xl text-center mx-auto">
           <h1 class="text-4xl md:text-6xl font-bold tracking-tight text-gray-900 mb-6">

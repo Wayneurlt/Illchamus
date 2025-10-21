@@ -2,7 +2,7 @@
   <div>
     <Navbar />
 
-    <section class="pt-28 pb-8 bg-white">
+    <section class="pt-32 pb-8 bg-white">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h1 class="text-4xl font-bold tracking-tight text-gray-900">Blog & Updates</h1>
         <p class="mt-4 text-gray-600 max-w-3xl">Stories and updates from our community work.</p>

@@ -7,9 +7,16 @@
           <!-- Organization Info -->
           <div class="lg:col-span-2">
             <div class="mb-6">
-              <h3 class="text-3xl lg:text-4xl font-bold gradient-text mb-4">
-                Illchamus CBO
-              </h3>
+              <div class="flex items-center space-x-4 mb-4">
+                <img 
+                  src="/assets/images/logo.png" 
+                  alt="Illchamus CBO Logo" 
+                  class="h-36 w-auto object-contain"
+                />
+                <div>
+                
+                </div>
+              </div>
               <p class="text-gray-300 mb-6 max-w-lg leading-relaxed text-base lg:text-lg">
                 Preserving Illchamus culture and empowering our community through education, support, and sustainable development in Baringo County, Kenya.
               </p>

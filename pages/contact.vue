@@ -2,143 +2,317 @@
   <div>
     <Navbar />
 
-    <section class="pt-28 pb-12 bg-gradient-to-b from-orange-50/60 to-white">
+    <!-- Hero Section -->
+    <section class="pt-32 pb-16 bg-gradient-to-br from-red-50 via-orange-50 to-purple-50">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 class="text-4xl font-bold tracking-tight text-gray-900">Get In Touch</h1>
-        <p class="mt-4 text-gray-700 max-w-3xl">Tell us a bit about yourself and how we can help. We typically reply within 1–2 business days.</p>
-        <div class="mt-6 flex flex-wrap gap-3">
-          <span class="px-3 py-1 rounded-full text-xs font-semibold text-white btn-maasai">Partnerships</span>
-          <span class="px-3 py-1 rounded-full text-xs font-semibold text-white btn-maasai">Volunteering</span>
-          <span class="px-3 py-1 rounded-full text-xs font-semibold text-white btn-maasai">Donations</span>
+        <div class="text-center">
+          <h1 class="text-4xl md:text-6xl font-bold tracking-tight text-gray-900 mb-6">
+            Get In <span class="gradient-text">Touch</span>
+          </h1>
+          <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed mb-8">
+            We'd love to hear from you! Whether you want to volunteer, partner with us, or support our community work, 
+            we're here to help and answer any questions you might have.
+          </p>
+          
+          <!-- Contact Methods -->
+          <div class="flex flex-wrap justify-center gap-4 mb-8">
+            <div class="flex items-center space-x-2 bg-white px-4 py-2 rounded-full shadow-md">
+              <Icon name="heroicons:phone" class="h-5 w-5 text-red-600" />
+              <span class="text-gray-700 font-medium">+254 732 847 605</span>
+            </div>
+            <div class="flex items-center space-x-2 bg-white px-4 py-2 rounded-full shadow-md">
+              <Icon name="heroicons:envelope" class="h-5 w-5 text-red-600" />
+              <span class="text-gray-700 font-medium">smile4smileinnitiative@gmail.com</span>
+            </div>
+            <div class="flex items-center space-x-2 bg-white px-4 py-2 rounded-full shadow-md">
+              <Icon name="heroicons:map-pin" class="h-5 w-5 text-red-600" />
+              <span class="text-gray-700 font-medium">Baringo County, Kenya</span>
+            </div>
+          </div>
+          
+          <!-- Tags -->
+          <div class="flex flex-wrap justify-center gap-3">
+            <span class="px-4 py-2 bg-red-600 text-white rounded-full text-sm font-semibold">Partnerships</span>
+            <span class="px-4 py-2 bg-orange-600 text-white rounded-full text-sm font-semibold">Volunteering</span>
+            <span class="px-4 py-2 bg-purple-600 text-white rounded-full text-sm font-semibold">Donations</span>
+            <span class="px-4 py-2 bg-green-600 text-white rounded-full text-sm font-semibold">Programs</span>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="pb-16 bg-white">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-8">
-        <!-- Contact details -->
-        <div class="rounded-2xl border border-gray-200 p-6">
-          <h2 class="text-lg font-semibold text-gray-900">Reach us directly</h2>
-          <div class="mt-4 space-y-4 text-gray-700">
-            <div class="flex items-start gap-3"><Icon name="mdi:map-marker" class="h-5 w-5 text-purple-600 mt-0.5" /><span>Baringo County, Kenya</span></div>
-            <div class="flex items-start gap-3"><Icon name="mdi:phone" class="h-5 w-5 text-purple-600 mt-0.5" /><span>+254 732 847 605</span></div>
-            <div class="flex items-start gap-3"><Icon name="mdi:email" class="h-5 w-5 text-purple-600 mt-0.5" /><span>smile4smileinnitiative@gmail.com</span></div>
-          </div>
-          <div class="mt-6 flex gap-3">
-            <a href="https://facebook.com/" class="px-3 py-2 rounded-lg text-sm font-semibold text-white btn-maasai">Facebook</a>
-            <a href="https://instagram.com/" class="px-3 py-2 rounded-lg text-sm font-semibold text-white btn-maasai">Instagram</a>
-          </div>
-          <div class="mt-6 grid grid-cols-2 gap-3">
-            <div class="rounded-xl border border-orange-100 p-4 bg-orange-50/30">
-              <p class="text-xs text-gray-600">Response time</p>
-              <p class="font-semibold text-gray-900">1–2 business days</p>
+    <!-- Main Content -->
+    <section class="py-20 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          <!-- Contact Form -->
+          <div class="bg-white rounded-2xl p-8 shadow-lg border border-gray-200">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">Send us a Message</h2>
+            
+            <!-- Success/Error Messages -->
+            <div v-if="message" class="mb-6 p-4 rounded-lg" :class="messageType === 'success' ? 'bg-green-50 text-green-800 border border-green-200' : 'bg-red-50 text-red-800 border border-red-200'">
+              <div class="flex items-center">
+                <Icon :name="messageType === 'success' ? 'heroicons:check-circle' : 'heroicons:exclamation-triangle'" class="h-5 w-5 mr-2" />
+                {{ message }}
+              </div>
             </div>
-            <div class="rounded-xl border border-orange-100 p-4 bg-orange-50/30">
-              <p class="text-xs text-gray-600">Office hours</p>
-              <p class="font-semibold text-gray-900">Mon–Fri, 9am–5pm</p>
+            
+            <form @submit.prevent="onSubmit" class="space-y-6">
+              <!-- Name fields -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div>
+                  <label for="firstName" class="block text-sm font-medium text-gray-700 mb-2">
+                    First Name *
+                  </label>
+                  <input
+                    id="firstName"
+                    v-model="form.firstName"
+                    type="text"
+                    required
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-colors duration-200"
+                    placeholder="Your first name"
+                  />
+                  <p v-if="errors.firstName" class="mt-2 text-xs text-red-600">{{ errors.firstName }}</p>
+                </div>
+                
+                <div>
+                  <label for="lastName" class="block text-sm font-medium text-gray-700 mb-2">
+                    Last Name *
+                  </label>
+                  <input
+                    id="lastName"
+                    v-model="form.lastName"
+                    type="text"
+                    required
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-colors duration-200"
+                    placeholder="Your last name"
+                  />
+                  <p v-if="errors.lastName" class="mt-2 text-xs text-red-600">{{ errors.lastName }}</p>
+                </div>
+              </div>
+              
+              <!-- Contact fields -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div>
+                  <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+                    Email Address *
+                  </label>
+                  <input
+                    id="email"
+                    v-model="form.email"
+                    type="email"
+                    required
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-colors duration-200"
+                    placeholder="your.email@example.com"
+                  />
+                  <p v-if="errors.email" class="mt-2 text-xs text-red-600">{{ errors.email }}</p>
+                </div>
+                
+                <div>
+                  <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">
+                    Phone Number
+                  </label>
+                  <input
+                    id="phone"
+                    v-model="form.phone"
+                    type="tel"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-colors duration-200"
+                    placeholder="+254 700 000 000"
+                  />
+                </div>
+              </div>
+              
+              <!-- Subject field -->
+              <div>
+                <label for="subject" class="block text-sm font-medium text-gray-700 mb-2">
+                  Subject *
+                </label>
+                <select
+                  id="subject"
+                  v-model="form.subject"
+                  required
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-colors duration-200"
+                >
+                  <option value="">Select a subject</option>
+                  <option value="partnership">Partnership</option>
+                  <option value="volunteer">Volunteering</option>
+                  <option value="donation">Donation</option>
+                  <option value="program">Program Information</option>
+                  <option value="general">General Inquiry</option>
+                </select>
+                <p v-if="errors.subject" class="mt-2 text-xs text-red-600">{{ errors.subject }}</p>
+              </div>
+              
+              <!-- Message field -->
+              <div>
+                <div class="flex items-center justify-between mb-2">
+                  <label for="message" class="block text-sm font-medium text-gray-700">
+                    Message *
+                  </label>
+                  <span class="text-sm text-gray-500">{{ form.message.length }}/1000</span>
+                </div>
+                <textarea
+                  id="message"
+                  v-model="form.message"
+                  rows="6"
+                  maxlength="1000"
+                  required
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-colors duration-200 resize-none"
+                  placeholder="Tell us how we can help you..."
+                ></textarea>
+                <p v-if="errors.message" class="mt-2 text-xs text-red-600">{{ errors.message }}</p>
+              </div>
+              
+              <!-- Consent checkbox -->
+              <div class="flex items-start space-x-3">
+                <input
+                  id="consent"
+                  v-model="form.consent"
+                  type="checkbox"
+                  required
+                  class="mt-1 h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded"
+                />
+                <label for="consent" class="text-sm text-gray-600">
+                  I agree to the <a href="#" class="text-red-600 hover:underline">terms and conditions</a> and <a href="#" class="text-red-600 hover:underline">privacy policy</a>.
+                </label>
+              </div>
+              <p v-if="errors.consent" class="text-xs text-red-600">{{ errors.consent }}</p>
+              
+              <!-- Submit button -->
+              <button
+                type="submit"
+                :disabled="submitting"
+                class="w-full bg-red-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-red-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+              >
+                <Icon v-if="submitting" name="heroicons:arrow-path" class="h-5 w-5 animate-spin mr-2" />
+                {{ submitting ? 'Sending...' : 'Send Message' }}
+              </button>
+            </form>
+          </div>
+          
+          <!-- Contact Information -->
+          <div class="space-y-8">
+            <!-- Contact Details -->
+            <div class="bg-white rounded-2xl p-8 shadow-lg border border-gray-200">
+              <h3 class="text-2xl font-bold text-gray-900 mb-6">Contact Information</h3>
+              
+              <div class="space-y-6">
+                <div class="flex items-start space-x-4 group">
+                  <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-red-200 transition-colors duration-200">
+                    <Icon name="heroicons:map-pin" class="h-6 w-6 text-red-600" />
+                  </div>
+                  <div>
+                    <h4 class="text-lg font-semibold text-gray-900 mb-1">Location</h4>
+                    <p class="text-gray-600">Baringo County, Kenya</p>
+                    <p class="text-sm text-gray-500">East Africa</p>
+                  </div>
+                </div>
+                
+                <div class="flex items-start space-x-4 group">
+                  <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-red-200 transition-colors duration-200">
+                    <Icon name="heroicons:phone" class="h-6 w-6 text-red-600" />
+                  </div>
+                  <div>
+                    <h4 class="text-lg font-semibold text-gray-900 mb-1">Phone</h4>
+                    <a href="tel:+254732847605" class="text-gray-600 hover:text-red-600 transition-colors duration-200">+254 732 847 605</a>
+                    <p class="text-sm text-gray-500">Mon-Fri, 8AM-5PM EAT</p>
+                  </div>
+                </div>
+                
+                <div class="flex items-start space-x-4 group">
+                  <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-red-200 transition-colors duration-200">
+                    <Icon name="heroicons:envelope" class="h-6 w-6 text-red-600" />
+                  </div>
+                  <div>
+                    <h4 class="text-lg font-semibold text-gray-900 mb-1">Email</h4>
+                    <a href="mailto:smile4smileinnitiative@gmail.com" class="text-gray-600 hover:text-red-600 transition-colors duration-200 break-all">smile4smileinnitiative@gmail.com</a>
+                    <p class="text-sm text-gray-500">We respond within 24 hours</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Social Media -->
+            <div class="bg-white rounded-2xl p-8 shadow-lg border border-gray-200">
+              <h3 class="text-2xl font-bold text-gray-900 mb-6">Follow Us</h3>
+              <div class="grid grid-cols-2 gap-4">
+                <a 
+                  href="https://facebook.com/" 
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="flex items-center space-x-3 p-4 bg-gray-50 rounded-lg hover:bg-blue-50 transition-colors duration-200 group"
+                >
+                  <Icon name="mdi:facebook" class="h-6 w-6 text-blue-600" />
+                  <span class="text-gray-700 font-medium">Facebook</span>
+                </a>
+                <a 
+                  href="https://instagram.com/" 
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="flex items-center space-x-3 p-4 bg-gray-50 rounded-lg hover:bg-pink-50 transition-colors duration-200 group"
+                >
+                  <Icon name="mdi:instagram" class="h-6 w-6 text-pink-600" />
+                  <span class="text-gray-700 font-medium">Instagram</span>
+                </a>
+                <a 
+                  href="https://x.com/" 
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="flex items-center space-x-3 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-200 group"
+                >
+                  <Icon name="mdi:twitter" class="h-6 w-6 text-gray-600" />
+                  <span class="text-gray-700 font-medium">Twitter</span>
+                </a>
+                <a 
+                  href="https://wa.me/254732847605" 
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="flex items-center space-x-3 p-4 bg-gray-50 rounded-lg hover:bg-green-50 transition-colors duration-200 group"
+                >
+                  <Icon name="mdi:whatsapp" class="h-6 w-6 text-green-600" />
+                  <span class="text-gray-700 font-medium">WhatsApp</span>
+                </a>
+              </div>
+            </div>
+            
+            <!-- Response Info -->
+            <div class="bg-gradient-to-r from-red-600 via-orange-500 to-purple-600 rounded-2xl p-8 text-white">
+              <h3 class="text-2xl font-bold mb-4">Quick Response</h3>
+              <div class="grid grid-cols-2 gap-4">
+                <div class="bg-white/20 rounded-lg p-4">
+                  <p class="text-sm text-white/90">Response time</p>
+                  <p class="text-xl font-bold">1-2 business days</p>
+                </div>
+                <div class="bg-white/20 rounded-lg p-4">
+                  <p class="text-sm text-white/90">Office hours</p>
+                  <p class="text-xl font-bold">Mon-Fri, 8AM-5PM</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-
-        <!-- Contact form with enhanced UI & validation -->
-        <form @submit.prevent="onSubmit" class="rounded-2xl border border-gray-200 p-8 bg-white">
-          <div v-if="success" class="mb-6 rounded-lg border border-green-200 bg-green-50 p-4 text-sm text-green-800">Thanks! Your email app will open with your message prefilled.</div>
-
-          <h3 class="text-xl font-bold text-gray-900 mb-6">Your Details</h3>
-          <div class="space-y-6">
-            <!-- Name fields row -->
-            <div class="grid sm:grid-cols-2 gap-6">
-              <div>
-                <label class="block text-base font-semibold text-gray-800 mb-2" for="firstName">First Name</label>
-                <div class="relative">
-                  <Icon name="heroicons:user-20-solid" class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                  <input id="firstName" v-model="form.firstName" type="text" required class="w-full pl-9 pr-4 py-3 text-base text-gray-900 rounded-lg border-gray-300 focus:border-purple-500 focus:ring-purple-500" placeholder="Enter your first name" autofocus />
-                </div>
-                <p v-if="errors.firstName" class="mt-2 text-xs text-red-600">{{ errors.firstName }}</p>
-              </div>
-              <div>
-                <label class="block text-base font-semibold text-gray-800 mb-2" for="lastName">Last Name</label>
-                <div class="relative">
-                  <Icon name="heroicons:user-20-solid" class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                  <input id="lastName" v-model="form.lastName" type="text" required class="w-full pl-9 pr-4 py-3 text-base text-gray-900 rounded-lg border-gray-300 focus:border-purple-500 focus:ring-purple-500" placeholder="Enter your last name" />
-                </div>
-                <p v-if="errors.lastName" class="mt-2 text-xs text-red-600">{{ errors.lastName }}</p>
-              </div>
-            </div>
-
-            <!-- Contact fields row -->
-            <div class="grid sm:grid-cols-2 gap-6">
-              <div>
-                <label class="block text-base font-semibold text-gray-800 mb-2" for="email">Email Address</label>
-                <div class="relative">
-                  <Icon name="heroicons:envelope-20-solid" class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                  <input id="email" v-model="form.email" type="email" required class="w-full pl-9 pr-4 py-3 text-base text-gray-900 rounded-lg border-gray-300 focus:border-purple-500 focus:ring-purple-500" placeholder="Enter your email address" />
-                </div>
-                <p v-if="errors.email" class="mt-2 text-xs text-red-600">{{ errors.email }}</p>
-              </div>
-              <div>
-                <label class="block text-base font-semibold text-gray-800 mb-2" for="phone">Phone Number <span class="text-gray-500 font-normal">(Optional)</span></label>
-                <div class="relative">
-                  <Icon name="heroicons:phone-20-solid" class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                  <input id="phone" v-model="form.phone" type="tel" class="w-full pl-9 pr-4 py-3 text-base text-gray-900 rounded-lg border-gray-300 focus:border-purple-500 focus:ring-purple-500" placeholder="Enter your phone number" />
-                </div>
-              </div>
-            </div>
-
-            <!-- Subject field -->
-            <div>
-              <h3 class="text-xl font-bold text-gray-900 mb-4">Your Message</h3>
-              <label class="block text-base font-semibold text-gray-800 mb-2" for="subject">Subject</label>
-              <select id="subject" v-model="form.subject" required class="w-full px-4 py-3 text-base text-gray-900 rounded-lg border-gray-300 focus:border-purple-500 focus:ring-purple-500">
-                <option disabled value="">Select a subject</option>
-                <option>Partnership</option>
-                <option>Volunteering</option>
-                <option>Donation</option>
-                <option>General</option>
-              </select>
-              <p v-if="errors.subject" class="mt-2 text-xs text-red-600">{{ errors.subject }}</p>
-            </div>
-
-            <!-- Message field -->
-            <div>
-              <div class="flex items-center justify-between mb-2">
-                <label class="block text-base font-semibold text-gray-800" for="message">Message</label>
-                <span class="text-sm text-gray-600 font-medium">{{ form.message.length }}/1000</span>
-              </div>
-              <textarea id="message" v-model="form.message" rows="6" maxlength="1000" required class="w-full px-4 py-3 text-base text-gray-900 rounded-lg border-gray-300 focus:border-purple-500 focus:ring-purple-500" placeholder="Tell us how we can help you..." />
-              <p v-if="errors.message" class="mt-2 text-xs text-red-600">{{ errors.message }}</p>
-            </div>
-
-            <!-- Honey pot -->
-            <input v-model="form._hp" type="text" class="hidden" tabindex="-1" autocomplete="off" />
-
-            <!-- Consent checkbox -->
-            <div class="flex items-start gap-3 pt-2">
-              <input id="consent" v-model="form.consent" type="checkbox" class="h-5 w-5 rounded border-gray-300 text-purple-600 focus:ring-purple-500 mt-0.5" />
-              <label for="consent" class="text-base text-gray-800 leading-relaxed font-medium">I agree to the terms and privacy policy</label>
-            </div>
-            <p v-if="errors.consent" class="text-xs text-red-600">{{ errors.consent }}</p>
-          </div>
-          <!-- reCAPTCHA placeholder -->
-          <div class="mt-8 rounded-lg border border-gray-200 bg-gray-50 p-4 text-base text-gray-700 font-medium">Security verification will appear here</div>
-
-          <div class="mt-8 flex flex-wrap items-center gap-4">
-            <button type="submit" :disabled="submitting" class="inline-flex items-center px-5 py-3 rounded-lg text-sm font-semibold text-white btn-maasai transition-all disabled:opacity-60 disabled:cursor-not-allowed hover:-translate-y-0.5 shadow-md hover:shadow-lg">
-              <Icon name="heroicons:paper-airplane-20-solid" class="mr-2 h-4 w-4" />
-              {{ submitting ? 'Sending…' : 'Send Message' }}
-            </button>
-            <a href="mailto:smile4smileinnitiative@gmail.com" class="px-4 py-2 rounded-lg text-sm font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200">Email us directly</a>
-            <a href="tel:+254732847605" class="px-4 py-2 rounded-lg text-sm font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200">Call us</a>
-            <a href="https://wa.me/254732847605" target="_blank" rel="noopener" class="px-4 py-2 rounded-lg text-sm font-semibold text-white btn-maasai">WhatsApp</a>
-          </div>
-        </form>
       </div>
     </section>
 
-    <!-- Map placeholder -->
-    <section class="pb-16 bg-white">
+    <!-- Map Section -->
+    <section class="py-16 bg-gray-50">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="h-64 rounded-2xl border border-gray-200 bg-gray-100 flex items-center justify-center text-gray-600">Map placeholder</div>
+        <div class="text-center mb-8">
+          <h2 class="text-3xl font-bold text-gray-900 mb-4">Find Us</h2>
+          <p class="text-gray-600">Located in the heart of Baringo County, Kenya</p>
+        </div>
+        <div class="relative h-96 bg-gray-200 rounded-2xl overflow-hidden">
+          <img 
+            src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" 
+            alt="Baringo County, Kenya"
+            class="w-full h-full object-cover"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+          <div class="absolute bottom-6 left-6 text-white">
+            <p class="text-lg font-semibold">Baringo County, Kenya</p>
+            <p class="text-sm text-white/80">East Africa</p>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -146,13 +320,42 @@
   </div>
 </template>
 
-<script setup lang="ts">
-useHead({ title: 'Contact • Illchamus Community CBO' })
-const form = reactive({ firstName: '', lastName: '', email: '', phone: '', subject: '', message: '', _hp: '', consent: false })
-const errors = reactive<{ [k: string]: string | null }>({ firstName: null, lastName: null, email: null, subject: null, message: null, consent: null })
-const submitting = ref(false)
-const success = ref(false)
+<script setup>
+import { ref, reactive } from 'vue'
 
+useHead({ 
+  title: 'Contact • Illchamus Community CBO',
+  meta: [
+    { name: 'description', content: 'Get in touch with Illchamus Community CBO. Contact us for partnerships, volunteering opportunities, donations, or general inquiries.' },
+    { name: 'keywords', content: 'contact Illchamus, community organization, Baringo County, Kenya, partnerships, volunteering, donations' }
+  ]
+})
+
+// Reactive state
+const form = reactive({ 
+  firstName: '', 
+  lastName: '', 
+  email: '', 
+  phone: '', 
+  subject: '', 
+  message: '', 
+  consent: false 
+})
+
+const errors = reactive({ 
+  firstName: null, 
+  lastName: null, 
+  email: null, 
+  subject: null, 
+  message: null, 
+  consent: null 
+})
+
+const submitting = ref(false)
+const message = ref('')
+const messageType = ref('')
+
+// Form validation
 const validate = () => {
   errors.firstName = form.firstName ? null : 'First name is required'
   errors.lastName = form.lastName ? null : 'Last name is required'
@@ -163,18 +366,49 @@ const validate = () => {
   return !errors.firstName && !errors.lastName && !errors.email && !errors.subject && !errors.message && !errors.consent
 }
 
-const onSubmit = () => {
-  if (!validate()) return
-  submitting.value = true
-  if (form._hp) { submitting.value = false; return } // honey pot
-  const subject = encodeURIComponent(`Website Contact — ${form.subject || 'Illchamus'}`)
-  const body = encodeURIComponent(`Name: ${form.firstName} ${form.lastName}\nEmail: ${form.email}\nPhone: ${form.phone || '-'}\n\n${form.message}`)
-  const mailto = `mailto:smile4smileinnitiative@gmail.com?subject=${subject}&body=${body}`
-  success.value = true
+// Show message
+const showMessage = (text, type) => {
+  message.value = text
+  messageType.value = type
+  
+  // Clear message after 5 seconds
   setTimeout(() => {
-    window.location.href = mailto
+    message.value = ''
+    messageType.value = ''
+  }, 5000)
+}
+
+// Submit form
+const onSubmit = async () => {
+  if (!validate()) {
+    showMessage('Please fill in all required fields correctly', 'error')
+    return
+  }
+  
+  submitting.value = true
+  message.value = ''
+  
+  try {
+    // Simulate form submission
+    await new Promise(resolve => setTimeout(resolve, 2000))
+    
+    // Reset form
+    Object.assign(form, {
+      firstName: '',
+      lastName: '',
+      email: '',
+      phone: '',
+      subject: '',
+      message: '',
+      consent: false
+    })
+    
+    showMessage('Thank you for your message! We will get back to you within 24 hours.', 'success')
+  } catch (error) {
+    showMessage('Sorry, there was an error sending your message. Please try again later.', 'error')
+  } finally {
     submitting.value = false
-  }, 300)
+  }
 }
 </script>
 

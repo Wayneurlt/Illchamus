@@ -3,7 +3,7 @@
     <Navbar />
 
     <!-- Hero Section -->
-    <section class="pt-28 pb-16 bg-gradient-to-br from-red-50 via-orange-50 to-purple-50">
+    <section class="pt-32 pb-16 bg-gradient-to-br from-red-50 via-orange-50 to-purple-50">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center">
           <h1 class="text-4xl md:text-6xl font-bold tracking-tight text-gray-900 mb-6">
