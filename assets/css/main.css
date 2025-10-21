@@ -85,3 +85,99 @@
     background-position: 0% 50%;
   }
 }
+
+/* Enhanced navbar styles for better alignment and robustness */
+.navbar-container {
+  position: relative;
+  z-index: 50;
+}
+
+.navbar-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.navbar-link:hover {
+  transform: translateY(-1px);
+}
+
+.navbar-link:focus {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+/* Improved mobile menu animations */
+.mobile-menu-enter-active,
+.mobile-menu-leave-active {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mobile-menu-enter-from {
+  opacity: 0;
+  transform: translateY(-10px) scale(0.95);
+}
+
+.mobile-menu-leave-to {
+  opacity: 0;
+  transform: translateY(-10px) scale(0.95);
+}
+
+/* Better responsive breakpoints for navbar */
+@media (max-width: 1023px) {
+  .navbar-desktop {
+    display: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  .navbar-mobile {
+    display: none;
+  }
+}
+
+/* Enhanced focus states for accessibility */
+.navbar-focus:focus {
+  outline: 2px solid #dc2626;
+  outline-offset: 2px;
+  border-radius: 0.5rem;
+}
+
+/* Smooth transitions for navbar state changes */
+.navbar-transition {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Better alignment for navbar items */
+.navbar-items {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+@media (min-width: 1280px) {
+  .navbar-items {
+    gap: 0.5rem;
+  }
+}
+
+/* Improved mobile menu button */
+.mobile-menu-button {
+  position: relative;
+  z-index: 10;
+}
+
+.mobile-menu-button:focus {
+  outline: 2px solid #dc2626;
+  outline-offset: 2px;
+}
+
+/* Better mobile menu positioning */
+.mobile-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 40;
+}
