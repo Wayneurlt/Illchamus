@@ -7,12 +7,11 @@
     "dev": "nuxt dev --host 0.0.0.0",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare",
-    "prisma:generate": "npx prisma generate",
-    "prisma:migrate": "npx prisma migrate",
-    "prisma:studio": "npx prisma studio",
-    "prisma:schema": "npx prisma db push",
-    "prisma": "npm run prisma:generate && npm run prisma:migrate && npm run prisma:schema"
+    "start": "node .output/server/index.mjs",
+    "postinstall": "nuxt prepare"
+  },
+  "imports": {
+    "#internal/nuxt/paths": "./node_modules/nuxt/dist/core/runtime/nitro/utils/paths.js"
   },
   "dependencies": {
     "@iconify-json/heroicons": "^1.2.2",
@@ -21,7 +20,6 @@
     "@nuxt/icon": "^1.12.0",
     "@nuxt/ui": "^3.1.1",
     "@pinia/nuxt": "^0.11.0",
-    "@prisma/nuxt": "^0.3.0",
     "@vercel/analytics": "^1.5.0",
     "aos": "^2.3.4",
     "gsap": "^3.13.0",

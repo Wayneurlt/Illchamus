@@ -4,7 +4,6 @@ export default defineNuxtConfig({
     "@nuxt/ui",
     "notivue/nuxt",
     "@pinia/nuxt",
-    "@prisma/nuxt",
     "@nuxt/fonts",
     "@nuxt/icon",
     "nuxt-auth-utils",
@@ -13,9 +12,16 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   css: [
     "~/assets/css/main.css",
+    "aos/dist/aos.css",
     "notivue/notification.css",
     "notivue/animations.css",
   ],
+  fonts: {
+    families: [
+      { name: "Nunito", provider: "google", weights: [400, 500, 600, 700] },
+      { name: "Fraunces", provider: "google", weights: [500, 600, 700] },
+    ],
+  },
   icon: {
     clientBundle: {
       scan: true,
@@ -42,7 +48,7 @@ export default defineNuxtConfig({
       title: "Illchamus Community CBO - Preserving Culture & Empowering Community",
       meta: [
         { charset: "utf-8" },
-        { name: "viewport", content: "width=device-width,initial-scale=1" },
+        { name: "viewport", content: "width=device-width, initial-scale=1.0, minimum-scale=1.0, viewport-fit=cover" },
         { name: "description", content: "Illchamus Community CBO is committed to protecting our heritage, supporting families, and building a brighter future in Baringo County, Kenya." },
       ],
       link: [
@@ -54,12 +60,6 @@ export default defineNuxtConfig({
     server: {
       allowedHosts: ["958d-105-160-105-173.ngrok-free.app"],
     },
-    resolve: {
-      alias: {
-        ".prisma/client/index-browser":
-          "./node_modules/.prisma/client/index-browser.js",
-      },
-    },
   },
   notivue: {
     limit: 3,
@@ -68,6 +68,11 @@ export default defineNuxtConfig({
       global: {
         duration: 5000,
       },
+    },
+  },
+  nitro: {
+    alias: {
+      "#internal/nuxt/paths": "node_modules/nuxt/dist/core/runtime/nitro/utils/paths.js",
     },
   },
 });
