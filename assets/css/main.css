@@ -1,18 +1,120 @@
 @import "tailwindcss";
-@import "@nuxt/ui";
-:root {
-  --maasai-purple: #6b21a8;
-  --maasai-red: #dc2626;
-  --maasai-orange: #f97316;
+
+@theme {
+  --font-sans: "Nunito", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Fraunces", Georgia, "Times New Roman", serif;
 }
 
+:root {
+  --cbo-accent: #c45c26;
+  --cbo-accent-hover: #a34a1c;
+  --cbo-accent-soft: #fde8d8;
+  --cbo-earth: #5c4a3d;
+  --cbo-earth-dark: #3d3229;
+  --cbo-ink: #2c2419;
+  --cbo-muted: #6b5d52;
+  --cbo-border: #e8dfd4;
+  --cbo-cream: #faf6f0;
+  --cbo-warm: #f3ebe0;
+  --cbo-sand: #e8dfd4;
+}
 
-.btn-maasai {
-  background: linear-gradient(135deg, var(--maasai-red), var(--maasai-orange), var(--maasai-purple));
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: "Nunito", ui-sans-serif, system-ui, sans-serif;
+  color: var(--cbo-ink);
+  background-color: var(--cbo-cream);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Community backgrounds */
+.bg-cbo-cream { background-color: var(--cbo-cream); }
+.bg-cbo-warm { background-color: var(--cbo-warm); }
+.bg-cbo-earth { background-color: var(--cbo-earth-dark); }
+
+/* Display typography – warm, human headings */
+.font-display {
+  font-family: "Fraunces", Georgia, "Times New Roman", serif;
+}
+
+.section-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.875rem;
+  border-radius: 9999px;
+  background: var(--cbo-accent-soft);
+  color: var(--cbo-accent-hover);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  margin-bottom: 1rem;
+}
+
+.section-heading {
+  font-family: "Fraunces", Georgia, "Times New Roman", serif;
+  font-size: clamp(1.875rem, 4vw, 2.625rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--cbo-ink);
+  line-height: 1.15;
+}
+
+.section-lead {
+  font-size: 1.0625rem;
+  color: var(--cbo-muted);
+  line-height: 1.7;
+  max-width: 36rem;
+}
+
+.gradient-text {
+  color: var(--cbo-accent);
+  font-weight: 600;
+}
+
+/* Buttons – warm, approachable */
+.btn-cbo {
+  background: var(--cbo-accent);
+  color: #fff;
+  font-weight: 700;
+  border-radius: 0.75rem;
+  transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 8px rgba(196, 92, 38, 0.25);
+}
+.btn-cbo:hover {
+  background: var(--cbo-accent-hover);
+  box-shadow: 0 4px 14px rgba(196, 92, 38, 0.3);
+}
+.btn-cbo:active {
+  transform: scale(0.98);
+}
+
+.btn-cbo-outline {
+  background: transparent;
+  color: var(--cbo-accent);
+  border: 2px solid var(--cbo-accent);
+  font-weight: 700;
+  border-radius: 0.75rem;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease;
+}
+.btn-cbo-outline:hover {
+  background: var(--cbo-accent);
   color: #fff;
 }
+.btn-cbo-outline:active {
+  transform: scale(0.98);
+}
 
-/* Underline hover indicator using Maasai gradient */
 .link-underline {
   position: relative;
 }
@@ -23,161 +125,139 @@
   bottom: -2px;
   height: 2px;
   width: 0;
-  background: linear-gradient(90deg, var(--maasai-red), var(--maasai-orange), var(--maasai-purple));
-  transition: width .25s ease;
+  background: var(--cbo-accent);
+  transition: width 0.2s ease;
+  border-radius: 1px;
 }
 .link-underline:hover::after {
   width: 100%;
 }
-@keyframes spin-slow {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
 
-.animate-spin-slow {
-  animation: spin-slow 10s linear infinite;
-}
-
-/* Seamless color transitions between sections */
-.section-transition {
-  background: linear-gradient(180deg, 
-    rgba(255, 255, 255, 0) 0%,
-    rgba(251, 146, 60, 0.1) 25%,
-    rgba(220, 38, 38, 0.05) 50%,
-    rgba(107, 33, 168, 0.03) 75%,
-    rgba(255, 255, 255, 0) 100%
-  );
-}
-
-/* Enhanced card hover effects with Maasai colors */
+/* Cards – soft, community feel */
 .card-hover {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
 }
-
 .card-hover:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 25px 50px -12px rgba(220, 38, 38, 0.25);
-  border-color: rgba(251, 146, 60, 0.3);
+  box-shadow: 0 12px 32px -8px rgba(61, 50, 41, 0.12);
+  transform: translateY(-3px);
 }
 
-/* Smooth gradient text animation */
-.gradient-text {
-  background: linear-gradient(135deg, var(--maasai-red), var(--maasai-orange), var(--maasai-purple));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  background-size: 200% 200%;
-  animation: gradient-shift 3s ease infinite;
+.card-community {
+  background: #fff;
+  border: 1px solid var(--cbo-border);
+  border-radius: 1rem;
+  box-shadow: 0 2px 12px rgba(61, 50, 41, 0.06);
 }
 
-@keyframes gradient-shift {
-  0% {
-    background-position: 0% 50%;
+/* Page container */
+.container-cbo {
+  max-width: 72rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  width: 100%;
+}
+@media (min-width: 640px) {
+  .container-cbo {
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
+}
+@media (min-width: 1024px) {
+  .container-cbo {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
   }
 }
 
-/* Enhanced navbar styles for better alignment and robustness */
+/* Community CTA band */
+.cta-community {
+  background: linear-gradient(135deg, var(--cbo-earth-dark) 0%, #4a3c32 100%);
+  color: #faf6f0;
+  position: relative;
+  overflow: hidden;
+}
+.cta-community::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 20% 80%, rgba(196, 92, 38, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(253, 232, 216, 0.08) 0%, transparent 40%);
+  pointer-events: none;
+}
+
+/* Navbar */
 .navbar-container {
   position: relative;
   z-index: 50;
 }
 
 .navbar-link {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--cbo-earth);
+  transition: color 0.2s ease;
+}
+.navbar-link:hover,
+.navbar-link.router-link-active {
+  color: var(--cbo-accent);
 }
 
-.navbar-link:hover {
-  transform: translateY(-1px);
-}
-
-.navbar-link:focus {
-  outline: 2px solid transparent;
-  outline-offset: 2px;
-}
-
-/* Improved mobile menu animations */
 .mobile-menu-enter-active,
 .mobile-menu-leave-active {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
-
-.mobile-menu-enter-from {
-  opacity: 0;
-  transform: translateY(-10px) scale(0.95);
-}
-
+.mobile-menu-enter-from,
 .mobile-menu-leave-to {
   opacity: 0;
-  transform: translateY(-10px) scale(0.95);
+  transform: translateY(-8px);
 }
 
-/* Better responsive breakpoints for navbar */
 @media (max-width: 1023px) {
   .navbar-desktop {
     display: none;
   }
 }
-
 @media (min-width: 1024px) {
   .navbar-mobile {
     display: none;
   }
 }
 
-/* Enhanced focus states for accessibility */
-.navbar-focus:focus {
-  outline: 2px solid #dc2626;
+*:focus-visible {
+  outline: 2px solid var(--cbo-accent);
   outline-offset: 2px;
-  border-radius: 0.5rem;
 }
 
-/* Smooth transitions for navbar state changes */
-.navbar-transition {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-/* Better alignment for navbar items */
-.navbar-items {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
+@media (max-width: 640px) {
+  html {
+    font-size: 15px;
+  }
 }
-
-@media (min-width: 1280px) {
-  .navbar-items {
-    gap: 0.5rem;
+@media (min-width: 1921px) {
+  html {
+    font-size: 18px;
   }
 }
 
-/* Improved mobile menu button */
-.mobile-menu-button {
-  position: relative;
-  z-index: 10;
-}
-
-.mobile-menu-button:focus {
-  outline: 2px solid #dc2626;
-  outline-offset: 2px;
-}
-
-/* Better mobile menu positioning */
-.mobile-menu {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  z-index: 40;
+img,
+video,
+svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
 }

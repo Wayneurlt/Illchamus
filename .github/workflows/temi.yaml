@@ -35,7 +35,6 @@ jobs:
                   PORT: 3200,
                   NITRO_PORT: 3200,
                   NODE_ENV: "production",
-                  DATABASE_URL: "postgresql://neondb_owner:npg_XPlSyhg5F6aC@ep-weathered-darkness-a8by06qf-pooler.eastus2.azure.neon.tech/neondb?sslmode=require&channel_binding=require",
                 },
               },
             ],
