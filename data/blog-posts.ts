@@ -14,7 +14,7 @@ export const blogPosts: BlogPost[] = [
     date: 'Nov 2023',
     title: "First Charity Visit to Israel Faith Children's Home",
     excerpt: 'We connected with children, provided essentials, and strengthened our commitment to lasting impact.',
-    image: 'https://images.unsplash.com/photo-1560251180-1b0b3f0b1e5a?q=80&w=2070&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2070&auto=format&fit=crop',
     tag: 'Events',
     content: `
       <p>Our journey began with a simple yet profound visit to the Israel Faith Children's Home in Baringo County. What started as a small gesture of support has grown into a comprehensive community development initiative that continues to touch lives across the region.</p>

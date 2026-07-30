@@ -261,3 +261,16 @@ svg {
   height: auto;
   display: block;
 }
+
+/* Robust mobile viewport height: avoids layout jump when the mobile
+   browser's address bar shows/hides. Falls back to vh where dvh isn't supported. */
+.hero-min-h {
+  min-height: calc(100vh - 4rem);
+  min-height: calc(100dvh - 4rem);
+}
+@media (min-width: 640px) {
+  .hero-min-h {
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+}

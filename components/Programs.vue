@@ -243,7 +243,7 @@ const programs = ref([
     title: "Women's Leadership Program",
     category: "Women",
     categoryId: "women",
-    image: "https://images.unsplash.com/photo-1594736797933-d0401ba2fe65?auto=format&fit=crop&w=800&q=80",
+    image: "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=800&q=80",
     shortDescription: "Empowering women leaders",
     description: "Skills training, leadership, and economic opportunities.",
     fullDescription:

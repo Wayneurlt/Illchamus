@@ -9,9 +9,3 @@
     </Notivue>
   </UApp>
 </template>
-
-<script setup lang="ts">
-onMounted(() => {
-  console.log(window.innerHeight, window.innerWidth);
-});
-</script>

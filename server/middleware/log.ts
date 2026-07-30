@@ -1,6 +1,7 @@
 import morgan from "morgan";
 
+const logger = morgan("tiny");
+
 export default defineEventHandler((event) => {
-  var logger = morgan("tiny");
-  logger(event.node.req, event.node.res, function () {});
+  logger(event.node.req, event.node.res, () => {});
 });

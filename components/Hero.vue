@@ -1,27 +1,27 @@
 <template>
   <section
     ref="sectionRef"
-    class="relative flex flex-col justify-center items-center text-center min-h-[calc(100vh-4rem)] sm:min-h-screen overflow-hidden bg-cbo-warm pt-20 sm:pt-24 lg:pt-28 pb-12 sm:pb-16"
+    class="hero-min-h relative flex flex-col justify-center items-center text-center overflow-hidden bg-cbo-warm pt-20 sm:pt-24 lg:pt-28 pb-12 sm:pb-16"
     aria-label="Hero"
   >
-    <div class="absolute inset-0 w-full h-full">
-      <video
-        ref="videoRef"
-        :src="bgVideo"
-        playsinline
-        muted
-        loop
-        preload="auto"
-        class="absolute top-0 left-0 w-full h-full object-cover object-center pointer-events-none transition-opacity duration-700"
-        style="width: 100%; height: 100%; object-fit: cover;"
-        :class="isPlaying ? 'opacity-100' : 'opacity-0'"
-        @loadeddata="onVideoLoaded"
-        @error="onVideoError"
-      />
+    <div class="absolute inset-0 flex items-start justify-center sm:block">
+      <div class="w-full aspect-video sm:w-full sm:h-full sm:aspect-auto">
+        <video
+          ref="videoRef"
+          :src="bgVideo"
+          playsinline
+          muted
+          loop
+          preload="metadata"
+          class="w-full h-full object-cover object-center pointer-events-none transition-opacity duration-700"
+          :class="isPlaying ? 'opacity-100' : 'opacity-0'"
+          @error="onVideoError"
+        />
+      </div>
     </div>
     <div
-      class="absolute inset-0 bg-gradient-to-b from-[#faf6f0]/85 via-[#f3ebe0]/70 to-[#faf6f0]/90 pointer-events-none transition-opacity duration-700 z-[1]"
-      :class="isPlaying ? 'opacity-100' : 'opacity-100'"
+      class="absolute inset-0 bg-gradient-to-b from-[#faf6f0]/85 via-[#f3ebe0]/70 to-[#faf6f0] sm:to-[#faf6f0]/90 pointer-events-none transition-opacity duration-700 z-[1]"
+      :class="isPlaying ? 'opacity-60' : 'opacity-100'"
       aria-hidden="true"
     />
 
@@ -117,7 +117,6 @@ const subtitle = ref<HTMLElement | null>(null);
 const statsRef = ref<HTMLElement | null>(null);
 const playBtn = ref<HTMLElement | null>(null);
 
-const onVideoLoaded = () => {};
 const onVideoError = (e: Event) => console.warn("Video error", e);
 
 const toggleVideo = async () => {

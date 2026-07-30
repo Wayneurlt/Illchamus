@@ -65,8 +65,8 @@
         </p>
         <div class="flex flex-wrap justify-center gap-6 text-sm">
           <a href="#" class="text-neutral-500 hover:text-white transition-colors" @click.prevent="scrollToTop">Back to top</a>
-          <a href="#" class="text-neutral-500 hover:text-white transition-colors">Privacy</a>
-          <a href="#" class="text-neutral-500 hover:text-white transition-colors">Terms</a>
+          <NuxtLink to="/privacy" class="text-neutral-500 hover:text-white transition-colors">Privacy</NuxtLink>
+          <NuxtLink to="/terms" class="text-neutral-500 hover:text-white transition-colors">Terms</NuxtLink>
         </div>
       </div>
     </div>

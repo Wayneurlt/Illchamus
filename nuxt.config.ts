@@ -1,3 +1,5 @@
+import { fileURLToPath } from "node:url";
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   modules: [
@@ -72,7 +74,9 @@ export default defineNuxtConfig({
   },
   nitro: {
     alias: {
-      "#internal/nuxt/paths": "node_modules/nuxt/dist/core/runtime/nitro/utils/paths.js",
+      "#internal/nuxt/paths": fileURLToPath(
+        new URL("./node_modules/nuxt/dist/core/runtime/nitro/utils/paths.js", import.meta.url)
+      ),
     },
   },
 });

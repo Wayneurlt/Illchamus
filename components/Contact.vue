@@ -30,7 +30,7 @@
           <div v-if="feedback" class="mb-6 p-4 rounded-xl text-sm" :class="feedbackType === 'success' ? 'bg-emerald-50 text-emerald-800 border border-emerald-200' : 'bg-red-50 text-red-800 border border-red-200'">
             {{ feedback }}
           </div>
-          <form @submit.prevent="submitForm" class="space-y-5">
+          <form @submit.prevent="submit" class="space-y-5">
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div>
                 <label for="firstName" class="block text-sm font-medium text-[var(--cbo-ink)] mb-1.5">First name *</label>
@@ -68,7 +68,7 @@
             <div class="flex items-start gap-3">
               <input id="consent" v-model="form.consent" type="checkbox" required class="mt-1 h-4 w-4 rounded border-[var(--cbo-border)] text-[var(--cbo-accent)] focus:ring-[var(--cbo-accent)]" />
               <label for="consent" class="text-sm text-[var(--cbo-muted)]">
-                I agree to the <a href="#" class="text-[var(--cbo-accent)] hover:underline">terms</a> and <a href="#" class="text-[var(--cbo-accent)] hover:underline">privacy policy</a>.
+                I agree to the <NuxtLink to="/terms" class="text-[var(--cbo-accent)] hover:underline">terms</NuxtLink> and <NuxtLink to="/privacy" class="text-[var(--cbo-accent)] hover:underline">privacy policy</NuxtLink>.
               </label>
             </div>
             <button type="submit" :disabled="isSubmitting" class="w-full btn-cbo py-3 rounded-xl text-base font-medium disabled:opacity-50 flex items-center justify-center gap-2">
@@ -134,51 +134,5 @@
 </template>
 
 <script setup>
-const form = ref({
-  firstName: "",
-  lastName: "",
-  email: "",
-  phone: "",
-  subject: "",
-  message: "",
-  consent: false,
-});
-const isSubmitting = ref(false);
-const feedback = ref("");
-const feedbackType = ref("");
-
-const validateForm = () => {
-  if (!form.value.firstName?.trim()) { showMessage("Please enter your first name", "error"); return false; }
-  if (!form.value.lastName?.trim()) { showMessage("Please enter your last name", "error"); return false; }
-  if (!form.value.email?.trim()) { showMessage("Please enter your email", "error"); return false; }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.value.email)) { showMessage("Please enter a valid email", "error"); return false; }
-  if (!form.value.subject) { showMessage("Please select a subject", "error"); return false; }
-  if (!form.value.message?.trim() || form.value.message.trim().length < 10) {
-    showMessage("Please enter a message (at least 10 characters)", "error");
-    return false;
-  }
-  if (!form.value.consent) { showMessage("Please agree to the terms and privacy policy", "error"); return false; }
-  return true;
-};
-
-const showFeedback = (text, type) => {
-  feedback.value = text;
-  feedbackType.value = type;
-  setTimeout(() => { feedback.value = ""; feedbackType.value = ""; }, 5000);
-};
-
-const submitForm = async () => {
-  if (!validateForm()) return;
-  isSubmitting.value = true;
-  feedback.value = "";
-  try {
-    await new Promise((r) => setTimeout(r, 2000));
-    form.value = { firstName: "", lastName: "", email: "", phone: "", subject: "", message: "", consent: false };
-    showMessage("Thank you! We’ll get back to you within 24 hours.", "success");
-  } catch {
-    showMessage("Something went wrong. Please try again.", "error");
-  } finally {
-    isSubmitting.value = false;
-  }
-};
+const { form, isSubmitting, feedback, feedbackType, submit } = useContactForm();
 </script>
