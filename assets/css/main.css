@@ -1,276 +1,326 @@
 @import "tailwindcss";
 
+/* Brand palette drawn from the ICDO logo: maroon figure, leaf green, lake blue,
+   paired with a sunflower accent and warm paper background. */
 @theme {
-  --font-sans: "Nunito", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Fraunces", Georgia, "Times New Roman", serif;
-}
+  --font-sans: "Hanken Grotesk", ui-sans-serif, system-ui, sans-serif;
 
-:root {
-  --cbo-accent: #c45c26;
-  --cbo-accent-hover: #a34a1c;
-  --cbo-accent-soft: #fde8d8;
-  --cbo-earth: #5c4a3d;
-  --cbo-earth-dark: #3d3229;
-  --cbo-ink: #2c2419;
-  --cbo-muted: #6b5d52;
-  --cbo-border: #e8dfd4;
-  --cbo-cream: #faf6f0;
-  --cbo-warm: #f3ebe0;
-  --cbo-sand: #e8dfd4;
-}
-
-* {
-  box-sizing: border-box;
+  --color-ink: #2e1414;
+  --color-ink-soft: #6a5853;
+  --color-maroon: #6b2525;
+  --color-maroon-deep: #3f1515;
+  --color-sun: #f7b733;
+  --color-sun-deep: #e3a11b;
+  --color-sun-soft: #fdf1d8;
+  --color-lake: #4f9fbd;
+  --color-lake-soft: #e2f0f5;
+  --color-leaf: #4d7c3a;
+  --color-leaf-soft: #e6efdd;
+  --color-paper: #faf7f2;
+  --color-line: #ece2d6;
 }
 
 html {
   scroll-behavior: smooth;
-  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  /* Stops any stray wide element from widening the page on phones (which makes
+     mobile browsers zoom out and the layout look shifted left). `clip`, unlike
+     `hidden`, keeps position: sticky working. */
+  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 body {
-  font-family: "Nunito", ui-sans-serif, system-ui, sans-serif;
-  color: var(--cbo-ink);
-  background-color: var(--cbo-cream);
+  font-family: var(--font-sans);
+  color: var(--color-ink);
+  background-color: var(--color-paper);
   overflow-x: hidden;
+  overflow-x: clip;
+  min-width: 320px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-/* Community backgrounds */
-.bg-cbo-cream { background-color: var(--cbo-cream); }
-.bg-cbo-warm { background-color: var(--cbo-warm); }
-.bg-cbo-earth { background-color: var(--cbo-earth-dark); }
-
-/* Display typography – warm, human headings */
-.font-display {
-  font-family: "Fraunces", Georgia, "Times New Roman", serif;
-}
-
-.section-eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.375rem;
-  padding: 0.375rem 0.875rem;
-  border-radius: 9999px;
-  background: var(--cbo-accent-soft);
-  color: var(--cbo-accent-hover);
-  font-size: 0.8125rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  margin-bottom: 1rem;
-}
-
-.section-heading {
-  font-family: "Fraunces", Georgia, "Times New Roman", serif;
-  font-size: clamp(1.875rem, 4vw, 2.625rem);
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  color: var(--cbo-ink);
-  line-height: 1.15;
-}
-
-.section-lead {
-  font-size: 1.0625rem;
-  color: var(--cbo-muted);
-  line-height: 1.7;
-  max-width: 36rem;
-}
-
-.gradient-text {
-  color: var(--cbo-accent);
-  font-weight: 600;
-}
-
-/* Buttons – warm, approachable */
-.btn-cbo {
-  background: var(--cbo-accent);
-  color: #fff;
-  font-weight: 700;
-  border-radius: 0.75rem;
-  transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
-  box-shadow: 0 2px 8px rgba(196, 92, 38, 0.25);
-}
-.btn-cbo:hover {
-  background: var(--cbo-accent-hover);
-  box-shadow: 0 4px 14px rgba(196, 92, 38, 0.3);
-}
-.btn-cbo:active {
-  transform: scale(0.98);
-}
-
-.btn-cbo-outline {
-  background: transparent;
-  color: var(--cbo-accent);
-  border: 2px solid var(--cbo-accent);
-  font-weight: 700;
-  border-radius: 0.75rem;
-  transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease;
-}
-.btn-cbo-outline:hover {
-  background: var(--cbo-accent);
-  color: #fff;
-}
-.btn-cbo-outline:active {
-  transform: scale(0.98);
-}
-
-.link-underline {
-  position: relative;
-}
-.link-underline::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -2px;
-  height: 2px;
-  width: 0;
-  background: var(--cbo-accent);
-  transition: width 0.2s ease;
-  border-radius: 1px;
-}
-.link-underline:hover::after {
-  width: 100%;
-}
-
-/* Cards – soft, community feel */
-.card-hover {
-  transition: box-shadow 0.3s ease, transform 0.2s ease;
-}
-.card-hover:hover {
-  box-shadow: 0 12px 32px -8px rgba(61, 50, 41, 0.12);
-  transform: translateY(-3px);
-}
-
-.card-community {
-  background: #fff;
-  border: 1px solid var(--cbo-border);
-  border-radius: 1rem;
-  box-shadow: 0 2px 12px rgba(61, 50, 41, 0.06);
-}
-
-/* Page container */
-.container-cbo {
-  max-width: 72rem;
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 0.75rem;
-  padding-right: 0.75rem;
-  width: 100%;
-}
-@media (min-width: 640px) {
-  .container-cbo {
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
-}
-@media (min-width: 1024px) {
-  .container-cbo {
-    padding-left: 1.25rem;
-    padding-right: 1.25rem;
-  }
-}
-
-/* Community CTA band */
-.cta-community {
-  background: linear-gradient(135deg, var(--cbo-earth-dark) 0%, #4a3c32 100%);
-  color: #faf6f0;
-  position: relative;
-  overflow: hidden;
-}
-.cta-community::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse at 20% 80%, rgba(196, 92, 38, 0.15) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 20%, rgba(253, 232, 216, 0.08) 0%, transparent 40%);
-  pointer-events: none;
-}
-
-/* Navbar */
-.navbar-container {
-  position: relative;
-  z-index: 50;
-}
-
-.navbar-link {
-  font-size: 0.9375rem;
-  font-weight: 600;
-  color: var(--cbo-earth);
-  transition: color 0.2s ease;
-}
-.navbar-link:hover,
-.navbar-link.router-link-active {
-  color: var(--cbo-accent);
-}
-
-.mobile-menu-enter-active,
-.mobile-menu-leave-active {
-  transition: opacity 0.2s ease, transform 0.2s ease;
-}
-.mobile-menu-enter-from,
-.mobile-menu-leave-to {
-  opacity: 0;
-  transform: translateY(-8px);
-}
-
-@media (max-width: 1023px) {
-  .navbar-desktop {
-    display: none;
-  }
-}
-@media (min-width: 1024px) {
-  .navbar-mobile {
-    display: none;
-  }
-}
-
-*:focus-visible {
-  outline: 2px solid var(--cbo-accent);
-  outline-offset: 2px;
-}
-
-.line-clamp-2 {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-.line-clamp-3 {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-@media (max-width: 640px) {
-  html {
-    font-size: 15px;
-  }
-}
-@media (min-width: 1921px) {
-  html {
-    font-size: 18px;
-  }
+  text-rendering: optimizeLegibility;
 }
 
 img,
-video,
-svg {
+video {
   max-width: 100%;
-  height: auto;
   display: block;
 }
 
-/* Robust mobile viewport height: avoids layout jump when the mobile
-   browser's address bar shows/hides. Falls back to vh where dvh isn't supported. */
-.hero-min-h {
-  min-height: calc(100vh - 4rem);
-  min-height: calc(100dvh - 4rem);
+::selection {
+  background: var(--color-sun);
+  color: var(--color-ink);
 }
-@media (min-width: 640px) {
-  .hero-min-h {
-    min-height: 100vh;
-    min-height: 100dvh;
+
+*:focus-visible {
+  outline: 3px solid var(--color-lake);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
   }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Site component classes. They are declared with @utility (not @layer components)
+   so they sit in Tailwind's utilities layer: that keeps them above the base reset
+   whatever order other modules (Nuxt UI, Nuxt Icon) inject their CSS layers in,
+   while single-purpose utilities such as `px-0` or `text-white` can still override them. */
+
+/* Page width for regular content */
+@utility shell {
+  width: 100%;
+  max-width: 1240px;
+  margin-inline: auto;
+  padding-inline: 1rem;
+  @media (min-width: 640px) {
+    padding-inline: 1.5rem;
+  }
+  @media (min-width: 1024px) {
+    padding-inline: 2rem;
+  }
+}
+
+/* Outer frame for the rounded hero cards (nearly full-bleed) */
+@utility frame {
+  width: 100%;
+  max-width: 1480px;
+  margin-inline: auto;
+  padding-inline: 0.625rem;
+  @media (min-width: 640px) {
+    padding-inline: 1rem;
+  }
+}
+
+/* Top offset so hero cards sit under the utility bar */
+@utility hero-offset {
+  padding-top: 0.625rem;
+  @media (min-width: 1024px) {
+    padding-top: 2.75rem;
+  }
+}
+
+/* Buttons */
+@utility btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 3rem;
+  padding: 0 1.5rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  line-height: 1;
+  white-space: nowrap;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.15s ease,
+    box-shadow 0.2s ease;
+  &:active {
+    transform: scale(0.97);
+  }
+  &:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none;
+  }
+}
+@utility btn-sm {
+  min-height: 2.5rem;
+  padding: 0 1.125rem;
+  font-size: 0.875rem;
+}
+@utility btn-sun {
+  background: var(--color-sun);
+  color: var(--color-ink);
+  &:hover {
+    background: var(--color-sun-deep);
+  }
+}
+@utility btn-ink {
+  background: var(--color-maroon);
+  color: #fff;
+  &:hover {
+    background: var(--color-maroon-deep);
+  }
+}
+@utility btn-white {
+  background: #fff;
+  color: var(--color-ink);
+  box-shadow: 0 6px 20px -8px rgb(0 0 0 / 0.35);
+  &:hover {
+    background: var(--color-sun-soft);
+  }
+}
+@utility btn-outline {
+  border: 1.5px solid currentColor;
+  color: var(--color-maroon);
+  background: transparent;
+  &:hover {
+    background: var(--color-maroon);
+    border-color: var(--color-maroon);
+    color: #fff;
+  }
+}
+@utility btn-ghost {
+  border: 1.5px solid rgb(255 255 255 / 0.7);
+  color: #fff;
+  background: transparent;
+  &:hover {
+    background: #fff;
+    color: var(--color-ink);
+  }
+}
+
+/* Typography */
+@utility display {
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 0.98;
+}
+@utility h2 {
+  font-size: clamp(1.875rem, 1.3rem + 2.4vw, 2.875rem);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.08;
+  color: var(--color-ink);
+}
+@utility h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+  color: var(--color-ink);
+}
+@utility lead {
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  color: var(--color-ink-soft);
+}
+@utility eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-maroon);
+  &::before {
+    content: "";
+    width: 1.5rem;
+    height: 3px;
+    border-radius: 3px;
+    background: var(--color-sun);
+  }
+}
+
+/* Text link with arrow nudge */
+@utility link-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-weight: 700;
+  color: var(--color-maroon);
+  & .iconify,
+  & svg {
+    transition: transform 0.2s ease;
+  }
+  &:hover .iconify,
+  &:hover svg {
+    transform: translateX(4px);
+  }
+}
+
+/* Form fields */
+@utility field-label {
+  display: block;
+  margin-bottom: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+@utility field {
+  width: 100%;
+  min-height: 3rem;
+  padding: 0.75rem 1rem;
+  border: 1.5px solid var(--color-line);
+  border-radius: 0.875rem;
+  background: #fff;
+  color: var(--color-ink);
+  font-size: 1rem; /* 16px stops iOS zooming on focus */
+  resize: vertical;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  &::placeholder {
+    color: #a99a92;
+  }
+  &:focus {
+    outline: none;
+    border-color: var(--color-lake);
+    box-shadow: 0 0 0 4px rgb(79 159 189 / 0.18);
+  }
+}
+
+/* Decorative sunflower ring (the arc in the corner of yellow bands) */
+@utility sun-ring {
+  position: absolute;
+  border-radius: 9999px;
+  border-style: solid;
+  border-color: var(--color-sun);
+  pointer-events: none;
+}
+
+/* Long-form article copy (blog posts, policies) */
+@utility article {
+  color: var(--color-ink-soft);
+  font-size: 1.0625rem;
+  line-height: 1.8;
+  & > * + * {
+    margin-top: 1.25rem;
+  }
+  & h2,
+  & h3 {
+    color: var(--color-ink);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    margin-top: 2.25rem;
+  }
+  & h2 {
+    font-size: 1.5rem;
+  }
+  & h3 {
+    font-size: 1.3125rem;
+  }
+  & a {
+    color: var(--color-maroon);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Scroll reveal (see plugins/reveal.client.ts). Only active once JS has run. */
+.reveal-ready [data-aos] {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.7s cubic-bezier(0.2, 0.7, 0.2, 1), transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.reveal-ready [data-aos].is-revealed {
+  opacity: 1;
+  transform: none;
 }

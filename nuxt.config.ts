@@ -14,14 +14,12 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   css: [
     "~/assets/css/main.css",
-    "aos/dist/aos.css",
     "notivue/notification.css",
     "notivue/animations.css",
   ],
   fonts: {
     families: [
-      { name: "Nunito", provider: "google", weights: [400, 500, 600, 700] },
-      { name: "Fraunces", provider: "google", weights: [500, 600, 700] },
+      { name: "Hanken Grotesk", provider: "google", weights: [400, 500, 600, 700, 800] },
     ],
   },
   icon: {
@@ -52,6 +50,7 @@ export default defineNuxtConfig({
         { charset: "utf-8" },
         { name: "viewport", content: "width=device-width, initial-scale=1.0, minimum-scale=1.0, viewport-fit=cover" },
         { name: "description", content: "Illchamus Community CBO is committed to protecting our heritage, supporting families, and building a brighter future in Baringo County, Kenya." },
+        { name: "theme-color", content: "#faf7f2" },
       ],
       link: [
         { rel: "icon", type: "image/png", href: "/logo.png" }

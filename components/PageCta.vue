@@ -1,30 +1,14 @@
 <template>
-  <section class="py-24 lg:py-32 cta-community">
-    <div class="container-cbo text-center relative z-10" data-aos="fade-up">
-      <p class="section-eyebrow bg-white/10 text-[#fde8d8] border border-white/10">Join hands with us</p>
-      <h2 class="section-heading text-[#faf6f0] mb-4">
-        <slot name="heading">
-          {{ headingBefore }}
-          <span class="text-[#fbbf7a]">{{ accentWord }}</span>
-          {{ headingAfter }}
-        </slot>
-      </h2>
-      <p v-if="description || $slots.default" class="text-[#d4c4b5] max-w-2xl mx-auto mb-8 text-[15px] leading-relaxed">
-        <slot>{{ description }}</slot>
-      </p>
-      <div v-if="$slots.actions || primaryText" class="flex flex-col sm:flex-row gap-4 justify-center">
-        <slot name="actions">
-          <NuxtLink v-if="primaryTo" :to="primaryTo" class="btn-cbo px-8 py-3 text-base inline-flex justify-center">
-            {{ primaryText }}
-          </NuxtLink>
-          <NuxtLink
-            v-if="secondaryTo"
-            :to="secondaryTo"
-            class="btn-cbo-outline border-[#faf6f0] text-[#faf6f0] hover:bg-[#faf6f0] hover:text-[var(--cbo-earth-dark)] px-8 py-3 text-base inline-flex justify-center"
-          >
-            {{ secondaryText }}
-          </NuxtLink>
-        </slot>
+  <section class="shell">
+    <div class="relative overflow-hidden rounded-[28px] lg:rounded-[36px] bg-sun-soft px-6 py-12 sm:px-10 sm:py-14 lg:px-16 lg:py-16">
+      <div class="sun-ring w-[170px] h-[170px] border-[20px] -top-24 -right-16 sm:w-[340px] sm:h-[340px] sm:border-[32px] sm:-top-40 sm:-right-24" aria-hidden="true" />
+      <div class="relative max-w-2xl pr-10 sm:pr-16 lg:pr-0" data-aos="fade-up">
+        <h2 class="h2">{{ title }}</h2>
+        <p v-if="description" class="lead mt-4 text-ink">{{ description }}</p>
+        <div class="mt-8 flex flex-col sm:flex-row gap-3">
+          <NuxtLink v-if="primaryTo" :to="primaryTo" class="btn btn-ink">{{ primaryText }}</NuxtLink>
+          <NuxtLink v-if="secondaryTo" :to="secondaryTo" class="btn btn-outline">{{ secondaryText }}</NuxtLink>
+        </div>
       </div>
     </div>
   </section>
@@ -32,13 +16,11 @@
 
 <script setup lang="ts">
 defineProps<{
-  headingBefore?: string
-  accentWord?: string
-  headingAfter?: string
-  description?: string
-  primaryText?: string
-  primaryTo?: string
-  secondaryText?: string
-  secondaryTo?: string
-}>()
+  title: string;
+  description?: string;
+  primaryText?: string;
+  primaryTo?: string;
+  secondaryText?: string;
+  secondaryTo?: string;
+}>();
 </script>

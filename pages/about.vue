@@ -1,136 +1,120 @@
 <template>
   <div>
-    <PageHero lead="We champion Illchamus heritage while advancing education, wellness, and sustainable livelihoods across Baringo County, Kenya." lead-class="text-lg">
-      <template #title>
-        Preserving <span class="gradient-text">culture</span>. Empowering <span class="gradient-text">community</span>.
-      </template>
-    </PageHero>
+    <PageHero
+      eyebrow="About us"
+      title="Preserving culture. Empowering community."
+      lead="We champion Illchamus heritage while advancing education, wellness and sustainable livelihoods across Baringo County, Kenya."
+      :image="img(photos.savanna, 1800)"
+      :crumbs="[{ label: 'About Us' }]"
+    />
 
-    <section class="py-24 lg:py-32 bg-cbo-warm">
-      <div class="container-cbo">
-        <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          <div data-aos="fade-right">
-            <h2 class="section-heading mb-6">
-              Our <span class="gradient-text">mission</span>
-            </h2>
-            <p class="text-[var(--cbo-muted)] leading-relaxed mb-8 text-[15px] lg:text-base">
-              To protect our heritage and enable every child and family to thrive through inclusive education, mental wellness support, and community-driven development.
-            </p>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div class="rounded-2xl border border-[var(--cbo-border)] bg-white p-6 text-center" data-aos="fade-up" data-aos-delay="100">
-                <p class="text-2xl lg:text-3xl font-semibold text-[var(--cbo-accent)]">5,000+</p>
-                <p class="text-sm text-[var(--cbo-muted)] mt-1">Lives impacted</p>
-              </div>
-              <div class="rounded-2xl border border-[var(--cbo-border)] bg-white p-6 text-center" data-aos="fade-up" data-aos-delay="150">
-                <p class="text-2xl lg:text-3xl font-semibold text-[var(--cbo-accent)]">350+</p>
-                <p class="text-sm text-[var(--cbo-muted)] mt-1">Students supported</p>
-              </div>
-              <div class="rounded-2xl border border-[var(--cbo-border)] bg-white p-6 text-center" data-aos="fade-up" data-aos-delay="200">
-                <p class="text-2xl lg:text-3xl font-semibold text-[var(--cbo-accent)]">12</p>
-                <p class="text-sm text-[var(--cbo-muted)] mt-1">Communities reached</p>
-              </div>
-            </div>
+    <!-- Our story -->
+    <section class="py-16 sm:py-20 lg:py-28">
+      <div class="shell grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-16 items-center">
+        <div class="relative pb-10 sm:pb-14 pr-10 sm:pr-16" data-aos="fade-up">
+          <div class="aspect-[4/3] overflow-hidden rounded-[28px]">
+            <img :src="img(photos.classroom, 900, 675)" alt="Pupils in a classroom" class="w-full h-full object-cover" loading="lazy" />
           </div>
-          <div class="rounded-2xl cta-community p-8 lg:p-10" data-aos="fade-left">
-            <h3 class="text-xl lg:text-2xl font-semibold tracking-tight mb-6">Our story</h3>
-            <p class="text-neutral-400 leading-relaxed mb-6 text-[15px]">
-              Born from a simple visit to a children's home, our journey has grown into a community-driven initiative. We partner with local schools, provide scholarships and mentorship, and integrate mental health support so learning and wellbeing flourish together.
-            </p>
-            <ul class="space-y-3 mb-8">
-              <li class="flex items-start gap-3 text-neutral-300 text-[15px]">
-                <span class="w-1.5 h-1.5 rounded-full bg-[var(--cbo-accent)] mt-1.5 shrink-0" />
-                Scholarships and school essentials
-              </li>
-              <li class="flex items-start gap-3 text-neutral-300 text-[15px]">
-                <span class="w-1.5 h-1.5 rounded-full bg-[var(--cbo-accent)] mt-1.5 shrink-0" />
-                Computer literacy and vocational training
-              </li>
-              <li class="flex items-start gap-3 text-neutral-300 text-[15px]">
-                <span class="w-1.5 h-1.5 rounded-full bg-[var(--cbo-accent)] mt-1.5 shrink-0" />
-                Integrated mental wellness support
-              </li>
-            </ul>
-            <NuxtLink to="/donate" class="btn-cbo inline-flex px-6 py-2.5 rounded-full text-sm">
-              Join our mission
-            </NuxtLink>
+          <div class="absolute bottom-0 right-0 w-1/2 aspect-square overflow-hidden rounded-[24px] ring-8 ring-paper">
+            <img :src="img(photos.learner, 500, 500)" alt="A learner writing in a notebook" class="w-full h-full object-cover" loading="lazy" />
+          </div>
+          <div class="absolute top-6 -left-2 sm:left-6 rounded-2xl bg-sun px-4 py-3 shadow-lg">
+            <p class="text-2xl font-extrabold text-ink leading-none">12</p>
+            <p class="text-xs font-bold text-ink/75">villages together</p>
+          </div>
+        </div>
+
+        <div data-aos="fade-up" data-aos-delay="100">
+          <p class="eyebrow">Our story</p>
+          <h2 class="h2 mt-3">It started with a single visit</h2>
+          <p class="lead mt-5">
+            Born from a simple visit to a children's home, our journey has grown into a community-driven initiative. We
+            partner with local schools, provide scholarships and mentorship, and integrate mental health support so learning
+            and wellbeing flourish together.
+          </p>
+          <ul class="mt-7 space-y-3">
+            <li v-for="item in storyPoints" :key="item" class="flex items-start gap-3 text-[16px] font-medium text-ink">
+              <span class="mt-0.5 w-6 h-6 shrink-0 rounded-full bg-leaf-soft text-leaf flex items-center justify-center">
+                <Icon name="heroicons:check-20-solid" class="h-4 w-4" />
+              </span>
+              {{ item }}
+            </li>
+          </ul>
+          <div class="mt-9 flex flex-col sm:flex-row gap-3">
+            <NuxtLink to="/donate" class="btn btn-ink">Join our mission</NuxtLink>
+            <NuxtLink to="/blog/first-charity-visit" class="btn btn-outline">Read the full story</NuxtLink>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="py-24 lg:py-32 bg-cbo-cream">
-      <div class="container-cbo">
-        <div class="text-center mb-16" data-aos="fade-up">
-          <h2 class="section-heading mb-4">Our <span class="gradient-text">values</span></h2>
-          <p class="section-lead mx-auto">These principles guide everything we do in service of the Illchamus community.</p>
-        </div>
-        <div class="grid md:grid-cols-3 gap-8">
-          <div class="rounded-2xl border border-[var(--cbo-border)] p-8 card-hover" data-aos="fade-up" data-aos-delay="0">
-            <div class="w-12 h-12 rounded-xl bg-[var(--cbo-accent-soft)] flex items-center justify-center mb-6">
-              <Icon name="heroicons:heart" class="h-6 w-6 text-[var(--cbo-accent)]" />
-            </div>
-            <h4 class="text-lg font-semibold text-[var(--cbo-ink)] mb-3">Culture & identity</h4>
-            <p class="text-[var(--cbo-muted)] text-[15px] leading-relaxed">We preserve Illchamus heritage through language, arts, and storytelling for future generations.</p>
-          </div>
-          <div class="rounded-2xl border border-[var(--cbo-border)] p-8 card-hover" data-aos="fade-up" data-aos-delay="80">
-            <div class="w-12 h-12 rounded-xl bg-[var(--cbo-accent-soft)] flex items-center justify-center mb-6">
-              <Icon name="heroicons:academic-cap" class="h-6 w-6 text-[var(--cbo-accent)]" />
-            </div>
-            <h4 class="text-lg font-semibold text-[var(--cbo-ink)] mb-3">Education first</h4>
-            <p class="text-[var(--cbo-muted)] text-[15px] leading-relaxed">Access, equity, and excellence in learning for every child.</p>
-          </div>
-          <div class="rounded-2xl border border-[var(--cbo-border)] p-8 card-hover" data-aos="fade-up" data-aos-delay="160">
-            <div class="w-12 h-12 rounded-xl bg-[var(--cbo-accent-soft)] flex items-center justify-center mb-6">
-              <Icon name="heroicons:shield-check" class="h-6 w-6 text-[var(--cbo-accent)]" />
-            </div>
-            <h4 class="text-lg font-semibold text-[var(--cbo-ink)] mb-3">Wellbeing</h4>
-            <p class="text-[var(--cbo-muted)] text-[15px] leading-relaxed">Holistic mental, emotional, and social support for strong, resilient communities.</p>
-          </div>
-        </div>
+    <!-- Mission & vision -->
+    <section class="shell grid grid-cols-1 gap-5 md:grid-cols-2">
+      <div v-for="(card, i) in purpose" :key="card.title" class="rounded-[28px] p-8 sm:p-10" :class="card.bg" data-aos="fade-up" :data-aos-delay="i * 80">
+        <span class="w-12 h-12 rounded-2xl bg-white flex items-center justify-center" :class="card.iconColor">
+          <Icon :name="card.icon" class="h-6 w-6" />
+        </span>
+        <h2 class="mt-6 text-2xl sm:text-[1.75rem] font-bold tracking-tight text-ink">{{ card.title }}</h2>
+        <p class="mt-3 text-[17px] leading-relaxed text-ink/80">{{ card.text }}</p>
       </div>
     </section>
 
-    <section class="py-24 lg:py-32 bg-cbo-warm">
-      <div class="container-cbo">
-        <div class="text-center mb-16" data-aos="fade-up">
-          <h2 class="section-heading mb-4">Our <span class="gradient-text">community</span> in action</h2>
-          <p class="section-lead mx-auto">See the real impact of our programs through images from across the Illchamus community.</p>
+    <!-- Values -->
+    <section class="py-16 sm:py-20 lg:py-28">
+      <div class="shell">
+        <div class="max-w-2xl" data-aos="fade-up">
+          <p class="eyebrow">Our values</p>
+          <h2 class="h2 mt-3">What guides everything we do</h2>
         </div>
-        <div class="mb-8 relative rounded-2xl overflow-hidden border border-[var(--cbo-border)] h-80 md:h-[420px]" data-aos="fade-up">
-          <img
-            src="https://images.unsplash.com/photo-1559027615-cd4628902d4a?auto=format&fit=crop&w=1200&q=80"
-            alt="Community gathering"
-            class="w-full h-full object-cover"
-          />
-          <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent pointer-events-none" />
-        </div>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+        <div class="mt-10 lg:mt-14 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
           <div
-            v-for="(item, i) in impactGallery"
-            :key="i"
-            class="rounded-xl overflow-hidden border border-[var(--cbo-border)] group"
-            :class="item.span ? 'md:col-span-2 md:row-span-2' : ''"
-            :data-aos="'fade-up'"
-            :data-aos-delay="i * 60"
+            v-for="(value, i) in values"
+            :key="value.title"
+            class="rounded-[26px] bg-white border border-line p-7"
+            data-aos="fade-up"
+            :data-aos-delay="i * 70"
           >
-            <div :class="item.span ? 'h-64 md:h-full' : 'h-40 md:h-48'">
-              <img :src="item.url" :alt="item.title" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-            </div>
+            <span class="w-12 h-12 rounded-2xl flex items-center justify-center" :class="toneClasses[value.tone]">
+              <Icon :name="value.icon" class="h-6 w-6" />
+            </span>
+            <h3 class="h3 mt-6">{{ value.title }}</h3>
+            <p class="mt-2 text-[15px] leading-relaxed text-ink-soft">{{ value.text }}</p>
           </div>
         </div>
-        <div class="mt-12 text-center" data-aos="fade-up">
-          <NuxtLink to="/gallery" class="btn-cbo inline-flex items-center gap-2 px-8 py-3 rounded-full text-base">
-            View full gallery
-            <Icon name="heroicons:arrow-right" class="h-5 w-5" />
-          </NuxtLink>
+      </div>
+    </section>
+
+    <!-- Impact band -->
+    <section class="relative overflow-hidden bg-sun-soft py-14 sm:py-20">
+      <div class="sun-ring w-[240px] h-[240px] border-[24px] -top-28 -right-20 sm:w-[340px] sm:h-[340px] sm:border-[32px] sm:-top-40" aria-hidden="true" />
+      <div class="shell relative">
+        <h2 class="h2 max-w-xl pr-12">Real change, real neighbours</h2>
+        <p class="lead mt-4 max-w-2xl text-ink">Every figure is a person, a family or a village we walk alongside.</p>
+        <ImpactStats class="mt-10 lg:mt-14" />
+      </div>
+    </section>
+
+    <!-- Where we work -->
+    <section class="py-16 sm:py-20 lg:py-28">
+      <div class="shell">
+        <div class="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between" data-aos="fade-up">
+          <div class="max-w-2xl">
+            <p class="eyebrow">Where we work</p>
+            <h2 class="h2 mt-3">Around Lake Baringo, Baringo County</h2>
+            <p class="lead mt-4">Twelve villages and settlements, from the lakeshore to the most remote homesteads.</p>
+          </div>
+          <NuxtLink to="/gallery" class="btn btn-outline shrink-0 self-start sm:self-auto">View gallery</NuxtLink>
+        </div>
+        <div class="mt-10 grid grid-cols-2 lg:grid-cols-4 grid-rows-2 gap-3 sm:gap-4 h-[460px] sm:h-[560px]">
+          <div v-for="(tile, i) in mosaic" :key="tile.id" class="relative overflow-hidden rounded-[22px]" :class="tile.span" data-aos="fade-up" :data-aos-delay="i * 60">
+            <img :src="img(tile.id, 900)" :alt="tile.alt" class="absolute inset-0 w-full h-full object-cover" loading="lazy" />
+          </div>
         </div>
       </div>
     </section>
 
     <PageCta
-      heading-before="Ready to make a "
-      accent-word="difference"
-      heading-after="?"
+      title="Ready to make a difference?"
       description="Join us in preserving Illchamus culture and empowering our community. Every contribution makes an impact."
       primary-text="Donate"
       primary-to="/donate"
@@ -140,17 +124,46 @@
   </div>
 </template>
 
-<script setup>
-usePageMeta('About');
+<script setup lang="ts">
+import { img, photos, toneClasses } from "~/data/site";
 
-const impactGallery = [
-  { url: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=800&q=80", title: "Education", span: true },
-  { url: "https://images.unsplash.com/photo-1544531586-fde5298cdd40?auto=format&fit=crop&w=800&q=80", title: "Culture" },
-  { url: "https://images.unsplash.com/photo-1541701494587-cb58502866ab?auto=format&fit=crop&w=800&q=80", title: "Community" },
-  { url: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=800&q=80", title: "Health" },
-  { url: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=800&q=80", title: "Women" },
-  { url: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=800&q=80", title: "Festivals", span: true },
-  { url: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=800&q=80", title: "Farming" },
-  { url: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=80", title: "Youth" },
+usePageMeta("About", "Learn about Illchamus Community CBO: our story, mission, values and the communities we serve around Lake Baringo, Kenya.");
+
+const storyPoints = [
+  "Scholarships and school essentials",
+  "Computer literacy and vocational training",
+  "Integrated mental wellness support",
+];
+
+const purpose = [
+  {
+    title: "Our mission",
+    text: "To protect our heritage and enable every child and family to thrive through inclusive education, mental wellness support and community-driven development.",
+    icon: "heroicons:flag",
+    bg: "bg-sun-soft",
+    iconColor: "text-maroon",
+  },
+  {
+    title: "Our vision",
+    text: "A proud, healthy and self-reliant Illchamus community where culture is celebrated and every generation has the chance to flourish.",
+    icon: "heroicons:eye",
+    bg: "bg-lake-soft",
+    iconColor: "text-[#24647c]",
+  },
+];
+
+const values = [
+  { title: "Culture & identity", text: "We preserve Illchamus heritage through language, arts and storytelling for future generations.", icon: "heroicons:sparkles", tone: "maroon" as const },
+  { title: "Education first", text: "Access, equity and excellence in learning for every child.", icon: "heroicons:academic-cap", tone: "sun" as const },
+  { title: "Wellbeing", text: "Holistic mental, emotional and social support for strong, resilient families.", icon: "heroicons:heart", tone: "lake" as const },
+  { title: "Stewardship", text: "Caring for Lake Baringo and the land so it can sustain those who come after us.", icon: "heroicons:globe-europe-africa", tone: "leaf" as const },
+];
+
+const mosaic = [
+  { id: photos.children, alt: "Children from the community", span: "col-span-2 lg:row-span-2" },
+  { id: photos.roller, alt: "A lilac-breasted roller", span: "" },
+  { id: photos.acacia, alt: "Acacia tree at sunset", span: "" },
+  { id: photos.giraffe, alt: "Giraffe on the savanna", span: "hidden lg:block" },
+  { id: photos.youthTech, alt: "Young people learning computer skills", span: "hidden lg:block" },
 ];
 </script>

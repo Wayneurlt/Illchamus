@@ -1,11 +1,17 @@
 <template>
   <div>
-    <PageHero title-before="Terms of " gradient-word="service" title-after="" lead="The terms that govern your use of the Illchamus Community CBO website and services." />
+    <PageHero
+      title="Terms of service"
+      lead="The terms that govern your use of the Illchamus Community CBO website and services."
+      :image="img(photos.savanna, 1800)"
+      :crumbs="[{ label: 'Terms' }]"
+    />
 
-    <section class="py-16 lg:py-24 bg-white">
-      <div class="container-cbo max-w-3xl">
-        <article class="prose prose-lg max-w-none prose-headings:font-semibold prose-headings:tracking-tight prose-p:text-[var(--cbo-muted)] prose-p:leading-relaxed" data-aos="fade-up">
-          <p class="text-sm text-[var(--cbo-muted)]">Last updated: {{ lastUpdated }}</p>
+    <section class="py-14 sm:py-20">
+      <div class="shell">
+        <div class="mx-auto max-w-3xl rounded-[28px] bg-white border border-line p-6 sm:p-12">
+        <article class="article" data-aos="fade-up">
+          <p class="text-sm font-semibold text-ink-soft">Last updated: {{ lastUpdated }}</p>
 
           <h2>Acceptance of terms</h2>
           <p>
@@ -35,15 +41,18 @@
           <h2>Contact us</h2>
           <p>
             Questions about these terms can be sent to us via our
-            <NuxtLink to="/contact" class="text-[var(--cbo-accent)] hover:underline">contact page</NuxtLink>.
+            <NuxtLink to="/contact">contact page</NuxtLink>.
           </p>
         </article>
+        </div>
       </div>
     </section>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { img, photos } from "~/data/site";
+
 usePageMeta('Terms of Service', "The terms that govern your use of the Illchamus Community CBO website and services.");
 
 const lastUpdated = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });

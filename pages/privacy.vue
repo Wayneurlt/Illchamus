@@ -1,11 +1,17 @@
 <template>
   <div>
-    <PageHero title-before="Privacy " gradient-word="policy" title-after="" lead="How Illchamus Community CBO collects, uses, and protects your information." />
+    <PageHero
+      title="Privacy policy"
+      lead="How Illchamus Community CBO collects, uses, and protects your information."
+      :image="img(photos.savanna, 1800)"
+      :crumbs="[{ label: 'Privacy' }]"
+    />
 
-    <section class="py-16 lg:py-24 bg-white">
-      <div class="container-cbo max-w-3xl">
-        <article class="prose prose-lg max-w-none prose-headings:font-semibold prose-headings:tracking-tight prose-p:text-[var(--cbo-muted)] prose-p:leading-relaxed" data-aos="fade-up">
-          <p class="text-sm text-[var(--cbo-muted)]">Last updated: {{ lastUpdated }}</p>
+    <section class="py-14 sm:py-20">
+      <div class="shell">
+        <div class="mx-auto max-w-3xl rounded-[28px] bg-white border border-line p-6 sm:p-12">
+        <article class="article" data-aos="fade-up">
+          <p class="text-sm font-semibold text-ink-soft">Last updated: {{ lastUpdated }}</p>
 
           <h2>Information we collect</h2>
           <p>
@@ -25,21 +31,24 @@
           <h2>Your rights</h2>
           <p>
             You may request access to, correction of, or deletion of your personal information at any time by contacting us at
-            <a href="mailto:smile4smileinnitiative@gmail.com" class="text-[var(--cbo-accent)] hover:underline">smile4smileinnitiative@gmail.com</a>.
+            <a :href="`mailto:${site.email}`">{{ site.email }}</a>.
           </p>
 
           <h2>Contact us</h2>
           <p>
             If you have questions about this privacy policy, please reach out via our
-            <NuxtLink to="/contact" class="text-[var(--cbo-accent)] hover:underline">contact page</NuxtLink>.
+            <NuxtLink to="/contact">contact page</NuxtLink>.
           </p>
         </article>
+        </div>
       </div>
     </section>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { img, photos, site } from "~/data/site";
+
 usePageMeta('Privacy Policy', "Learn how Illchamus Community CBO collects, uses, and protects your personal information.");
 
 const lastUpdated = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });

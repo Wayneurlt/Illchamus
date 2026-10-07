@@ -14,7 +14,7 @@ export const blogPosts: BlogPost[] = [
     date: 'Nov 2023',
     title: "First Charity Visit to Israel Faith Children's Home",
     excerpt: 'We connected with children, provided essentials, and strengthened our commitment to lasting impact.',
-    image: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2070&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1509099836639-18ba1795216d?q=75&w=1600&auto=format&fit=crop',
     tag: 'Events',
     content: `
       <p>Our journey began with a simple yet profound visit to the Israel Faith Children's Home in Baringo County. What started as a small gesture of support has grown into a comprehensive community development initiative that continues to touch lives across the region.</p>
@@ -31,7 +31,7 @@ export const blogPosts: BlogPost[] = [
     date: 'Jan 2024',
     title: 'Scholarship Drive Launch',
     excerpt: 'Launching scholarships and mentorship to empower learners for long-term success.',
-    image: 'https://images.unsplash.com/photo-1496307653780-42ee777d4833?q=80&w=1974&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1567057419565-4349c49d8a04?q=75&w=1600&auto=format&fit=crop',
     tag: 'Education',
     content: `
       <p>January 2024 marked a significant milestone in our educational support efforts with the official launch of our comprehensive scholarship program. This initiative represents our commitment to breaking down barriers to quality education for bright students in the Illchamus community.</p>
@@ -50,7 +50,7 @@ export const blogPosts: BlogPost[] = [
     date: 'Mar 2024',
     title: 'Community Wellness Program',
     excerpt: 'Integrating mental health support into schools and community groups.',
-    image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=1974&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1531206715517-5c0ba140b2b8?q=75&w=1600&auto=format&fit=crop',
     tag: 'Wellness',
     content: `
       <p>Mental health is a crucial component of overall wellbeing, yet it's often overlooked in community development programs. Our Community Wellness Program, launched in March 2024, aims to change that by integrating mental health support into the fabric of our community services.</p>
@@ -70,7 +70,7 @@ export const blogPosts: BlogPost[] = [
     date: 'Jun 2024',
     title: 'Computer Literacy Bootcamp',
     excerpt: 'Digital skilling for youth to prepare for modern careers.',
-    image: 'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=1975&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?q=75&w=1600&auto=format&fit=crop',
     tag: 'Skills',
     content: `
       <p>In today's digital world, computer literacy is no longer optional – it's essential for accessing opportunities and building successful careers. Our Computer Literacy Bootcamp, launched in June 2024, equips young people in the Illchamus community with the digital skills they need to thrive in the modern economy.</p>
@@ -90,7 +90,7 @@ export const blogPosts: BlogPost[] = [
     date: 'Sep 2024',
     title: 'Cultural Heritage Day',
     excerpt: 'Celebrating Illchamus traditions with music, art, and storytelling.',
-    image: 'https://images.unsplash.com/photo-1498654200943-1088dd4438ae?q=80&w=1974&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?q=75&w=1600&auto=format&fit=crop',
     tag: 'Culture',
     content: `
       <p>Cultural Heritage Day is one of our most anticipated annual events, celebrating the rich traditions and vibrant culture of the Illchamus people. This year's celebration, held in September 2024, brought together community members of all ages to honor our heritage and pass traditions to the next generation.</p>
@@ -110,7 +110,7 @@ export const blogPosts: BlogPost[] = [
     date: 'Dec 2024',
     title: 'Holiday Food Drive',
     excerpt: 'Providing essential supplies to families across Baringo County.',
-    image: 'https://images.unsplash.com/photo-1573495804683-641191e042ea?q=80&w=1974&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?q=75&w=1600&auto=format&fit=crop',
     tag: 'Relief',
     content: `
       <p>The holiday season is a time for celebration and togetherness, but for many families in Baringo County, it can also be a time of increased financial strain. Our annual Holiday Food Drive, conducted in December 2024, ensures that families can celebrate the season with dignity and hope.</p>

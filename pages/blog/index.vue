@@ -1,45 +1,60 @@
 <template>
   <div>
-    <PageHero title="Blog & updates" lead="Stories and updates from our community work." />
+    <PageHero
+      eyebrow="News & stories"
+      title="Stories from our community"
+      lead="Updates, milestones and voices from across our programs in Baringo County."
+      :image="img(photos.classroom, 1800)"
+      :crumbs="[{ label: 'News & Stories' }]"
+    />
 
-    <section class="pb-24 lg:pb-32 bg-cbo-cream">
-      <div class="container-cbo">
-        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-          <article
-            v-for="(post, i) in posts"
-            :key="post.slug"
-            class="group rounded-2xl border border-[var(--cbo-border)] overflow-hidden card-hover bg-white"
-            :data-aos="'fade-up'"
-            :data-aos-delay="i % 3 * 80"
+    <section class="py-14 sm:py-20">
+      <div class="shell">
+        <div class="no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0 flex gap-2 overflow-x-auto" role="tablist" aria-label="Filter stories">
+          <button
+            v-for="tag in tags"
+            :key="tag"
+            type="button"
+            role="tab"
+            :aria-selected="active === tag"
+            class="shrink-0 rounded-full px-5 py-2.5 text-sm font-bold transition-colors"
+            :class="active === tag ? 'bg-maroon text-white' : 'bg-white border border-line text-ink hover:border-maroon'"
+            @click="active = tag"
           >
-            <NuxtLink :to="`/blog/${post.slug}`" class="block">
-              <div class="relative aspect-video overflow-hidden bg-[var(--cbo-accent-soft)]">
-                <img :src="post.image" alt="Post cover" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
-                <div v-if="post.tag" class="absolute top-4 left-4">
-                  <span class="px-3 py-1.5 rounded-full bg-[var(--cbo-accent)] text-white text-xs font-medium">{{ post.tag }}</span>
-                </div>
-              </div>
-              <div class="p-5 lg:p-6">
-                <p class="text-xs text-[var(--cbo-muted)] font-medium mb-2 flex items-center gap-1.5">
-                  <Icon name="heroicons:calendar" class="h-3.5 w-3.5" />
-                  {{ post.date }}
-                </p>
-                <h3 class="text-lg font-semibold text-[var(--cbo-ink)] mb-2 line-clamp-2 hover:text-[var(--cbo-accent)] transition-colors">{{ post.title }}</h3>
-                <p class="text-sm text-[var(--cbo-muted)] leading-relaxed line-clamp-3 mb-4">{{ post.excerpt }}</p>
-                <span class="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--cbo-accent)]">
-                  Read more
-                  <Icon name="heroicons:arrow-right" class="h-4 w-4" />
-                </span>
-              </div>
-            </NuxtLink>
-          </article>
+            {{ tag }}
+          </button>
+        </div>
+
+        <PostCard v-if="featured" :post="featured" featured class="mt-8 block" />
+
+        <div v-if="rest.length" class="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <PostCard v-for="post in rest" :key="post.slug" :post="post" />
         </div>
       </div>
     </section>
+
+    <PageCta
+      title="Have a story to tell?"
+      description="If our programs have touched your life, we would love to hear from you."
+      primary-text="Share your story"
+      primary-to="/contact"
+      secondary-text="Support our work"
+      secondary-to="/donate"
+    />
   </div>
 </template>
 
-<script setup>
-const { posts } = useBlogPosts()
-usePageMeta('Blog')
+<script setup lang="ts">
+import { img, photos } from "~/data/site";
+
+usePageMeta("News & Stories", "Stories and updates from the Illchamus Community CBO and our programs in Baringo County, Kenya.");
+
+const { posts } = useBlogPosts();
+const newestFirst = [...posts].reverse();
+const tags = ["All", ...new Set(newestFirst.map((p) => p.tag).filter((t): t is string => !!t))];
+const active = ref("All");
+
+const visible = computed(() => (active.value === "All" ? newestFirst : newestFirst.filter((p) => p.tag === active.value)));
+const featured = computed(() => visible.value[0]);
+const rest = computed(() => visible.value.slice(1));
 </script>

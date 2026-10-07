@@ -1,243 +1,320 @@
 <template>
-  <nav
-    ref="navRef"
-    class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-out"
-    :class="[
-      isScrolled
-        ? 'bg-[var(--cbo-cream)]/95 backdrop-blur-md border-b border-[var(--cbo-border)] shadow-sm'
-        : 'bg-[var(--cbo-cream)]/90 backdrop-blur-sm',
-    ]"
-    role="navigation"
-    aria-label="Main navigation"
-  >
-    <div class="container-cbo">
-      <div class="flex justify-between items-center h-16 lg:h-20">
-        <!-- Logo -->
-        <NuxtLink
-          to="/"
-          class="flex items-center shrink-0 h-full py-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--cbo-accent)] focus-visible:ring-offset-2 rounded-lg transition-transform hover:scale-105"
-          aria-label="Illchamus CBO Home"
-          @click="closeMobileMenu"
-        >
-          <img
-            src="/logo.png"
-            alt="Illchamus CBO"
-            class="h-full max-h-10 lg:max-h-12 w-auto object-contain"
-            loading="eager"
-          />
-        </NuxtLink>
-
-        <!-- Desktop Navigation -->
-        <div class="hidden lg:flex items-center gap-1">
+  <header class="absolute inset-x-0 top-0 z-40" role="banner">
+    <!-- Utility bar -->
+    <div class="hidden lg:block">
+      <div class="frame">
+        <div class="h-11 flex items-center justify-end gap-7 pr-4 text-[13px] font-semibold text-ink">
           <NuxtLink
-            v-for="link in navLinks"
-            :key="link.to"
+            v-for="link in utilityLinks"
+            :key="link.label"
             :to="link.to"
-            class="relative px-4 py-2.5 rounded-lg text-[15px] font-semibold text-[var(--cbo-earth)] transition-colors hover:text-[var(--cbo-accent)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--cbo-accent)] focus-visible:ring-offset-2"
-            :class="{
-              'text-[var(--cbo-accent)]': isActiveRoute(link.to),
-            }"
-            active-class="text-[var(--cbo-accent)]"
+            class="inline-flex items-center gap-1.5 hover:text-maroon transition-colors"
           >
+            <Icon v-if="link.label === 'Shop'" :name="link.icon" class="h-4 w-4" />
             {{ link.label }}
-            <span
-              v-if="isActiveRoute(link.to)"
-              class="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-[var(--cbo-accent)]"
-            />
           </NuxtLink>
-          <NuxtLink
-            to="/donate"
-            class="ml-2 btn-cbo px-5 py-2.5 text-[15px] text-white inline-flex items-center gap-1.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--cbo-accent)] focus-visible:ring-offset-2"
-          >
-            <Icon name="heroicons:heart" class="h-4 w-4" />
-            Donate
-          </NuxtLink>
+          <a :href="site.phoneHref" class="inline-flex items-center gap-1.5 hover:text-maroon transition-colors">
+            <Icon name="heroicons:phone" class="h-4 w-4" />
+            Call us: {{ site.phone }}
+          </a>
+          <a :href="`mailto:${site.email}`" class="inline-flex items-center hover:text-maroon transition-colors" aria-label="Email us">
+            <Icon name="heroicons:envelope" class="h-[18px] w-[18px]" />
+          </a>
         </div>
-
-        <!-- Mobile Menu Button -->
-        <button
-          ref="menuButtonRef"
-          class="lg:hidden p-2.5 -mr-2 rounded-lg text-neutral-700 hover:bg-[var(--cbo-accent-soft)] active:bg-neutral-200 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--cbo-accent)] focus-visible:ring-offset-2"
-          :aria-expanded="isMobileMenuOpen"
-          aria-controls="mobile-menu"
-          aria-label="Toggle navigation menu"
-          @click="toggleMobileMenu"
-        >
-          <Transition
-            mode="out-in"
-            enter-active-class="transition-all duration-200"
-            enter-from-class="opacity-0 rotate-90"
-            enter-to-class="opacity-100 rotate-0"
-            leave-active-class="transition-all duration-200"
-            leave-from-class="opacity-100 rotate-0"
-            leave-to-class="opacity-0 -rotate-90"
-          >
-            <Icon
-              :key="isMobileMenuOpen ? 'close' : 'menu'"
-              :name="isMobileMenuOpen ? 'heroicons:x-mark-20-solid' : 'heroicons:bars-3'"
-              class="h-6 w-6"
-            />
-          </Transition>
-        </button>
       </div>
     </div>
 
-    <!-- Mobile Menu -->
-    <Transition
-      enter-active-class="transition-all duration-300 ease-out"
-      enter-from-class="opacity-0 -translate-y-4"
-      enter-to-class="opacity-100 translate-y-0"
-      leave-active-class="transition-all duration-200 ease-in"
-      leave-from-class="opacity-100 translate-y-0"
-      leave-to-class="opacity-0 -translate-y-4"
-    >
-      <div
-        v-if="isMobileMenuOpen"
-        id="mobile-menu"
-        class="lg:hidden absolute inset-x-0 top-full bg-white border-b border-neutral-200 shadow-lg"
-      >
-        <div class="container-cbo py-6 space-y-1">
+    <!-- Main bar: sits over the top of each page's hero card -->
+    <div class="frame hero-offset lg:pt-0">
+      <nav class="relative flex items-center h-[76px] lg:h-[92px] px-4 sm:px-6 lg:px-8" aria-label="Main navigation">
+        <NuxtLink
+          to="/"
+          class="logo-badge absolute left-3 top-2 w-[60px] h-[60px] sm:left-5 sm:w-[68px] sm:h-[68px] lg:left-7 lg:-top-8 lg:w-[124px] lg:h-[124px]"
+          aria-label="Illchamus Community CBO – home"
+        >
+          <img src="/logo.png" alt="ICDO logo" class="w-full h-full object-contain scale-110" width="124" height="124" />
+        </NuxtLink>
+
+        <div class="hidden lg:flex items-center gap-0.5 xl:gap-1 ml-[150px] xl:ml-[164px]">
           <NuxtLink
             v-for="link in navLinks"
             :key="link.to"
             :to="link.to"
-            class="flex items-center justify-between px-4 py-3.5 rounded-xl text-[15px] font-semibold text-[var(--cbo-earth)] hover:bg-[var(--cbo-warm)] hover:text-[var(--cbo-accent)] transition-all active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--cbo-accent)] focus-visible:ring-offset-2"
-            :class="{
-              'text-[var(--cbo-accent)] bg-[var(--cbo-accent-soft)]': isActiveRoute(link.to),
-            }"
-            @click="closeMobileMenu"
+            class="nav-link-light"
+            :class="{ 'is-active': isActive(link.to) }"
           >
-            <span>{{ link.label }}</span>
-            <Icon
-              v-if="isActiveRoute(link.to)"
-              name="heroicons:check-circle"
-              class="h-5 w-5 text-[var(--cbo-accent)]"
-            />
+            {{ link.label }}
           </NuxtLink>
-          <NuxtLink
-            to="/donate"
-            class="flex items-center justify-center gap-2 mx-4 mt-4 btn-cbo text-center py-3.5 rounded-full text-white font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--cbo-accent)] focus-visible:ring-offset-2"
-            @click="closeMobileMenu"
-          >
-            <Icon name="heroicons:heart" class="h-4 w-4" />
+        </div>
+
+        <div class="ml-auto flex items-center gap-2">
+          <NuxtLink to="/donate" class="btn btn-white hidden sm:inline-flex">
+            <Icon name="heroicons:heart-solid" class="h-4 w-4 text-[#e2574c]" />
             Donate
           </NuxtLink>
+          <button
+            type="button"
+            class="lg:hidden w-12 h-12 rounded-full bg-white/95 text-ink flex items-center justify-center shadow-lg"
+            aria-label="Open menu"
+            :aria-expanded="menuOpen"
+            aria-controls="mobile-menu"
+            @click="openMenu"
+          >
+            <Icon name="heroicons:bars-3" class="h-6 w-6" />
+          </button>
+        </div>
+      </nav>
+    </div>
+
+    <!-- Compact sticky bar after scrolling -->
+    <Transition
+      enter-active-class="transition duration-300 ease-out"
+      enter-from-class="-translate-y-full"
+      leave-active-class="transition duration-200 ease-in"
+      leave-to-class="-translate-y-full"
+    >
+      <div v-if="scrolled" class="fixed inset-x-0 top-0 z-50 bg-white/90 backdrop-blur-md border-b border-line shadow-[0_8px_24px_-16px_rgba(46,20,20,0.35)]">
+        <div class="shell flex items-center h-16 lg:h-[72px]">
+          <NuxtLink to="/" class="flex items-center gap-3 shrink-0" aria-label="Illchamus Community CBO – home">
+            <span class="logo-badge w-11 h-11 lg:w-12 lg:h-12 !shadow-none ring-1 ring-line">
+              <img src="/logo.png" alt="" class="w-full h-full object-contain scale-110" />
+            </span>
+            <span class="hidden sm:block leading-tight">
+              <span class="block text-[15px] font-extrabold tracking-tight text-ink">Illchamus Community</span>
+              <span class="block text-xs font-semibold text-ink-soft">Baringo County, Kenya</span>
+            </span>
+          </NuxtLink>
+          <div class="hidden lg:flex items-center gap-0.5 ml-auto mr-4">
+            <NuxtLink
+              v-for="link in navLinks"
+              :key="link.to"
+              :to="link.to"
+              class="nav-link-dark"
+              :class="{ 'is-active': isActive(link.to) }"
+            >
+              {{ link.label }}
+            </NuxtLink>
+          </div>
+          <div class="flex items-center gap-2 ml-auto lg:ml-0">
+            <NuxtLink to="/donate" class="btn btn-sun btn-sm">
+              <Icon name="heroicons:heart-solid" class="h-4 w-4" />
+              Donate
+            </NuxtLink>
+            <button
+              type="button"
+              class="lg:hidden w-10 h-10 rounded-full bg-paper text-ink flex items-center justify-center border border-line"
+              aria-label="Open menu"
+              :aria-expanded="menuOpen"
+              aria-controls="mobile-menu"
+              @click="openMenu"
+            >
+              <Icon name="heroicons:bars-3" class="h-5 w-5" />
+            </button>
+          </div>
         </div>
       </div>
     </Transition>
-  </nav>
+
+    <!-- Mobile menu -->
+    <Teleport to="body">
+      <Transition
+        enter-active-class="transition duration-300 ease-out"
+        enter-from-class="opacity-0 translate-y-3"
+        leave-active-class="transition duration-200 ease-in"
+        leave-to-class="opacity-0 translate-y-3"
+      >
+        <div
+          v-if="menuOpen"
+          id="mobile-menu"
+          ref="menuRef"
+          class="fixed inset-0 z-[70] bg-maroon-deep text-white overflow-y-auto overscroll-contain lg:hidden"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Site menu"
+        >
+          <div class="sun-ring w-[340px] h-[340px] border-[34px] -right-36 -bottom-36 opacity-90" aria-hidden="true" />
+          <div class="relative min-h-full flex flex-col px-5 sm:px-8 pt-4 pb-10">
+            <div class="flex items-center justify-between">
+              <NuxtLink to="/" class="logo-badge w-[60px] h-[60px]" aria-label="Home" @click="closeMenu">
+                <img src="/logo.png" alt="ICDO logo" class="w-full h-full object-contain scale-110" />
+              </NuxtLink>
+              <button
+                ref="closeRef"
+                type="button"
+                class="w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center"
+                aria-label="Close menu"
+                @click="closeMenu"
+              >
+                <Icon name="heroicons:x-mark" class="h-6 w-6" />
+              </button>
+            </div>
+
+            <nav class="mt-10" aria-label="Mobile navigation">
+              <ul class="space-y-1">
+                <li v-for="link in [{ to: '/', label: 'Home' }, ...navLinks]" :key="link.to">
+                  <NuxtLink
+                    :to="link.to"
+                    class="flex items-center justify-between py-3 text-[1.75rem] sm:text-3xl font-bold tracking-tight border-b border-white/10"
+                    :class="isActive(link.to) ? 'text-sun' : 'text-white'"
+                    @click="closeMenu"
+                  >
+                    {{ link.label }}
+                    <Icon name="heroicons:arrow-up-right" class="h-5 w-5 opacity-50" />
+                  </NuxtLink>
+                </li>
+              </ul>
+            </nav>
+
+            <div class="mt-8 flex flex-wrap gap-2">
+              <NuxtLink
+                v-for="link in utilityLinks"
+                :key="link.label"
+                :to="link.to"
+                class="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2.5 text-sm font-semibold"
+                @click="closeMenu"
+              >
+                <Icon :name="link.icon" class="h-4 w-4 text-sun" />
+                {{ link.label }}
+              </NuxtLink>
+            </div>
+
+            <NuxtLink to="/donate" class="btn btn-sun mt-8 w-full text-base" @click="closeMenu">
+              <Icon name="heroicons:heart-solid" class="h-5 w-5" />
+              Donate today
+            </NuxtLink>
+
+            <div class="mt-auto pt-10 space-y-2 text-[15px] text-white/80">
+              <a :href="site.phoneHref" class="flex items-center gap-2.5"><Icon name="heroicons:phone" class="h-4 w-4 text-sun" />{{ site.phone }}</a>
+              <a :href="`mailto:${site.email}`" class="flex items-center gap-2.5 break-all"><Icon name="heroicons:envelope" class="h-4 w-4 text-sun shrink-0" />{{ site.email }}</a>
+              <p class="flex items-center gap-2.5"><Icon name="heroicons:map-pin" class="h-4 w-4 text-sun" />{{ site.location }}</p>
+            </div>
+          </div>
+        </div>
+      </Transition>
+    </Teleport>
+  </header>
 </template>
 
-<script setup>
-const navLinks = [
-  { to: "/", label: "Home" },
-  { to: "/about", label: "About" },
-  { to: "/gallery", label: "Gallery" },
-  { to: "/products", label: "Products" },
-  { to: "/blog", label: "Blog" },
-  { to: "/contact", label: "Contact" },
-];
+<script setup lang="ts">
+import { site, navLinks, utilityLinks } from "~/data/site";
 
 const route = useRoute();
-const navRef = ref(null);
-const menuButtonRef = ref(null);
-const isScrolled = ref(false);
-const isMobileMenuOpen = ref(false);
+const scrolled = ref(false);
+const menuOpen = ref(false);
+const closeRef = ref<HTMLButtonElement | null>(null);
+let lastTrigger: HTMLElement | null = null;
 
-// Check if route is active (handles exact and partial matches)
-const isActiveRoute = (path) => {
-  if (path === "/") {
-    return route.path === "/";
-  }
-  return route.path.startsWith(path);
+const isActive = (to: string) => {
+  if (to.includes("#")) return false;
+  if (to === "/") return route.path === "/";
+  return route.path.startsWith(to);
 };
 
-// Improved scroll handler with requestAnimationFrame for better performance
-let rafId = null;
-const handleScroll = () => {
-  if (rafId) {
-    cancelAnimationFrame(rafId);
-  }
-  rafId = requestAnimationFrame(() => {
-    const scrollY = window.scrollY || window.pageYOffset;
-    isScrolled.value = scrollY > 20;
+const openMenu = (e: Event) => {
+  lastTrigger = e.currentTarget as HTMLElement;
+  menuOpen.value = true;
+};
+
+const closeMenu = () => {
+  menuOpen.value = false;
+};
+
+watch(menuOpen, (open) => {
+  document.documentElement.style.overflow = open ? "hidden" : "";
+  if (open) nextTick(() => closeRef.value?.focus());
+  else lastTrigger?.focus?.();
+});
+
+watch(() => route.fullPath, closeMenu);
+
+let raf = 0;
+const onScroll = () => {
+  cancelAnimationFrame(raf);
+  raf = requestAnimationFrame(() => {
+    scrolled.value = window.scrollY > 360;
   });
 };
 
-// Toggle mobile menu
-const toggleMobileMenu = () => {
-  isMobileMenuOpen.value = !isMobileMenuOpen.value;
-  if (isMobileMenuOpen.value) {
-    document.body.style.overflow = "hidden";
-    // Focus trap: focus the first link when menu opens
-    nextTick(() => {
-      const firstLink = document.querySelector("#mobile-menu a");
-      if (firstLink) {
-        firstLink.focus();
-      }
-    });
-  } else {
-    document.body.style.overflow = "";
-    // Return focus to menu button
-    if (menuButtonRef.value) {
-      menuButtonRef.value.focus();
-    }
-  }
+const onKeydown = (e: KeyboardEvent) => {
+  if (e.key === "Escape" && menuOpen.value) closeMenu();
 };
 
-// Close mobile menu
-const closeMobileMenu = () => {
-  if (isMobileMenuOpen.value) {
-    isMobileMenuOpen.value = false;
-    document.body.style.overflow = "";
-  }
+const onResize = () => {
+  if (window.innerWidth >= 1024 && menuOpen.value) closeMenu();
 };
 
-// Close menu on route change
-watch(
-  () => route.path,
-  () => {
-    closeMobileMenu();
-  }
-);
-
-// Handle escape key
-const handleKeydown = (e) => {
-  if (e.key === "Escape" && isMobileMenuOpen.value) {
-    closeMobileMenu();
-  }
-};
-
-// Handle click outside to close mobile menu
-const handleClickOutside = (e) => {
-  if (
-    isMobileMenuOpen.value &&
-    navRef.value &&
-    !navRef.value.contains(e.target)
-  ) {
-    closeMobileMenu();
-  }
-};
-
-// Lifecycle hooks
 onMounted(() => {
-  // Initial scroll state
-  handleScroll();
-  
-  // Add event listeners
-  window.addEventListener("scroll", handleScroll, { passive: true });
-  document.addEventListener("keydown", handleKeydown);
-  document.addEventListener("click", handleClickOutside);
+  onScroll();
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onResize, { passive: true });
+  document.addEventListener("keydown", onKeydown);
 });
 
-onUnmounted(() => {
-  // Cleanup
-  if (rafId) {
-    cancelAnimationFrame(rafId);
-  }
-  window.removeEventListener("scroll", handleScroll);
-  document.removeEventListener("keydown", handleKeydown);
-  document.removeEventListener("click", handleClickOutside);
-  document.body.style.overflow = "";
+onBeforeUnmount(() => {
+  cancelAnimationFrame(raf);
+  window.removeEventListener("scroll", onScroll);
+  window.removeEventListener("resize", onResize);
+  document.removeEventListener("keydown", onKeydown);
+  document.documentElement.style.overflow = "";
 });
 </script>
+
+<style scoped>
+.logo-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background: #fff;
+  overflow: hidden;
+  box-shadow: 0 10px 30px -12px rgb(46 20 20 / 0.45);
+  z-index: 2;
+}
+
+.nav-link-light,
+.nav-link-dark {
+  position: relative;
+  padding: 0.625rem 0.625rem;
+  border-radius: 9999px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+@media (min-width: 1280px) {
+  .nav-link-light,
+  .nav-link-dark {
+    padding-inline: 0.875rem;
+  }
+}
+.nav-link-light {
+  color: #fff;
+  text-shadow: 0 1px 12px rgb(0 0 0 / 0.35);
+}
+.nav-link-light:hover,
+.nav-link-light.is-active {
+  background: rgb(255 255 255 / 0.16);
+}
+.nav-link-dark {
+  color: var(--color-ink);
+}
+.nav-link-dark:hover {
+  color: var(--color-maroon);
+  background: var(--color-sun-soft);
+}
+.nav-link-dark.is-active {
+  color: var(--color-maroon);
+}
+.nav-link-light.is-active::after,
+.nav-link-dark.is-active::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0.25rem;
+  width: 1rem;
+  height: 3px;
+  border-radius: 3px;
+  background: var(--color-sun);
+  transform: translateX(-50%);
+}
+</style>

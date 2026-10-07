@@ -1,14 +1,18 @@
 <template>
   <div>
-    <PageHero title-before="Community " gradient-word="gallery" title-after="" lead="Explore moments, celebrations, and impactful work across our Illchamus community—from cultural preservation to educational programs." />
+    <PageHero
+      eyebrow="Moments that matter"
+      title="Community gallery"
+      lead="Celebrations, classrooms and the landscapes of home, from across the Illchamus community."
+      :image="img(photos.acaciaDusk, 1800)"
+      :crumbs="[{ label: 'Gallery' }]"
+    />
 
     <Gallery />
 
     <PageCta
-      heading-before="Want to "
-      accent-word="contribute"
-      heading-after="?"
-      description="Share your photos of community events, cultural celebrations, or volunteer activities. Help us build a visual story of our journey."
+      title="Have photos to share?"
+      description="Send us your photos of community events, cultural celebrations or volunteer days and help us tell our story."
       primary-text="Share your photos"
       primary-to="/contact"
       secondary-text="Support our work"
@@ -17,6 +21,8 @@
   </div>
 </template>
 
-<script setup>
-usePageMeta('Gallery', "Explore our community gallery: cultural celebrations, educational programs, and initiatives across Baringo County, Kenya.");
+<script setup lang="ts">
+import { img, photos } from "~/data/site";
+
+usePageMeta("Gallery", "Explore our community gallery: cultural celebrations, educational programs, and initiatives across Baringo County, Kenya.");
 </script>
