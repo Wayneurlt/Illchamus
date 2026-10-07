@@ -22,7 +22,7 @@
           <button
             type="button"
             class="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/95 text-ink flex items-center justify-center shadow-md hover:bg-sun-soft transition-colors"
-            aria-label="Close"
+            :aria-label="m.common.close"
             @click="close"
           >
             <Icon name="heroicons:x-mark" class="h-5 w-5" />
@@ -37,6 +37,7 @@
 <script setup lang="ts">
 const props = defineProps<{ open: boolean; label?: string }>();
 const emit = defineEmits<{ close: [] }>();
+const { m } = useLang();
 
 const panel = ref<HTMLElement | null>(null);
 let previousFocus: HTMLElement | null = null;

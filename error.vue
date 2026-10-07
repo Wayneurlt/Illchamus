@@ -2,15 +2,15 @@
   <UApp>
     <NuxtLayout>
       <PageHero
-        :eyebrow="is404 ? 'Error 404' : 'Something went wrong'"
-        :title="is404 ? 'We couldn\'t find that page' : 'Sorry, something went wrong'"
-        :lead="is404 ? 'The page may have moved, or the link might be broken. Let\'s get you back on track.' : 'Please try again in a moment.'"
+        :eyebrow="is404 ? t.notFoundEyebrow : t.errorEyebrow"
+        :title="is404 ? t.notFoundTitle : t.errorTitle"
+        :lead="is404 ? t.notFoundLead : t.errorLead"
         :image="img(photos.acaciaDusk, 1800)"
-        :crumbs="[{ label: is404 ? 'Page not found' : 'Error' }]"
+        :crumbs="[{ label: is404 ? t.notFoundCrumb : t.errorCrumb }]"
       >
         <div class="flex flex-wrap gap-3">
-          <button type="button" class="btn btn-sun" @click="clearError({ redirect: '/' })">Back to home</button>
-          <NuxtLink to="/contact" class="btn btn-ghost" @click="clearError()">Contact us</NuxtLink>
+          <button type="button" class="btn btn-sun" @click="clearError({ redirect: '/' })">{{ t.home }}</button>
+          <button type="button" class="btn btn-ghost" @click="clearError({ redirect: '/contact' })">{{ t.contact }}</button>
         </div>
       </PageHero>
     </NuxtLayout>
@@ -23,6 +23,12 @@ import { img, photos } from "~/data/site";
 
 const props = defineProps<{ error: NuxtError }>();
 const is404 = computed(() => props.error?.statusCode === 404);
+const { m, lang } = useLang();
+const t = computed(() => m.value.error);
 
-useHead({ title: is404.value ? "Page not found • Illchamus Community CBO" : "Error • Illchamus Community CBO" });
+useHead({
+  title: () => `${is404.value ? t.value.notFoundCrumb : t.value.errorCrumb} • Illchamus Community CBO`,
+  htmlAttrs: { lang },
+  meta: [{ name: "robots", content: "noindex" }],
+});
 </script>

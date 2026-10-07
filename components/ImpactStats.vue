@@ -2,7 +2,7 @@
   <dl ref="root" class="grid grid-cols-2 lg:grid-cols-4 border-t border-ink/15">
     <div
       v-for="(stat, i) in impactStats"
-      :key="stat.label"
+      :key="i"
       class="pt-6 pb-2 pr-4 lg:px-6 first:lg:pl-0"
       :class="[
         i % 2 === 1 ? 'pl-4 border-l border-ink/15' : '',
@@ -10,13 +10,13 @@
         i > 1 ? 'border-t border-ink/15 lg:border-t-0 mt-0' : '',
       ]"
     >
-      <dt class="sr-only">{{ stat.label }}</dt>
+      <dt class="sr-only">{{ m.stats[i] }}</dt>
       <dd>
         <span class="block text-[2.25rem] sm:text-5xl font-extrabold tracking-tight text-ink tabular-nums">
           {{ stat.prefix || "" }}{{ format(display[i] ?? 0) }}{{ stat.suffix }}
         </span>
         <span class="mt-2 block text-sm sm:text-[15px] font-medium leading-snug text-ink-soft max-w-[14rem]">
-          {{ stat.label }}
+          {{ m.stats[i] }}
         </span>
       </dd>
     </div>
@@ -25,6 +25,8 @@
 
 <script setup lang="ts">
 import { impactStats } from "~/data/site";
+
+const { m } = useLang();
 
 const root = ref<HTMLElement | null>(null);
 // Render final values on the server so the numbers are never wrong without JS.

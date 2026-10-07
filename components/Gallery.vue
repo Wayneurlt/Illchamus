@@ -1,35 +1,37 @@
 <template>
   <section class="py-14 sm:py-20">
     <div class="shell">
-      <div class="no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0 flex gap-2 overflow-x-auto" role="tablist" aria-label="Filter photos">
+      <div class="no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0 flex gap-2 overflow-x-auto" role="tablist" :aria-label="m.gallery.filter">
         <button
           v-for="cat in categories"
-          :key="cat.id"
+          :key="cat"
           type="button"
           role="tab"
-          :aria-selected="active === cat.id"
+          :aria-selected="active === cat"
           class="shrink-0 rounded-full px-5 py-2.5 text-sm font-bold transition-colors"
-          :class="active === cat.id ? 'bg-maroon text-white' : 'bg-white border border-line text-ink hover:border-maroon'"
-          @click="active = cat.id"
+          :class="active === cat ? 'bg-maroon text-white' : 'bg-white border border-line text-ink hover:border-maroon'"
+          @click="active = cat"
         >
-          {{ cat.label }}
+          {{ m.gallery.categories[cat] }}
         </button>
       </div>
 
       <TransitionGroup tag="ul" name="tile" class="mt-8 columns-2 lg:columns-3 gap-3 sm:gap-5 [&>li]:mb-3 sm:[&>li]:mb-5">
-        <li v-for="item in filtered" :key="item.id + item.title" class="break-inside-avoid">
+        <li v-for="(item, index) in filtered" :key="item.key" class="break-inside-avoid">
           <button
             type="button"
             class="group relative block w-full overflow-hidden rounded-[20px] sm:rounded-[24px] bg-line"
-            :aria-label="`Open photo: ${item.title}`"
-            @click="openAt(item)"
+            :aria-label="fill(m.gallery.open, { title: item.title })"
+            @click="lightbox = index"
           >
-            <img
-              :src="img(item.id, 800)"
-              :alt="item.alt"
+            <Photo
+              :src="item.src"
+              :alt="item.description"
+              :width="600"
+              :height="item.tall ? 800 : 450"
+              sizes="50vw lg:400px"
               class="w-full object-cover transition-transform duration-700 group-hover:scale-105"
               :class="item.tall ? 'aspect-[3/4]' : 'aspect-[4/3]'"
-              loading="lazy"
             />
             <span class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity" />
             <span class="absolute inset-x-0 bottom-0 p-3 sm:p-5 text-left text-white">
@@ -55,22 +57,26 @@
         >
           <div class="flex items-center justify-between p-4 text-white">
             <p class="text-sm font-semibold text-white/70">{{ lightbox + 1 }} / {{ filtered.length }}</p>
-            <button ref="closeBtn" type="button" class="w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center" aria-label="Close" @click="lightbox = null">
+            <button ref="closeBtn" type="button" class="w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center" :aria-label="m.common.close" @click="lightbox = null">
               <Icon name="heroicons:x-mark" class="h-6 w-6" />
             </button>
           </div>
           <div class="relative flex-1 min-h-0 flex items-center justify-center px-4" @click.self="lightbox = null">
-            <img :src="img(currentItem.id, 1600)" :alt="currentItem.alt" class="max-h-full max-w-full object-contain rounded-2xl" />
-            <button type="button" class="lb-arrow left-3 sm:left-6" aria-label="Previous photo" @click="step(-1)">
+            <img :src="currentItem.large" :alt="currentItem.description" class="max-h-full max-w-full object-contain rounded-2xl" />
+            <button type="button" class="lb-arrow left-3 sm:left-6" :aria-label="m.common.previous" @click="step(-1)">
               <Icon name="heroicons:arrow-left" class="h-5 w-5" />
             </button>
-            <button type="button" class="lb-arrow right-3 sm:right-6" aria-label="Next photo" @click="step(1)">
+            <button type="button" class="lb-arrow right-3 sm:right-6" :aria-label="m.common.next" @click="step(1)">
               <Icon name="heroicons:arrow-right" class="h-5 w-5" />
             </button>
           </div>
           <div class="p-5 text-center text-white">
             <p class="font-bold">{{ currentItem.title }}</p>
             <p class="text-sm text-white/70">{{ currentItem.description }}</p>
+            <p v-if="creditFor(currentItem.src)" class="mt-1 text-xs text-white/50">
+              {{ m.credits.photoBy }} {{ creditFor(currentItem.src)!.author }} ·
+              <a :href="creditFor(currentItem.src)!.source" target="_blank" rel="noopener noreferrer" class="underline hover:text-white">{{ creditFor(currentItem.src)!.license }}</a>
+            </p>
           </div>
         </div>
       </Transition>
@@ -79,45 +85,52 @@
 </template>
 
 <script setup lang="ts">
-import { img, photos } from "~/data/site";
+import { GATHERING, baringo, img, photos } from "~/data/site";
+import { creditFor } from "~/data/credits";
 
 type Cat = "culture" | "nature" | "community" | "education";
 
-const categories: { id: "all" | Cat; label: string }[] = [
-  { id: "all", label: "All photos" },
-  { id: "community", label: "Community" },
-  { id: "education", label: "Education" },
-  { id: "culture", label: "Culture" },
-  { id: "nature", label: "Lake & land" },
+const { m } = useLang();
+const categories: ("all" | Cat)[] = ["all", "community", "education", "culture", "nature"];
+
+// Photo, category and shape per item; titles/descriptions come from gallery.items in the locale files (same order).
+const sources: { id?: string; src?: string; category: Cat; tall?: boolean }[] = [
+  { src: GATHERING, category: "culture" },
+  { id: photos.children, category: "community", tall: true },
+  { src: baringo.fisherman, category: "nature" },
+  { id: photos.classroom, category: "education" },
+  { src: baringo.hippo, category: "nature" },
+  { src: baringo.farmerTraining, category: "education" },
+  { id: photos.hands, category: "community" },
+  { src: baringo.crocodile, category: "nature" },
+  { id: photos.woman, category: "community", tall: true },
+  { src: baringo.kitchenGarden, category: "community" },
+  { src: baringo.sunsetBoat, category: "nature" },
+  { src: baringo.beehives, category: "community" },
+  { id: photos.learner, category: "education", tall: true },
+  { src: baringo.tilapia, category: "nature" },
+  { id: photos.roller, category: "nature" },
+  { src: baringo.deadTree, category: "nature", tall: true },
 ];
 
-const items: { id: string; title: string; description: string; alt: string; category: Cat; tall?: boolean }[] = [
-  { id: photos.children, title: "Future generation", description: "Nurturing our children", alt: "Smiling children", category: "community", tall: true },
-  { id: photos.roller, title: "Birds of Baringo", description: "The lilac-breasted roller", alt: "Lilac-breasted roller on a branch", category: "nature" },
-  { id: photos.classroom, title: "Full classrooms", description: "Learners supported by scholarships", alt: "Pupils in a classroom", category: "education" },
-  { id: photos.acaciaDusk, title: "Our heritage", description: "The land that shaped our traditions", alt: "Acacia tree at dusk", category: "culture", tall: true },
-  { id: photos.youthTech, title: "Digital skills", description: "Computer literacy for young people", alt: "Young people at computers", category: "education" },
-  { id: photos.hands, title: "Community unity", description: "Coming together", alt: "Hands joined in a circle", category: "community" },
-  { id: photos.savanna, title: "The savanna", description: "Our natural environment", alt: "Savanna with a distant mountain", category: "nature" },
-  { id: photos.woman, title: "Strong women", description: "Leaders in every village", alt: "Portrait of a woman", category: "community", tall: true },
-  { id: photos.learner, title: "Homework time", description: "Every child in school", alt: "A child writing in a notebook", category: "education", tall: true },
-  { id: photos.giraffe, title: "Wildlife", description: "Sharing the land with wildlife", alt: "Giraffe at sunset", category: "nature" },
-  { id: photos.portrait, title: "Our people", description: "Proud and rooted in Baringo", alt: "Portrait of a man", category: "culture" },
-  { id: photos.acacia, title: "Golden hour", description: "Evening over Baringo", alt: "Acacia tree at sunset", category: "nature" },
-  { id: photos.soil, title: "Growing our future", description: "Sustainable farming", alt: "Hands holding soil and a seedling", category: "community" },
-  { id: photos.elephant, title: "Conservation", description: "Protecting our ecosystems", alt: "Elephant on the plains", category: "nature", tall: true },
-];
+const items = computed(() =>
+  sources.map((source, i) => ({
+    ...source,
+    key: source.id || source.src || String(i),
+    src: source.src || img(source.id!, 800),
+    large: source.src || img(source.id!, 1600),
+    title: m.value.gallery.items[i]?.title || "",
+    description: m.value.gallery.items[i]?.description || "",
+  }))
+);
 
 const active = ref<"all" | Cat>("all");
-const filtered = computed(() => (active.value === "all" ? items : items.filter((i) => i.category === active.value)));
+const filtered = computed(() => (active.value === "all" ? items.value : items.value.filter((i) => i.category === active.value)));
 
 const lightbox = ref<number | null>(null);
 const currentItem = computed(() => (lightbox.value === null ? null : filtered.value[lightbox.value]));
 const closeBtn = ref<HTMLButtonElement | null>(null);
 
-const openAt = (item: (typeof items)[number]) => {
-  lightbox.value = filtered.value.indexOf(item);
-};
 const step = (d: number) => {
   if (lightbox.value === null) return;
   const n = filtered.value.length;

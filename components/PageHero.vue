@@ -1,22 +1,24 @@
 <template>
   <section class="frame hero-offset">
     <div class="relative isolate overflow-hidden rounded-[26px] lg:rounded-[32px] bg-maroon-deep min-h-[440px] sm:min-h-[460px] lg:min-h-[500px] flex items-end">
-      <img
+      <Photo
         v-if="image"
         :src="image"
         alt=""
+        :width="1920"
+        :height="900"
+        sizes="100vw xxl:1480px"
+        priority
         class="absolute inset-0 -z-10 w-full h-full object-cover"
         :class="imagePosition"
-        loading="eager"
-        fetchpriority="high"
       />
       <div class="absolute inset-0 -z-10 bg-gradient-to-r from-black/75 via-black/45 to-black/10" aria-hidden="true" />
       <div class="absolute inset-x-0 top-0 h-40 -z-10 bg-gradient-to-b from-black/45 to-transparent" aria-hidden="true" />
 
       <div class="w-full px-5 sm:px-10 lg:px-14 pt-32 pb-12 sm:pb-14 lg:pb-16 text-white">
-        <nav aria-label="Breadcrumb" class="text-sm font-semibold text-white/75">
+        <nav :aria-label="m.nav.breadcrumb" class="text-sm font-semibold text-white/75">
           <ol class="flex flex-wrap items-center gap-1.5">
-            <li><NuxtLink to="/" class="hover:text-white">Home</NuxtLink></li>
+            <li><NuxtLink to="/" class="hover:text-white">{{ m.nav.home }}</NuxtLink></li>
             <template v-for="crumb in trail" :key="crumb.label">
               <li aria-hidden="true"><Icon name="heroicons:chevron-right-20-solid" class="h-4 w-4" /></li>
               <li>
@@ -43,6 +45,8 @@
 </template>
 
 <script setup lang="ts">
+const { m } = useLang();
+
 const props = defineProps<{
   title?: string;
   lead?: string;

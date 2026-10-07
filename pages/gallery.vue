@@ -1,28 +1,17 @@
 <template>
   <div>
-    <PageHero
-      eyebrow="Moments that matter"
-      title="Community gallery"
-      lead="Celebrations, classrooms and the landscapes of home, from across the Illchamus community."
-      :image="img(photos.acaciaDusk, 1800)"
-      :crumbs="[{ label: 'Gallery' }]"
-    />
+    <PageHero :eyebrow="t.eyebrow" :title="t.title" :lead="t.lead" :image="baringo.sunsetBoat" :crumbs="[{ label: m.nav.gallery }]" />
 
     <Gallery />
 
-    <PageCta
-      title="Have photos to share?"
-      description="Send us your photos of community events, cultural celebrations or volunteer days and help us tell our story."
-      primary-text="Share your photos"
-      primary-to="/contact"
-      secondary-text="Support our work"
-      secondary-to="/donate"
-    />
+    <PageCta :title="t.ctaTitle" :description="t.ctaText" :primary-text="t.ctaPrimary" primary-to="/contact" :secondary-text="t.ctaSecondary" secondary-to="/donate" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { img, photos } from "~/data/site";
+import { baringo } from "~/data/site";
 
-usePageMeta("Gallery", "Explore our community gallery: cultural celebrations, educational programs, and initiatives across Baringo County, Kenya.");
+const { m } = useLang();
+const t = computed(() => m.value.gallery);
+usePageMeta(() => t.value.metaTitle, () => t.value.metaDescription, { image: baringo.sunsetBoat });
 </script>

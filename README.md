@@ -1,130 +1,70 @@
-# Illchamus Community CBO Website
+# Illchamus Community CBO website
 
-A modern, responsive website for the Illchamus Community CBO in Kenya, built with Nuxt 3, Vue 3, and Tailwind CSS.
+Website for Illchamus Community CBO (ICDO), Baringo County, Kenya. Built with Nuxt 3, Tailwind CSS 4 and a small built-in admin, in English and Kiswahili.
 
-## Features
+## Running it locally
 
-- **Responsive Design**: Mobile-first approach with beautiful layouts for all devices
-- **Modern UI**: Clean, vibrant design with gradient colors and smooth animations
-- **Community-Focused**: Highlights indigenous culture, mission, and impact
-- **Interactive Components**: Smooth scrolling, hover effects, and form handling
-- **Performance Optimized**: Fast loading with optimized images and code
-
-## Tech Stack
-
-- **Framework**: Nuxt 3
-- **Frontend**: Vue 3 with Composition API
-- **Styling**: Tailwind CSS with custom animations
-- **Icons**: Heroicons via Nuxt Icon
-- **Images**: Unsplash placeholders for community-focused imagery
-
-## Project Structure
-
-```
-├── components/
-│   ├── Navbar.vue      # Transparent navigation with sticky behavior
-│   ├── Hero.vue        # Full-screen hero with background image
-│   ├── Features.vue    # Mission and feature cards
-│   ├── Impact.vue      # Statistics and impact showcase
-│   ├── Programs.vue    # Program cards with descriptions
-│   ├── Gallery.vue     # Masonry-style image gallery
-│   ├── Contact.vue     # Contact form and information
-│   └── Footer.vue      # Footer with links and social media
-├── pages/
-│   └── index.vue       # Main page with all components
-├── assets/css/
-│   └── main.css        # Custom styles and animations
-└── nuxt.config.ts      # Nuxt configuration
+```bash
+npm install
+npm run dev          # http://localhost:3000
 ```
 
-## Getting Started
+Create a `.env` file in the project folder:
 
-1. Install dependencies:
-   ```bash
-   npm install
-   ```
+```bash
+NUXT_SESSION_PASSWORD=a-long-random-string-of-at-least-32-characters
+NUXT_ADMIN_PASSWORD=choose-an-admin-password
+# Optional: email delivery (see below)
+NUXT_RESEND_API_KEY=
+NUXT_RESEND_AUDIENCE_ID=
+```
 
-2. Start the development server:
-   ```bash
-   npm run dev
-   ```
+Content you add locally is saved in `.data/site/` (not committed to git).
 
-3. Open your browser and navigate to `http://localhost:3000`
+## Managing content (no code needed)
 
-## Design Guidelines
+Go to **`/admin`** and sign in with the admin password. From there you can:
 
-- **Colors**: Purple (#6b21a8), Blue (#1d4ed8), Red (#dc2626)
-- **Typography**: Clean, modern fonts with good readability
-- **Animations**: Smooth fade-in and slide-up effects
-- **Responsive**: Mobile-first design with breakpoints for all devices
+- **News** – write, edit, hide or delete posts, with photos. Use the toolbar for headings, bold text, links, lists and photos; press *Preview* to check.
+- **Events** – add events to the calendar on `/events` (single or multi-day, with times in Kenya time).
+- **Team** – add leadership names, roles and photos for the About page.
+- **Messages** – read everything sent through the Contact form and donation pledges.
+- **Subscribers** – see newsletter sign-ups and download them as a CSV file.
 
-## Components Overview
+Every item has an optional **Kiswahili** tab. Anything left empty shows the English version to Swahili visitors.
 
-### Navbar
-- Transparent overlay on hero section
-- Sticky behavior on scroll
-- Mobile-responsive hamburger menu
-- Smooth navigation links
+## Email (contact form, pledges, newsletter)
 
-### Hero
-- Full-screen background image from Unsplash
-- Gradient overlay for text readability
-- Call-to-action buttons
-- Scroll indicator
+Messages and sign-ups are always saved and visible in `/admin`. To also receive them by email at **illchamus@gmail.com**:
 
-### Features
-- Four feature cards with icons
-- Hover effects and animations
-- Cultural preservation focus
-
-### Impact
-- Statistics display with large numbers
-- Image grid showcasing community
-- Visual impact representation
-
-### Programs
-- Grid of program cards
-- Images and descriptions
-- Hover effects for interactivity
-
-### Gallery
-- Masonry-style layout
-- Community and cultural images
-- Hover overlays with descriptions
-
-### Contact
-- Contact form with validation
-- Contact information display
-- Map placeholder integration
-
-### Footer
-- Social media links
-- Quick navigation
-- Contact information
-- Copyright and legal links
-
-## Customization
-
-The website is designed to be easily customizable:
-
-- Update colors in the CSS custom properties
-- Modify content in component templates
-- Replace Unsplash images with actual photos
-- Update contact information and social links
+1. Create a free account at [resend.com](https://resend.com) and an API key.
+2. Set `NUXT_RESEND_API_KEY`.
+3. Optional: create an *Audience* in Resend for the newsletter and set `NUXT_RESEND_AUDIENCE_ID`. New subscribers are added to it automatically, and you can send newsletters from Resend.
+4. Until you verify your own domain in Resend, emails are sent from `onboarding@resend.dev`, which only delivers to the email address you signed up to Resend with. After verifying a domain, set `NUXT_MAIL_FROM`, e.g. `Illchamus Website <hello@your-domain.org>`.
 
 ## Deployment
 
-The project is ready for deployment on platforms like:
-- Vercel
-- Netlify
-- AWS Amplify
-- Any static hosting service
+Pushing to `main` builds the site and deploys it to the Google Cloud VM with PM2 (`.github/workflows/temi.yaml`). Add these in GitHub → **Settings → Secrets and variables → Actions**:
 
-Build the project:
-```bash
-npm run build
-```
+| Secret | Required | Purpose |
+| --- | --- | --- |
+| `NUXT_SESSION_PASSWORD` | yes | Encrypts admin sessions (32+ random characters) |
+| `NUXT_ADMIN_PASSWORD` | yes | Password for `/admin` |
+| `NUXT_PUBLIC_SITE_URL` | recommended | Public address, e.g. `https://illchamus.org` (used in share previews and the sitemap) |
+| `NUXT_RESEND_API_KEY` | optional | Turns on email delivery |
+| `NUXT_RESEND_AUDIENCE_ID` | optional | Newsletter audience in Resend |
+| `NUXT_MAIL_FROM` | optional | Sender address once your domain is verified |
 
-## License
+Saved content lives on the server in `/home/tiny/temi/data`, outside the build folder, so deploys never overwrite it. **Back this folder up regularly.**
 
-This project is created for the Illchamus Community CBO. All rights reserved.
+## Where things are
+
+| What | Where |
+| --- | --- |
+| All site wording (English / Kiswahili) | `locales/en.ts`, `locales/sw.ts` |
+| Contact details, navigation, photos | `data/site.ts` |
+| Brand colours and shared styles | `assets/css/main.css` |
+| Pages | `pages/` |
+| Server API (forms, admin, sitemap) | `server/` |
+
+Search engines get a live `sitemap.xml`, `robots.txt`, share-preview tags on every page and structured data for the organisation, news articles and events.

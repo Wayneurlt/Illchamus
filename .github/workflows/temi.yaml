@@ -20,26 +20,37 @@ jobs:
       - name: Build for GCP
         run: npm run build
 
+      # Site settings come from GitHub secrets (Settings → Secrets and variables → Actions).
+      # Values are JSON-encoded so passwords with quotes or symbols are written safely.
       - name: Generate PM2 ecosystem.config.cjs File
+        env:
+          NUXT_SESSION_PASSWORD: ${{ secrets.NUXT_SESSION_PASSWORD }}
+          NUXT_ADMIN_PASSWORD: ${{ secrets.NUXT_ADMIN_PASSWORD }}
+          NUXT_RESEND_API_KEY: ${{ secrets.NUXT_RESEND_API_KEY }}
+          NUXT_RESEND_AUDIENCE_ID: ${{ secrets.NUXT_RESEND_AUDIENCE_ID }}
+          NUXT_MAIL_FROM: ${{ secrets.NUXT_MAIL_FROM }}
+          NUXT_PUBLIC_SITE_URL: ${{ secrets.NUXT_PUBLIC_SITE_URL }}
         run: |
           mkdir -p .output/server
-          cat <<EOL > .output/server/ecosystem.config.cjs
-          module.exports = {
-            apps: [
-              {
-                name: "temi",
-                script: "index.mjs",
-                exec_mode: "cluster",
-                instances: "max",
-                env: {
-                  PORT: 3200,
-                  NITRO_PORT: 3200,
-                  NODE_ENV: "production",
-                },
-              },
-            ],
-          };
-          EOL
+          node -e '
+            const pick = (k) => (process.env[k] ? { [k]: process.env[k] } : {});
+            const env = {
+              PORT: 3200,
+              NITRO_PORT: 3200,
+              NODE_ENV: "production",
+              // Saved content (news, events, team, messages, uploads) lives outside the build folder.
+              NUXT_DATA_DIR: "/home/tiny/temi/data",
+              ...pick("NUXT_SESSION_PASSWORD"),
+              ...pick("NUXT_ADMIN_PASSWORD"),
+              ...pick("NUXT_RESEND_API_KEY"),
+              ...pick("NUXT_RESEND_AUDIENCE_ID"),
+              ...pick("NUXT_MAIL_FROM"),
+              ...pick("NUXT_PUBLIC_SITE_URL"),
+            };
+            const config = { apps: [{ name: "temi", script: "index.mjs", exec_mode: "cluster", instances: "max", env }] };
+            require("fs").writeFileSync(".output/server/ecosystem.config.cjs",
+              "const config = " + JSON.stringify(config, null, 2) + ";\nconfig.apps[0].cwd = __dirname;\nmodule.exports = config;\n");
+          '
 
       - name: Setup and Verify SSH Key
         run: |
@@ -82,5 +93,9 @@ jobs:
             export NVM_DIR="$HOME/.nvm"
             source $NVM_DIR/nvm.sh
             export PATH=$NVM_DIR/versions/node/v23.11.1/bin:$PATH
+            mkdir -p /home/tiny/temi/data
             cd /home/tiny/temi/.output
-            pm2 restart temi || PORT=3200 pm2 start server/index.mjs --name "temi"
+            # Start from the generated ecosystem file so the environment settings above apply.
+            pm2 delete temi >/dev/null 2>&1 || true
+            pm2 start server/ecosystem.config.cjs
+            pm2 save

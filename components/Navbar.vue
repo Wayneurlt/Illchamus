@@ -6,20 +6,21 @@
         <div class="h-11 flex items-center justify-end gap-7 pr-4 text-[13px] font-semibold text-ink">
           <NuxtLink
             v-for="link in utilityLinks"
-            :key="link.label"
+            :key="link.key"
             :to="link.to"
             class="inline-flex items-center gap-1.5 hover:text-maroon transition-colors"
           >
-            <Icon v-if="link.label === 'Shop'" :name="link.icon" class="h-4 w-4" />
-            {{ link.label }}
+            <Icon v-if="link.key === 'shop'" :name="link.icon" class="h-4 w-4" />
+            {{ m.nav[link.key] }}
           </NuxtLink>
           <a :href="site.phoneHref" class="inline-flex items-center gap-1.5 hover:text-maroon transition-colors">
             <Icon name="heroicons:phone" class="h-4 w-4" />
-            Call us: {{ site.phone }}
+            {{ m.nav.callUs }}: {{ site.phone }}
           </a>
-          <a :href="`mailto:${site.email}`" class="inline-flex items-center hover:text-maroon transition-colors" aria-label="Email us">
+          <a :href="`mailto:${site.email}`" class="inline-flex items-center hover:text-maroon transition-colors" :aria-label="m.nav.emailUs">
             <Icon name="heroicons:envelope" class="h-[18px] w-[18px]" />
           </a>
+          <LangSwitch />
         </div>
       </div>
     </div>
@@ -29,13 +30,13 @@
       <nav class="relative flex items-center h-[76px] lg:h-[92px] px-4 sm:px-6 lg:px-8" aria-label="Main navigation">
         <NuxtLink
           to="/"
-          class="logo-badge absolute left-3 top-2 w-[60px] h-[60px] sm:left-5 sm:w-[68px] sm:h-[68px] lg:left-7 lg:-top-8 lg:w-[124px] lg:h-[124px]"
-          aria-label="Illchamus Community CBO – home"
+          class="logo-badge absolute left-3 top-1.5 w-[74px] h-[74px] sm:left-5 sm:w-[84px] sm:h-[84px] lg:left-7 lg:-top-9 lg:w-[132px] lg:h-[132px]"
+          :aria-label="m.nav.homeLabel"
         >
-          <img src="/logo.png" alt="ICDO logo" class="w-full h-full object-contain scale-110" width="124" height="124" />
+          <LogoBadge class="w-full h-full" />
         </NuxtLink>
 
-        <div class="hidden lg:flex items-center gap-0.5 xl:gap-1 ml-[150px] xl:ml-[164px]">
+        <div class="hidden lg:flex items-center gap-0.5 xl:gap-1 ml-[156px] xl:ml-[170px]">
           <NuxtLink
             v-for="link in navLinks"
             :key="link.to"
@@ -43,19 +44,19 @@
             class="nav-link-light"
             :class="{ 'is-active': isActive(link.to) }"
           >
-            {{ link.label }}
+            {{ m.nav[link.key] }}
           </NuxtLink>
         </div>
 
         <div class="ml-auto flex items-center gap-2">
           <NuxtLink to="/donate" class="btn btn-white hidden sm:inline-flex">
             <Icon name="heroicons:heart-solid" class="h-4 w-4 text-[#e2574c]" />
-            Donate
+            {{ m.nav.donate }}
           </NuxtLink>
           <button
             type="button"
             class="lg:hidden w-12 h-12 rounded-full bg-white/95 text-ink flex items-center justify-center shadow-lg"
-            aria-label="Open menu"
+            :aria-label="m.nav.openMenu"
             :aria-expanded="menuOpen"
             aria-controls="mobile-menu"
             @click="openMenu"
@@ -75,13 +76,13 @@
     >
       <div v-if="scrolled" class="fixed inset-x-0 top-0 z-50 bg-white/90 backdrop-blur-md border-b border-line shadow-[0_8px_24px_-16px_rgba(46,20,20,0.35)]">
         <div class="shell flex items-center h-16 lg:h-[72px]">
-          <NuxtLink to="/" class="flex items-center gap-3 shrink-0" aria-label="Illchamus Community CBO – home">
+          <NuxtLink to="/" class="flex items-center gap-3 shrink-0" :aria-label="m.nav.homeLabel">
             <span class="logo-badge w-11 h-11 lg:w-12 lg:h-12 !shadow-none ring-1 ring-line">
-              <img src="/logo.png" alt="" class="w-full h-full object-contain scale-110" />
+              <LogoBadge compact class="w-full h-full" />
             </span>
-            <span class="hidden sm:block leading-tight">
+            <span class="hidden sm:block lg:hidden xl:block leading-tight">
               <span class="block text-[15px] font-extrabold tracking-tight text-ink">Illchamus Community</span>
-              <span class="block text-xs font-semibold text-ink-soft">Baringo County, Kenya</span>
+              <span class="block text-xs font-semibold text-ink-soft">{{ m.site.location }}</span>
             </span>
           </NuxtLink>
           <div class="hidden lg:flex items-center gap-0.5 ml-auto mr-4">
@@ -92,18 +93,18 @@
               class="nav-link-dark"
               :class="{ 'is-active': isActive(link.to) }"
             >
-              {{ link.label }}
+              {{ m.nav[link.key] }}
             </NuxtLink>
           </div>
           <div class="flex items-center gap-2 ml-auto lg:ml-0">
             <NuxtLink to="/donate" class="btn btn-sun btn-sm">
               <Icon name="heroicons:heart-solid" class="h-4 w-4" />
-              Donate
+              {{ m.nav.donate }}
             </NuxtLink>
             <button
               type="button"
               class="lg:hidden w-10 h-10 rounded-full bg-paper text-ink flex items-center justify-center border border-line"
-              aria-label="Open menu"
+              :aria-label="m.nav.openMenu"
               :aria-expanded="menuOpen"
               aria-controls="mobile-menu"
               @click="openMenu"
@@ -130,35 +131,38 @@
           class="fixed inset-0 z-[70] bg-maroon-deep text-white overflow-y-auto overscroll-contain lg:hidden"
           role="dialog"
           aria-modal="true"
-          aria-label="Site menu"
+          :aria-label="m.nav.openMenu"
         >
           <div class="sun-ring w-[340px] h-[340px] border-[34px] -right-36 -bottom-36 opacity-90" aria-hidden="true" />
           <div class="relative min-h-full flex flex-col px-5 sm:px-8 pt-4 pb-10">
             <div class="flex items-center justify-between">
-              <NuxtLink to="/" class="logo-badge w-[60px] h-[60px]" aria-label="Home" @click="closeMenu">
-                <img src="/logo.png" alt="ICDO logo" class="w-full h-full object-contain scale-110" />
+              <NuxtLink to="/" class="logo-badge w-[84px] h-[84px]" :aria-label="m.nav.home" @click="closeMenu">
+                <LogoBadge class="w-full h-full" />
               </NuxtLink>
-              <button
-                ref="closeRef"
-                type="button"
-                class="w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center"
-                aria-label="Close menu"
-                @click="closeMenu"
-              >
-                <Icon name="heroicons:x-mark" class="h-6 w-6" />
-              </button>
+              <div class="flex items-center gap-3">
+                <LangSwitch dark />
+                <button
+                  ref="closeRef"
+                  type="button"
+                  class="w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center"
+                  :aria-label="m.nav.closeMenu"
+                  @click="closeMenu"
+                >
+                  <Icon name="heroicons:x-mark" class="h-6 w-6" />
+                </button>
+              </div>
             </div>
 
             <nav class="mt-10" aria-label="Mobile navigation">
               <ul class="space-y-1">
-                <li v-for="link in [{ to: '/', label: 'Home' }, ...navLinks]" :key="link.to">
+                <li v-for="link in mobileLinks" :key="link.to">
                   <NuxtLink
                     :to="link.to"
                     class="flex items-center justify-between py-3 text-[1.75rem] sm:text-3xl font-bold tracking-tight border-b border-white/10"
                     :class="isActive(link.to) ? 'text-sun' : 'text-white'"
                     @click="closeMenu"
                   >
-                    {{ link.label }}
+                    {{ m.nav[link.key] }}
                     <Icon name="heroicons:arrow-up-right" class="h-5 w-5 opacity-50" />
                   </NuxtLink>
                 </li>
@@ -168,25 +172,25 @@
             <div class="mt-8 flex flex-wrap gap-2">
               <NuxtLink
                 v-for="link in utilityLinks"
-                :key="link.label"
+                :key="link.key"
                 :to="link.to"
                 class="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2.5 text-sm font-semibold"
                 @click="closeMenu"
               >
                 <Icon :name="link.icon" class="h-4 w-4 text-sun" />
-                {{ link.label }}
+                {{ m.nav[link.key] }}
               </NuxtLink>
             </div>
 
             <NuxtLink to="/donate" class="btn btn-sun mt-8 w-full text-base" @click="closeMenu">
               <Icon name="heroicons:heart-solid" class="h-5 w-5" />
-              Donate today
+              {{ m.nav.donateToday }}
             </NuxtLink>
 
             <div class="mt-auto pt-10 space-y-2 text-[15px] text-white/80">
               <a :href="site.phoneHref" class="flex items-center gap-2.5"><Icon name="heroicons:phone" class="h-4 w-4 text-sun" />{{ site.phone }}</a>
               <a :href="`mailto:${site.email}`" class="flex items-center gap-2.5 break-all"><Icon name="heroicons:envelope" class="h-4 w-4 text-sun shrink-0" />{{ site.email }}</a>
-              <p class="flex items-center gap-2.5"><Icon name="heroicons:map-pin" class="h-4 w-4 text-sun" />{{ site.location }}</p>
+              <p class="flex items-center gap-2.5"><Icon name="heroicons:map-pin" class="h-4 w-4 text-sun" />{{ m.site.location }}</p>
             </div>
           </div>
         </div>
@@ -198,6 +202,8 @@
 <script setup lang="ts">
 import { site, navLinks, utilityLinks } from "~/data/site";
 
+const { m } = useLang();
+const mobileLinks = [{ to: "/", key: "home" as const }, ...navLinks];
 const route = useRoute();
 const scrolled = ref(false);
 const menuOpen = ref(false);

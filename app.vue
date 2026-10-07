@@ -4,8 +4,11 @@
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
-    <Notivue v-slot="item">
-      <Notification :item="item" />
-    </Notivue>
   </UApp>
 </template>
+
+<script setup lang="ts">
+const { lang } = useLang();
+useHead({ htmlAttrs: { lang } });
+useSiteSchema();
+</script>

@@ -1,5 +1,9 @@
+/** Contact form state and submission to /api/contact. */
 export function useContactForm() {
-  const form = reactive({
+  const { m } = useLang();
+  const toMessage = useFormError();
+
+  const blank = () => ({
     firstName: "",
     lastName: "",
     email: "",
@@ -7,71 +11,42 @@ export function useContactForm() {
     subject: "",
     message: "",
     consent: false,
+    website: "", // honeypot
   });
+  const form = reactive(blank());
 
   const isSubmitting = ref(false);
   const feedback = ref("");
-  const feedbackType = ref("");
+  const feedbackType = ref<"" | "success" | "error">("");
 
-  const showFeedback = (text: string, type: "success" | "error") => {
+  const show = (text: string, type: "success" | "error") => {
     feedback.value = text;
     feedbackType.value = type;
-    setTimeout(() => {
-      feedback.value = "";
-      feedbackType.value = "";
-    }, 5000);
   };
 
+  /** Quick checks in the browser; the server validates again. */
   const validate = () => {
-    if (!form.firstName?.trim()) {
-      showFeedback("Please enter your first name.", "error");
-      return false;
-    }
-    if (!form.lastName?.trim()) {
-      showFeedback("Please enter your last name.", "error");
-      return false;
-    }
-    if (!form.email?.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
-      showFeedback("Please enter a valid email.", "error");
-      return false;
-    }
-    if (!form.subject) {
-      showFeedback("Please select a subject.", "error");
-      return false;
-    }
-    if (!form.message?.trim() || form.message.trim().length < 10) {
-      showFeedback("Please enter a message (at least 10 characters).", "error");
-      return false;
-    }
-    if (!form.consent) {
-      showFeedback("Please agree to the terms and privacy policy.", "error");
-      return false;
-    }
-    return true;
-  };
-
-  const resetForm = () => {
-    Object.assign(form, {
-      firstName: "",
-      lastName: "",
-      email: "",
-      phone: "",
-      subject: "",
-      message: "",
-      consent: false,
-    });
+    const e = m.value.forms.errors;
+    if (!form.firstName.trim() || !form.lastName.trim()) return e.name_required;
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(form.email.trim())) return e.email_invalid;
+    if (!form.subject) return e.subject_required;
+    if (form.message.trim().length < 10) return e.message_short;
+    if (!form.consent) return e.consent_required;
+    return "";
   };
 
   const submit = async () => {
-    if (!validate()) return;
+    if (isSubmitting.value) return;
+    const problem = validate();
+    if (problem) return show(problem, "error");
     isSubmitting.value = true;
     feedback.value = "";
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      resetForm();
-      showFeedback("Thank you! We'll get back to you within 24 hours.", "success");
-    } catch {
-      showFeedback("Something went wrong. Please try again.", "error");
+      await $fetch("/api/contact", { method: "POST", body: { ...form } });
+      Object.assign(form, blank());
+      show(m.value.contact.success, "success");
+    } catch (error) {
+      show(toMessage(error), "error");
     } finally {
       isSubmitting.value = false;
     }
