@@ -17,6 +17,13 @@ jobs:
 
       - run: npm ci
 
+      # Applies any new database migrations (prisma/migrations) to Neon before deploying.
+      - name: Apply database migrations
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DIRECT_URL: ${{ secrets.DIRECT_URL }}
+        run: npx prisma migrate deploy
+
       - name: Build for GCP
         run: npm run build
 
@@ -24,6 +31,7 @@ jobs:
       # Values are JSON-encoded so passwords with quotes or symbols are written safely.
       - name: Generate PM2 ecosystem.config.cjs File
         env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
           NUXT_SESSION_PASSWORD: ${{ secrets.NUXT_SESSION_PASSWORD }}
           NUXT_ADMIN_PASSWORD: ${{ secrets.NUXT_ADMIN_PASSWORD }}
           NUXT_RESEND_API_KEY: ${{ secrets.NUXT_RESEND_API_KEY }}
@@ -38,8 +46,8 @@ jobs:
               PORT: 3200,
               NITRO_PORT: 3200,
               NODE_ENV: "production",
-              // Saved content (news, events, team, messages, uploads) lives outside the build folder.
-              NUXT_DATA_DIR: "/home/tiny/temi/data",
+              // All content (news, events, team, messages, uploads) lives in the Neon database.
+              ...pick("DATABASE_URL"),
               ...pick("NUXT_SESSION_PASSWORD"),
               ...pick("NUXT_ADMIN_PASSWORD"),
               ...pick("NUXT_RESEND_API_KEY"),
@@ -93,7 +101,6 @@ jobs:
             export NVM_DIR="$HOME/.nvm"
             source $NVM_DIR/nvm.sh
             export PATH=$NVM_DIR/versions/node/v23.11.1/bin:$PATH
-            mkdir -p /home/tiny/temi/data
             cd /home/tiny/temi/.output
             # Start from the generated ecosystem file so the environment settings above apply.
             pm2 delete temi >/dev/null 2>&1 || true

@@ -1,5 +1,3 @@
-import type { Message } from "../utils/content";
-
 const SUBJECTS: Record<string, string> = {
   volunteer: "Volunteering",
   partnership: "Partnership",
@@ -28,29 +26,23 @@ export default defineEventHandler(async (event) => {
   if (message.length < 10) fail(400, "message_short");
   if (body?.consent !== true) fail(400, "consent_required");
 
-  const record: Message = {
-    id: `${Date.now()}-${newId().slice(0, 6)}`,
-    kind: "contact",
-    name: `${firstName} ${lastName}`,
-    email,
-    phone: phone || undefined,
-    subject: SUBJECTS[subject],
-    message,
-    emailed: false,
-    createdAt: new Date().toISOString(),
-  };
-
-  record.emailed = await notifyOrg(
-    `New message: ${record.subject} — ${record.name}`,
+  const name = `${firstName} ${lastName}`;
+  const topic = SUBJECTS[subject]!;
+  // Save first so nothing is lost if email delivery fails.
+  const saved = await prisma.message.create({
+    data: { kind: "contact", name, email, phone: phone || null, subject: topic, message },
+  });
+  const emailed = await notifyOrg(
+    `New message: ${topic} — ${name}`,
     [
-      ["Name", record.name],
+      ["Name", name],
       ["Email", email],
       ["Phone", phone],
-      ["Topic", record.subject],
+      ["Topic", topic],
       ["Message", message],
     ],
     email
   );
-  await putItem("messages", record.id, record);
+  if (emailed) await prisma.message.update({ where: { id: saved.id }, data: { emailed: true } });
   return { ok: true };
 });

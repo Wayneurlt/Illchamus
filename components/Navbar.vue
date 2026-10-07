@@ -128,12 +128,15 @@
           v-if="menuOpen"
           id="mobile-menu"
           ref="menuRef"
-          class="fixed inset-0 z-[70] bg-maroon-deep text-white overflow-y-auto overscroll-contain lg:hidden"
+          class="fixed inset-0 z-[70] bg-maroon-deep text-white overflow-clip lg:hidden"
           role="dialog"
           aria-modal="true"
           :aria-label="m.nav.openMenu"
         >
-          <div class="sun-ring w-[340px] h-[340px] border-[34px] -right-36 -bottom-36 opacity-90" aria-hidden="true" />
+          <!-- The decorative ring lives on this fixed, clipped layer so it can never
+               widen or lengthen the scrolling menu below. -->
+          <div class="sun-ring w-[220px] h-[220px] border-[26px] -right-28 -bottom-28 opacity-90" aria-hidden="true" />
+          <div class="absolute inset-0 overflow-y-auto overflow-x-hidden overscroll-contain">
           <div class="relative min-h-full flex flex-col px-5 sm:px-8 pt-4 pb-10">
             <div class="flex items-center justify-between">
               <NuxtLink to="/" class="logo-badge w-[84px] h-[84px]" :aria-label="m.nav.home" @click="closeMenu">
@@ -192,6 +195,7 @@
               <a :href="`mailto:${site.email}`" class="flex items-center gap-2.5 break-all"><Icon name="heroicons:envelope" class="h-4 w-4 text-sun shrink-0" />{{ site.email }}</a>
               <p class="flex items-center gap-2.5"><Icon name="heroicons:map-pin" class="h-4 w-4 text-sun" />{{ m.site.location }}</p>
             </div>
+          </div>
           </div>
         </div>
       </Transition>

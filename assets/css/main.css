@@ -359,3 +359,18 @@ video {
   opacity: 1;
   transform: none;
 }
+
+/* Admin content area: fills the space beside the sidebar up to a comfortable
+   maximum and stays centred on very wide screens. */
+@utility admin-wrap {
+  width: 100%;
+  max-width: 1440px;
+  margin-inline: auto;
+  padding-inline: 1rem;
+  @media (min-width: 640px) {
+    padding-inline: 1.5rem;
+  }
+  @media (min-width: 1024px) {
+    padding-inline: 2.5rem;
+  }
+}

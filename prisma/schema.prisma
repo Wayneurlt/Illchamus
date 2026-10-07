@@ -1,0 +1,112 @@
+// Database for the Illchamus Community CBO website (Neon Postgres).
+// Change this file, then run `npm run db:migrate` to create a migration.
+
+generator client {
+  provider      = "prisma-client-js"
+  // native = this machine; the Debian targets cover the Ubuntu build runner and VM.
+  binaryTargets = ["native", "debian-openssl-3.0.x", "debian-openssl-1.1.x"]
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL") // pooled connection, used by the website
+  directUrl = env("DIRECT_URL") // direct connection, used for migrations
+}
+
+model Post {
+  slug      String   @id
+  title     String
+  titleSw   String?
+  date      DateTime @db.Date
+  tag       String?
+  excerpt   String   @default("")
+  excerptSw String?
+  body      String   @default("")
+  bodySw    String?
+  image     String?
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([published, date])
+}
+
+model Event {
+  id            String    @id @default(cuid())
+  title         String
+  titleSw       String?
+  date          DateTime  @db.Date
+  endDate       DateTime? @db.Date
+  startTime     String? // "HH:MM", Kenya time
+  endTime       String?
+  location      String?
+  category      String?
+  description   String?
+  descriptionSw String?
+  image         String?
+  published     Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([published, date])
+}
+
+model TeamMember {
+  id        String   @id @default(cuid())
+  name      String
+  role      String
+  roleSw    String?
+  bio       String?
+  bioSw     String?
+  photo     String?
+  order     Int      @default(99)
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum MessageKind {
+  contact
+  pledge
+}
+
+/// Contact form messages and donation pledges.
+model Message {
+  id        String      @id @default(cuid())
+  kind      MessageKind
+  name      String
+  email     String
+  phone     String?
+  subject   String?
+  message   String?
+  amount    Int?
+  frequency String?
+  emailed   Boolean     @default(false)
+  createdAt DateTime    @default(now())
+
+  @@index([createdAt])
+}
+
+model Subscriber {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  source    String   @default("footer")
+  lang      String   @default("en")
+  createdAt DateTime @default(now())
+}
+
+/// Photos uploaded in the admin, served from /uploads/<name>.
+model Upload {
+  name      String   @id
+  mime      String
+  size      Int
+  data      Bytes
+  createdAt DateTime @default(now())
+}
+
+/// Small key/value settings, e.g. the admin password hash.
+model Setting {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
+}

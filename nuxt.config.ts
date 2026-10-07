@@ -24,14 +24,13 @@ export default defineNuxtConfig({
     screens: { xs: 360, sm: 640, md: 768, lg: 1024, xl: 1280, xxl: 1536, "2xl": 1920 },
   },
   // Server-only settings. Override in production with NUXT_* environment variables,
-  // e.g. NUXT_ADMIN_PASSWORD, NUXT_RESEND_API_KEY, NUXT_DATA_DIR.
+  // e.g. NUXT_ADMIN_PASSWORD, NUXT_RESEND_API_KEY. The database uses DATABASE_URL.
   runtimeConfig: {
     adminPassword: "",
     resendApiKey: "",
     resendAudienceId: "",
     mailFrom: "Illchamus Website <onboarding@resend.dev>",
     contactTo: "illchamus@gmail.com",
-    dataDir: "",
     public: {
       // Canonical site address, e.g. https://illchamus.org (falls back to the request host).
       siteUrl: "",

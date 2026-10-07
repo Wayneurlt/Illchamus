@@ -1,6 +1,7 @@
 <template>
   <AdminShell :groups="navGroups" :active="tab" @select="setTab" @logout="logout">
-    <div class="sticky top-16 lg:top-0 z-20 hidden lg:flex items-center gap-4 h-20 px-8 bg-paper/90 backdrop-blur border-b border-line">
+    <div class="sticky top-16 lg:top-0 z-20 hidden lg:block bg-paper/90 backdrop-blur border-b border-line">
+      <div class="admin-wrap flex items-center gap-4 h-20">
       <div class="min-w-0">
         <h1 class="text-2xl font-bold tracking-tight text-ink truncate">{{ editing ? editorTitle : current.title }}</h1>
         <p class="text-sm text-ink-soft truncate">{{ editing ? current.title : current.text }}</p>
@@ -13,8 +14,9 @@
         <Icon name="heroicons:arrow-down-tray" class="h-4 w-4" />
         Download CSV
       </a>
+      </div>
     </div>
-    <main class="px-4 sm:px-6 lg:px-8 py-6 sm:py-8 max-w-6xl">
+    <main class="admin-wrap @container py-6 sm:py-8">
       <div v-if="status && !status.mail && tab !== 'settings' && tab !== 'overview'" class="mb-6 flex gap-3 rounded-2xl bg-sun-soft p-4 text-sm text-ink">
         <Icon name="heroicons:exclamation-triangle" class="h-5 w-5 shrink-0 text-maroon" />
         <p>
@@ -25,7 +27,7 @@
       <p v-if="loadError" class="mb-6 rounded-2xl bg-red-50 p-4 text-sm font-medium text-red-800">{{ loadError }}</p>
 
       <!-- Editors -->
-      <div v-if="editing" class="mx-auto max-w-3xl rounded-[28px] bg-white border border-line px-6 sm:px-8 pt-6 sm:pt-8">
+      <div v-if="editing" class="mx-auto max-w-4xl rounded-[28px] bg-white border border-line px-6 sm:px-8 pt-6 sm:pt-8">
         <div class="flex items-center justify-between gap-3">
           <h1 class="text-2xl font-bold tracking-tight text-ink">{{ editorTitle }}</h1>
           <button type="button" class="w-10 h-10 rounded-full hover:bg-paper flex items-center justify-center" aria-label="Close editor" @click="closeEditor">
@@ -39,6 +41,9 @@
         </div>
       </div>
 
+      <div v-else-if="tab === 'overview' && !loaded" class="rounded-[22px] bg-white border border-line p-10 text-center text-ink-soft">
+        <Icon name="heroicons:arrow-path" class="inline h-5 w-5 animate-spin mr-2 align-[-4px]" />Loading…
+      </div>
       <AdminOverview
         v-else-if="tab === 'overview'"
         :posts="posts"
@@ -74,7 +79,8 @@
             <StatusBadge :published="p.published" />
             <RowActions :view="p.published ? `/blog/${p.slug}` : undefined" @edit="openEditor(p)" @delete="remove('posts', p.slug, p.title)" />
           </li>
-          <EmptyRow v-if="!posts.length" text="No posts yet. Add your first story." />
+          <li v-if="!loaded" class="rounded-[22px] bg-white border border-line p-10 text-center text-ink-soft"><Icon name="heroicons:arrow-path" class="inline h-5 w-5 animate-spin mr-2 align-[-4px]" />Loading…</li>
+          <EmptyRow v-else-if="!posts.length" text="No posts yet. Add your first story." />
         </ul>
       </section>
 
@@ -97,7 +103,8 @@
             <StatusBadge :published="e.published" />
             <RowActions view="/events" @edit="openEditor(e)" @delete="remove('events', e.id, e.title)" />
           </li>
-          <EmptyRow v-if="!events.length" text="No events yet. Add one to fill the calendar." />
+          <li v-if="!loaded" class="rounded-[22px] bg-white border border-line p-10 text-center text-ink-soft"><Icon name="heroicons:arrow-path" class="inline h-5 w-5 animate-spin mr-2 align-[-4px]" />Loading…</li>
+          <EmptyRow v-else-if="!events.length" text="No events yet. Add one to fill the calendar." />
         </ul>
       </section>
 
@@ -119,7 +126,8 @@
             <StatusBadge :published="t.published" />
             <RowActions view="/about#team" @edit="openEditor(t)" @delete="remove('team', t.id, t.name)" />
           </li>
-          <EmptyRow v-if="!team.length" text="No team members yet." />
+          <li v-if="!loaded" class="rounded-[22px] bg-white border border-line p-10 text-center text-ink-soft"><Icon name="heroicons:arrow-path" class="inline h-5 w-5 animate-spin mr-2 align-[-4px]" />Loading…</li>
+          <EmptyRow v-else-if="!team.length" text="No team members yet." />
         </ul>
       </section>
 
@@ -145,7 +153,8 @@
             <p v-if="msg.kind === 'pledge'" class="mt-3 text-lg font-extrabold text-ink">KES {{ msg.amount?.toLocaleString("en-US") }} <span class="text-sm font-semibold text-ink-soft">· {{ msg.frequency }}</span></p>
             <p v-if="msg.message" class="mt-3 whitespace-pre-line text-[15px] leading-relaxed text-ink-soft">{{ msg.message }}</p>
           </li>
-          <EmptyRow v-if="!messages.length" text="No messages yet." />
+          <li v-if="!loaded" class="rounded-[22px] bg-white border border-line p-10 text-center text-ink-soft"><Icon name="heroicons:arrow-path" class="inline h-5 w-5 animate-spin mr-2 align-[-4px]" />Loading…</li>
+          <EmptyRow v-else-if="!messages.length" text="No messages yet." />
         </ul>
       </section>
 
@@ -176,7 +185,8 @@
                   <button type="button" class="font-semibold text-red-700 hover:underline" @click="remove('subscribers', s.id, s.email)">Remove</button>
                 </td>
               </tr>
-              <tr v-if="!subscribers.length"><td colspan="4" class="px-4 py-10 text-center text-ink-soft">No subscribers yet.</td></tr>
+              <tr v-if="!loaded"><td colspan="4" class="px-4 py-10 text-center text-ink-soft">Loading…</td></tr>
+              <tr v-else-if="!subscribers.length"><td colspan="4" class="px-4 py-10 text-center text-ink-soft">No subscribers yet.</td></tr>
             </tbody>
           </table>
         </div>
@@ -213,6 +223,7 @@ const subscribers = ref<(Subscriber & { id: string })[]>([]);
 type Status = { mail: boolean; audience: boolean; contactTo: string; passwordSource: "custom" | "server"; passwordChangedAt: string | null; minPasswordLength: number };
 const status = ref<Status | null>(null);
 const loadError = ref("");
+const loaded = ref(false);
 const today = todayInKenya();
 
 // "New" messages are those that arrived since the inbox was last opened (per browser).
@@ -283,6 +294,7 @@ async function load() {
     messages.value = msg;
     subscribers.value = s;
     status.value = st;
+    loaded.value = true;
   } catch (err) {
     loadError.value = adminError(err);
     if ((err as any)?.statusCode === 401) navigateTo("/admin/login");

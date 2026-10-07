@@ -1,16 +1,15 @@
-import type { Post, SiteEvent } from "../utils/content";
-
 const STATIC = ["/", "/about", "/events", "/gallery", "/blog", "/donate", "/contact", "/products", "/privacy", "/terms", "/credits"];
 
 export default defineEventHandler(async (event) => {
   const origin = siteOrigin(event);
-  const posts = (await listItems<Post>("posts")).filter((p) => p.published);
-  const events = (await listItems<SiteEvent>("events")).filter((e) => e.published);
-  const latestEvent = events.reduce((max, e) => (e.updatedAt > max ? e.updatedAt : max), "");
+  const [posts, latestEvent] = await Promise.all([
+    prisma.post.findMany({ where: { published: true }, select: { slug: true, updatedAt: true }, orderBy: { date: "desc" } }),
+    prisma.event.findFirst({ where: { published: true }, orderBy: { updatedAt: "desc" }, select: { updatedAt: true } }),
+  ]);
 
   const urls = [
-    ...STATIC.map((path) => ({ loc: path, lastmod: path === "/events" ? latestEvent : "" })),
-    ...posts.map((p) => ({ loc: `/blog/${p.slug}`, lastmod: p.updatedAt })),
+    ...STATIC.map((path) => ({ loc: path, lastmod: path === "/events" && latestEvent ? latestEvent.updatedAt.toISOString() : "" })),
+    ...posts.map((p) => ({ loc: `/blog/${p.slug}`, lastmod: p.updatedAt.toISOString() })),
   ];
   setHeader(event, "Content-Type", "application/xml; charset=utf-8");
   return `<?xml version="1.0" encoding="UTF-8"?>

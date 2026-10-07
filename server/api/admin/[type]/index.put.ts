@@ -1,12 +1,11 @@
-import type { Post, SiteEvent, TeamMember } from "../../../utils/content";
-
 // Create or update a post, event or team member (admin only).
 export default defineEventHandler(async (event) => {
   await requireAdmin(event);
   const type = getRouterParam(event, "type");
   const b = await readBody<Record<string, unknown>>(event);
-  const now = new Date().toISOString();
   const published = b?.published !== false;
+  // Empty optional text is stored as NULL.
+  const nul = (v: unknown, max = 500) => optional(v, max) ?? null;
 
   if (type === "posts") {
     const title = str(b.title, 200);
@@ -15,26 +14,26 @@ export default defineEventHandler(async (event) => {
     if (!DATE_RE.test(date)) fail(400, "date_invalid");
     const slug = safeId(str(b.slug, 80)) || slugify(title);
     const previous = safeId(str(b.originalSlug, 80));
-    if (!previous || previous !== slug) {
-      if (await getItem("posts", slug)) fail(409, "slug_taken");
-    }
-    const post: Post = {
-      slug,
+    if (previous !== slug && (await prisma.post.findUnique({ where: { slug }, select: { slug: true } }))) fail(409, "slug_taken");
+
+    const data = {
       title,
-      titleSw: optional(b.titleSw, 200),
-      date,
-      tag: optional(b.tag, 40),
+      titleSw: nul(b.titleSw, 200),
+      date: toDate(date),
+      tag: nul(b.tag, 40),
       excerpt: str(b.excerpt, 400),
-      excerptSw: optional(b.excerptSw, 400),
+      excerptSw: nul(b.excerptSw, 400),
       body: str(b.body, 60_000),
-      bodySw: optional(b.bodySw, 60_000),
-      image: imageUrl(b.image),
+      bodySw: nul(b.bodySw, 60_000),
+      image: imageUrl(b.image) ?? null,
       published,
-      updatedAt: now,
     };
-    await putItem("posts", slug, post);
-    if (previous && previous !== slug) await removeItem("posts", previous);
-    return post;
+    // Renaming the web address moves the post to the new slug.
+    const saved =
+      previous && previous !== slug
+        ? (await prisma.$transaction([prisma.post.deleteMany({ where: { slug: previous } }), prisma.post.create({ data: { slug, ...data } })]))[1]
+        : await prisma.post.upsert({ where: { slug }, create: { slug, ...data }, update: data });
+    return postOut(saved);
   }
 
   if (type === "events") {
@@ -47,44 +46,47 @@ export default defineEventHandler(async (event) => {
     const startTime = optional(b.startTime, 5);
     const endTime = optional(b.endTime, 5);
     if ((startTime && !TIME_RE.test(startTime)) || (endTime && !TIME_RE.test(endTime))) fail(400, "time_invalid");
-    const id = safeId(str(b.id, 40)) || newId();
-    const item: SiteEvent = {
-      id,
+
+    const data = {
       title,
-      titleSw: optional(b.titleSw, 200),
-      date,
-      endDate,
-      startTime,
-      endTime,
-      location: optional(b.location, 200),
-      category: optional(b.category, 40),
-      description: optional(b.description, 5000),
-      descriptionSw: optional(b.descriptionSw, 5000),
-      image: imageUrl(b.image),
+      titleSw: nul(b.titleSw, 200),
+      date: toDate(date),
+      endDate: endDate ? toDate(endDate) : null,
+      startTime: startTime ?? null,
+      endTime: startTime ? endTime ?? null : null,
+      location: nul(b.location, 200),
+      category: nul(b.category, 40),
+      description: nul(b.description, 5000),
+      descriptionSw: nul(b.descriptionSw, 5000),
+      image: imageUrl(b.image) ?? null,
       published,
-      updatedAt: now,
     };
-    return putItem("events", id, item);
+    const id = safeId(str(b.id, 40));
+    const saved = id
+      ? await prisma.event.upsert({ where: { id }, create: { id, ...data }, update: data })
+      : await prisma.event.create({ data });
+    return eventOut(saved);
   }
 
   if (type === "team") {
     const name = str(b.name, 120);
     const role = str(b.role, 120);
     if (!name || !role) fail(400, "name_role_required");
-    const id = safeId(str(b.id, 40)) || newId();
-    const member: TeamMember = {
-      id,
+    const data = {
       name,
       role,
-      roleSw: optional(b.roleSw, 120),
-      bio: optional(b.bio, 1000),
-      bioSw: optional(b.bioSw, 1000),
-      photo: imageUrl(b.photo),
-      order: Number.isFinite(Number(b.order)) ? Number(b.order) : 99,
+      roleSw: nul(b.roleSw, 120),
+      bio: nul(b.bio, 1000),
+      bioSw: nul(b.bioSw, 1000),
+      photo: imageUrl(b.photo) ?? null,
+      order: Number.isFinite(Number(b.order)) ? Math.round(Number(b.order)) : 99,
       published,
-      updatedAt: now,
     };
-    return putItem("team", id, member);
+    const id = safeId(str(b.id, 40));
+    const saved = id
+      ? await prisma.teamMember.upsert({ where: { id }, create: { id, ...data }, update: data })
+      : await prisma.teamMember.create({ data });
+    return teamOut(saved);
   }
 
   fail(404, "not_found");

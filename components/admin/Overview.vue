@@ -1,7 +1,7 @@
 <template>
   <div class="space-y-6">
     <!-- Stats -->
-    <div class="grid grid-cols-2 gap-4 xl:grid-cols-4">
+    <div class="grid grid-cols-1 gap-4 @sm:grid-cols-2 @4xl:grid-cols-4">
       <button v-for="card in cards" :key="card.label" type="button" class="stat" @click="$emit('go', card.tab)">
         <span class="flex items-center justify-between">
           <span class="text-sm font-semibold text-ink-soft">{{ card.label }}</span>
@@ -12,12 +12,12 @@
       </button>
     </div>
 
-    <div class="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] items-start">
+    <div class="grid grid-cols-1 gap-6 @4xl:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] items-start">
       <div class="space-y-6">
         <!-- Quick actions -->
         <section class="panel">
           <h2 class="panel-title">Quick actions</h2>
-          <div class="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
+          <div class="mt-4 grid grid-cols-1 gap-3 @xl:grid-cols-3">
             <button v-for="a in actions" :key="a.label" type="button" class="action" @click="$emit('create', a.tab)">
               <Icon :name="a.icon" class="h-5 w-5 text-maroon" />
               {{ a.label }}

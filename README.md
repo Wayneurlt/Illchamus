@@ -1,29 +1,44 @@
 # Illchamus Community CBO website
 
-Website for Illchamus Community CBO (ICDO), Baringo County, Kenya. Built with Nuxt 3, Tailwind CSS 4 and a small built-in admin, in English and Kiswahili.
+Website for Illchamus Community CBO (ICDO), Baringo County, Kenya. Built with Nuxt 3, Tailwind CSS 4, Prisma and a Neon Postgres database, with a built-in admin, in English and Kiswahili.
 
 ## Running it locally
-
-```bash
-npm install
-npm run dev          # http://localhost:3000
-```
 
 Create a `.env` file in the project folder:
 
 ```bash
+# Neon: the pooled URL for the site, and the same URL without "-pooler" for migrations
+DATABASE_URL=postgresql://…-pooler.…neon.tech/neondb?sslmode=require&connect_timeout=15
+DIRECT_URL=postgresql://….neon.tech/neondb?sslmode=require&connect_timeout=15
 NUXT_SESSION_PASSWORD=a-long-random-string-of-at-least-32-characters
-NUXT_ADMIN_PASSWORD=choose-an-admin-password
+NUXT_ADMIN_PASSWORD=the-starting-admin-password
 # Optional: email delivery (see below)
 NUXT_RESEND_API_KEY=
 NUXT_RESEND_AUDIENCE_ID=
 ```
 
-Content you add locally is saved in `.data/site/` (not committed to git).
+Then:
+
+```bash
+npm install          # also generates the Prisma client
+npm run db:deploy    # create/update the database tables
+npm run db:seed      # starter posts, team roles and the admin password (safe to re-run)
+npm run dev          # http://localhost:3000
+```
+
+### Database commands
+
+| Command | What it does |
+| --- | --- |
+| `npm run db:migrate` | After changing `prisma/schema.prisma`: create and apply a new migration |
+| `npm run db:deploy` | Apply existing migrations (used by the deploy) |
+| `npm run db:seed` | Add starter content if it's missing; never overwrites edits |
+| `npm run db:studio` | Browse and edit the database in your browser |
+| `npm run admin:reset-password` | Set the admin password back to `NUXT_ADMIN_PASSWORD` (signs everyone out) |
 
 ## Managing content (no code needed)
 
-Go to **`/admin`** and sign in with the admin password. From there you can:
+Go to **`/admin`** and sign in with the admin password. You can change it under **Account & security**. From there you can:
 
 - **News** – write, edit, hide or delete posts, with photos. Use the toolbar for headings, bold text, links, lists and photos; press *Preview* to check.
 - **Events** – add events to the calendar on `/events` (single or multi-day, with times in Kenya time).
@@ -48,14 +63,16 @@ Pushing to `main` builds the site and deploys it to the Google Cloud VM with PM2
 
 | Secret | Required | Purpose |
 | --- | --- | --- |
+| `DATABASE_URL` | yes | Neon pooled connection string (used by the site) |
+| `DIRECT_URL` | yes | Neon direct connection string (used for migrations during deploy) |
 | `NUXT_SESSION_PASSWORD` | yes | Encrypts admin sessions (32+ random characters) |
-| `NUXT_ADMIN_PASSWORD` | yes | Password for `/admin` |
+| `NUXT_ADMIN_PASSWORD` | yes | Starting password for `/admin` (the saved one in the database takes over once set) |
 | `NUXT_PUBLIC_SITE_URL` | recommended | Public address, e.g. `https://illchamus.org` (used in share previews and the sitemap) |
 | `NUXT_RESEND_API_KEY` | optional | Turns on email delivery |
 | `NUXT_RESEND_AUDIENCE_ID` | optional | Newsletter audience in Resend |
 | `NUXT_MAIL_FROM` | optional | Sender address once your domain is verified |
 
-Saved content lives on the server in `/home/tiny/temi/data`, outside the build folder, so deploys never overwrite it. **Back this folder up regularly.**
+All content (news, events, team, messages, subscribers and uploaded photos) is stored in the Neon database, so deploys never touch it. Neon keeps automatic backups; you can also restore to an earlier point from the Neon console.
 
 ## Where things are
 
@@ -66,5 +83,6 @@ Saved content lives on the server in `/home/tiny/temi/data`, outside the build f
 | Brand colours and shared styles | `assets/css/main.css` |
 | Pages | `pages/` |
 | Server API (forms, admin, sitemap) | `server/` |
+| Database schema, migrations and seed | `prisma/` |
 
 Search engines get a live `sitemap.xml`, `robots.txt`, share-preview tags on every page and structured data for the organisation, news articles and events.

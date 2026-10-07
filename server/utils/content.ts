@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 import type { H3Event } from "h3";
 
-// ---------- Types shared by the public API and the admin ----------
+// ---------- JSON shapes shared by the public API and the admin ----------
 
 export interface Post {
   slug: string;
@@ -67,34 +67,6 @@ export interface Subscriber {
   source: string;
   lang?: string;
   createdAt: string;
-}
-
-export type Collection = "posts" | "events" | "team" | "messages" | "subscribers";
-
-// ---------- Storage helpers (one JSON file per item) ----------
-
-export const store = () => useStorage("site");
-
-export async function listItems<T>(collection: Collection): Promise<T[]> {
-  const s = store();
-  const keys = (await s.getKeys(collection)).filter((k) => k.endsWith(".json"));
-  const items = await Promise.all(keys.map((k) => s.getItem<T>(k)));
-  return items.filter((i): i is Awaited<T> & NonNullable<T> => i != null) as T[];
-}
-
-export const itemKey = (collection: Collection, id: string) => `${collection}:${safeId(id)}.json`;
-
-export async function getItem<T>(collection: Collection, id: string) {
-  return store().getItem<T>(itemKey(collection, id));
-}
-
-export async function putItem<T>(collection: Collection, id: string, value: T) {
-  await store().setItem(itemKey(collection, id), value as never);
-  return value;
-}
-
-export async function removeItem(collection: Collection, id: string) {
-  await store().removeItem(itemKey(collection, id));
 }
 
 export const newId = () => randomUUID().replace(/-/g, "").slice(0, 16);

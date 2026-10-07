@@ -1,5 +1,5 @@
 <template>
-  <div class="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] items-start">
+  <div class="grid grid-cols-1 gap-6 @4xl:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] items-start">
     <!-- Change password -->
     <form class="card" @submit.prevent="submit">
       <div class="flex items-center gap-3">
@@ -57,7 +57,7 @@
           A custom password is in use. It was last changed on <b class="text-ink">{{ changedLabel }}</b>.
         </p>
         <p v-else class="mt-4 text-[15px] text-ink-soft">
-          The admin is using the password set on the server (<code>NUXT_ADMIN_PASSWORD</code>). Changing it here replaces it.
+          The admin is using the starting password from <code>NUXT_ADMIN_PASSWORD</code>. Changing it here replaces it.
         </p>
       </section>
 
@@ -68,8 +68,8 @@
           <h2 class="text-lg font-bold tracking-tight text-ink">Forgot the password?</h2>
         </div>
         <p class="mt-4 text-[15px] text-ink-soft">
-          Whoever manages the server can delete the file <code>meta/admin-password.json</code> in the site's data folder
-          (<code>/home/tiny/temi/data</code>). The admin then goes back to the server password in <code>NUXT_ADMIN_PASSWORD</code>.
+          Whoever manages the website can put a new password in <code>NUXT_ADMIN_PASSWORD</code> and run
+          <code>npm run admin:reset-password</code>. That replaces the saved password and signs everyone out.
         </p>
       </section>
 

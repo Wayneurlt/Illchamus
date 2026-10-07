@@ -1,5 +1,3 @@
-import type { Message } from "../utils/content";
-
 // Donation pledges: saves the donor's details and alerts the team, who follow up
 // with payment instructions (M-Pesa, bank transfer or PayPal).
 export default defineEventHandler(async (event) => {
@@ -17,19 +15,11 @@ export default defineEventHandler(async (event) => {
   if (!EMAIL_RE.test(email)) fail(400, "email_invalid");
   if (!Number.isFinite(amount) || amount < 1 || amount > 100_000_000) fail(400, "amount_invalid");
 
-  const record: Message = {
-    id: `${Date.now()}-${newId().slice(0, 6)}`,
-    kind: "pledge",
-    name,
-    email,
-    phone: phone || undefined,
-    amount,
-    frequency,
-    emailed: false,
-    createdAt: new Date().toISOString(),
-  };
+  const saved = await prisma.message.create({
+    data: { kind: "pledge", name, email, phone: phone || null, amount, frequency },
+  });
 
-  record.emailed = await notifyOrg(
+  const emailed = await notifyOrg(
     `New donation pledge: KES ${amount.toLocaleString("en-US")} (${frequency}) — ${name}`,
     [
       ["Name", name],
@@ -40,6 +30,6 @@ export default defineEventHandler(async (event) => {
     ],
     email
   );
-  await putItem("messages", record.id, record);
+  if (emailed) await prisma.message.update({ where: { id: saved.id }, data: { emailed: true } });
   return { ok: true };
 });
