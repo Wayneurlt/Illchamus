@@ -76,20 +76,34 @@
       <!-- Email -->
       <section class="card">
         <div class="flex items-center gap-3">
-          <span class="icon-tile" :class="status?.mail ? 'bg-leaf-soft text-leaf' : 'bg-sun-soft text-maroon'">
-            <Icon :name="status?.mail ? 'heroicons:envelope' : 'heroicons:exclamation-triangle'" class="h-5 w-5" />
+          <span class="icon-tile" :class="mailHealthy ? 'bg-leaf-soft text-leaf' : 'bg-sun-soft text-maroon'">
+            <Icon :name="mailHealthy ? 'heroicons:envelope' : 'heroicons:exclamation-triangle'" class="h-5 w-5" />
           </span>
           <h2 class="text-lg font-bold tracking-tight text-ink">Email delivery</h2>
         </div>
         <p class="mt-4 text-[15px] text-ink-soft">
           <template v-if="status?.mail">
-            Messages and pledges are emailed to <b class="text-ink">{{ status.contactTo }}</b>.
+            Messages and pledges are sent to <b class="text-ink">{{ status.contactTo }}</b>.
             <template v-if="status.audience">New subscribers are also added to your Resend audience.</template>
           </template>
           <template v-else>
             Not set up yet. Messages are saved here but not emailed to {{ status?.contactTo }}. Add <code>NUXT_RESEND_API_KEY</code> on the server to turn emails on.
           </template>
         </p>
+        <div v-if="status?.lastMail && !status.lastMail.ok" class="mt-4 rounded-xl bg-red-50 p-3 text-sm text-red-800" role="alert">
+          <b>The last email failed</b> ({{ new Date(status.lastMail.at).toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short" }) }}).
+          Messages are still saved here.<br />
+          <span class="text-red-700">Reason from Resend: {{ status.lastMail.error }}</span>
+        </div>
+        <div v-if="status?.mail" class="mt-4 flex flex-wrap items-center gap-3">
+          <button type="button" class="btn btn-outline btn-sm" :disabled="testing" @click="sendTest">
+            <Icon :name="testing ? 'heroicons:arrow-path' : 'heroicons:paper-airplane'" class="h-4 w-4" :class="testing ? 'animate-spin' : ''" />
+            {{ testing ? "Sending…" : "Send test email" }}
+          </button>
+          <span v-if="testResult" class="text-sm font-semibold" :class="testResult.ok ? 'text-leaf' : 'text-red-700'" role="status">
+            {{ testResult.ok ? `Sent. Check ${status.contactTo}.` : "Failed. See the reason above." }}
+          </span>
+        </div>
       </section>
     </div>
   </div>
@@ -97,9 +111,34 @@
 
 <script setup lang="ts">
 const props = defineProps<{
-  status: { mail: boolean; audience: boolean; contactTo: string; passwordSource: "custom" | "server"; passwordChangedAt: string | null; minPasswordLength: number } | null;
+  status: {
+    mail: boolean;
+    audience: boolean;
+    contactTo: string;
+    passwordSource: "custom" | "server";
+    passwordChangedAt: string | null;
+    minPasswordLength: number;
+    impactUpdatedAt?: string | null;
+    lastMail?: { ok: boolean; error?: string; at: string } | null;
+  } | null;
 }>();
 const emit = defineEmits<{ changed: [] }>();
+
+const mailHealthy = computed(() => !!props.status?.mail && props.status.lastMail?.ok !== false);
+const testing = ref(false);
+const testResult = ref<{ ok: boolean } | null>(null);
+const sendTest = async () => {
+  testing.value = true;
+  testResult.value = null;
+  try {
+    testResult.value = await $fetch<{ ok: boolean }>("/api/admin/test-email", { method: "POST" });
+  } catch (e) {
+    testResult.value = { ok: false };
+  } finally {
+    testing.value = false;
+    emit("changed"); // reload status so the latest result shows
+  }
+};
 
 const current = ref("");
 const next = ref("");

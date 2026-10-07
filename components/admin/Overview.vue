@@ -100,6 +100,8 @@ const props = defineProps<{
   subscribers: Subscriber[];
   mail: boolean;
   passwordCustom: boolean;
+  impactConfirmed: boolean;
+  mailFailing: boolean;
   lastSeen: string;
   today: string;
 }>();
@@ -127,8 +129,10 @@ const todos = computed(() => {
   if (unnamed) list.push({ text: `Add names and photos for ${unnamed} leadership role${unnamed > 1 ? "s" : ""}`, tab: "team" });
   const noPhoto = props.team.filter((t) => t.name !== "Name coming soon" && !t.photo).length;
   if (noPhoto) list.push({ text: `Add photos for ${noPhoto} team member${noPhoto > 1 ? "s" : ""}`, tab: "team" });
+  if (!props.impactConfirmed) list.push({ text: "Check and confirm the impact figures shown on the website", tab: "impact" });
   if (!upcoming.value.length) list.push({ text: "Add upcoming events to the calendar", tab: "events" });
   if (!props.mail) list.push({ text: "Turn on email delivery so messages reach your inbox", tab: "settings" });
+  else if (props.mailFailing) list.push({ text: "Emails are failing to send. Messages are saved here; see Account & security", tab: "settings" });
   if (!props.passwordCustom) list.push({ text: "Change the admin password from the server default", tab: "settings" });
   return list;
 });

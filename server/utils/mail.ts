@@ -3,6 +3,25 @@
 
 const RESEND = "https://api.resend.com";
 
+/** Remembers how the most recent email attempt went, so the admin can show problems. */
+async function recordMailResult(error?: string) {
+  const value = JSON.stringify({ ok: !error, error: error?.slice(0, 400), at: new Date().toISOString() });
+  try {
+    await prisma.setting.upsert({ where: { key: "mail_status" }, create: { key: "mail_status", value }, update: { value } });
+  } catch {
+    // Never let bookkeeping break a form submission.
+  }
+}
+
+export async function lastMailResult(): Promise<{ ok: boolean; error?: string; at: string } | null> {
+  const row = await prisma.setting.findUnique({ where: { key: "mail_status" } });
+  try {
+    return row ? JSON.parse(row.value) : null;
+  } catch {
+    return null;
+  }
+}
+
 const escapeHtml = (s: string) =>
   s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
 
@@ -45,9 +64,13 @@ export async function notifyOrg(subject: string, fields: [label: string, value?:
       text,
       html: `<div style="font-family:Arial,sans-serif;font-size:15px;color:#2e1414"><h2 style="margin:0 0 12px">${escapeHtml(subject)}</h2><table>${rows}</table><p style="color:#6a5853;font-size:13px;margin-top:20px">Sent from the Illchamus Community CBO website. Reply to this email to respond.</p></div>`,
     });
+    await recordMailResult();
     return true;
   } catch (error) {
     console.error("[mail]", error);
+    const detail = error instanceof Error ? error.message : String(error);
+    // Resend explains the problem in a JSON "message"; keep just that when present.
+    await recordMailResult(/"message":"([^"]+)"/.exec(detail)?.[1] || detail);
     return false;
   }
 }

@@ -53,6 +53,8 @@
         :subscribers="subscribers"
         :mail="!!status?.mail"
         :password-custom="status?.passwordSource === 'custom'"
+        :impact-confirmed="!!status?.impactUpdatedAt"
+        :mail-failing="status?.lastMail?.ok === false"
         :last-seen="messagesSeenAt"
         :today="today"
         @go="setTab"
@@ -60,6 +62,8 @@
       />
 
       <AdminSettings v-else-if="tab === 'settings'" :status="status" @changed="load" />
+
+      <AdminImpactForm v-else-if="tab === 'impact'" @saved="load" />
 
       <!-- News -->
       <section v-else-if="tab === 'posts'">
@@ -203,8 +207,8 @@ import type { AdminType } from "~/composables/useAdmin";
 definePageMeta({ layout: "admin", middleware: "admin" });
 useHead({ title: "Admin • Illchamus Community CBO", meta: [{ name: "robots", content: "noindex" }] });
 
-type Tab = "overview" | "posts" | "events" | "team" | "messages" | "subscribers" | "settings";
-const TABS: Tab[] = ["overview", "posts", "events", "team", "messages", "subscribers", "settings"];
+type Tab = "overview" | "posts" | "events" | "team" | "impact" | "messages" | "subscribers" | "settings";
+const TABS: Tab[] = ["overview", "posts", "events", "team", "impact", "messages", "subscribers", "settings"];
 const route = useRoute();
 const router = useRouter();
 const tab = computed<Tab>(() => (TABS.includes(route.query.tab as Tab) ? (route.query.tab as Tab) : "overview"));
@@ -220,7 +224,16 @@ const events = ref<SiteEvent[]>([]);
 const team = ref<TeamMember[]>([]);
 const messages = ref<Message[]>([]);
 const subscribers = ref<(Subscriber & { id: string })[]>([]);
-type Status = { mail: boolean; audience: boolean; contactTo: string; passwordSource: "custom" | "server"; passwordChangedAt: string | null; minPasswordLength: number };
+type Status = {
+  mail: boolean;
+  audience: boolean;
+  contactTo: string;
+  passwordSource: "custom" | "server";
+  passwordChangedAt: string | null;
+  minPasswordLength: number;
+  impactUpdatedAt: string | null;
+  lastMail: { ok: boolean; error?: string; at: string } | null;
+};
 const status = ref<Status | null>(null);
 const loadError = ref("");
 const loaded = ref(false);
@@ -252,6 +265,7 @@ const navGroups = computed(() => [
       { id: "posts", label: "News & stories", icon: "heroicons:newspaper", badge: posts.value.length || undefined, badgeTone: "muted" as const },
       { id: "events", label: "Events", icon: "heroicons:calendar-days", badge: events.value.filter((e) => (e.endDate || e.date) >= today).length || undefined, badgeTone: "muted" as const },
       { id: "team", label: "Team", icon: "heroicons:users", badge: unnamedTeam.value ? "!" : undefined, badgeTone: "alert" as const },
+      { id: "impact", label: "Impact & figures", icon: "heroicons:chart-bar", badge: status.value && !status.value.impactUpdatedAt ? "!" : undefined, badgeTone: "alert" as const },
     ],
   },
   {
@@ -269,6 +283,7 @@ const SECTION_COPY: Record<Tab, { title: string; text: string; add?: string }> =
   posts: { title: "News & stories", text: "Posts appear on the News page and the home page, newest first.", add: "New post" },
   events: { title: "Events", text: "Upcoming events show on the Events page and the home page.", add: "New event" },
   team: { title: "Leadership team", text: "Shown on the About page in the order below.", add: "Add person" },
+  impact: { title: "Impact & figures", text: "The numbers shown on the home and About pages, and in each program." },
   messages: { title: "Messages & pledges", text: "Everything sent through the Contact and Donate forms." },
   subscribers: { title: "Newsletter subscribers", text: "People who signed up for updates." },
   settings: { title: "Account & security", text: "Change the admin password and check email delivery." },

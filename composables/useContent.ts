@@ -1,4 +1,5 @@
 import type { Post, SiteEvent, TeamMember } from "~/server/utils/content";
+import { defaultImpact, type ImpactData } from "~/data/impact";
 
 export type PostSummary = Omit<Post, "body" | "bodySw">;
 export type { Post, SiteEvent, TeamMember };
@@ -21,3 +22,6 @@ export const useTeam = () => useFetch<TeamMember[]>("/api/team", { key: "team", 
 
 /** Today's date as YYYY-MM-DD in Kenya (EAT, UTC+3). */
 export const todayInKenya = () => new Date(Date.now() + 3 * 3600_000).toISOString().slice(0, 10);
+
+/** Impact figures (headline stats and program numbers), editable in the admin. */
+export const useImpact = () => useFetch<ImpactData>("/api/impact", { key: "impact", default: () => defaultImpact() });

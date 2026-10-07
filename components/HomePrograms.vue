@@ -81,8 +81,11 @@
 <script setup lang="ts">
 import { programs, toneClasses, type ProgramId } from "~/data/site";
 
-const { m } = useLang();
+const { m, tx } = useLang();
 const t = computed(() => m.value.home.programs);
+// Participants, duration and impact are editable in /admin → Impact & figures.
+const { data: impact } = await useImpact();
+const figures = (id: ProgramId) => impact.value.programs[id];
 const copy = (id: ProgramId) => m.value.programs[id];
 
 const selectedId = ref<ProgramId | null>(null);
@@ -91,9 +94,9 @@ const selected = computed(() => programs.find((p) => p.id === selectedId.value) 
 const facts = computed(() =>
   selected.value
     ? [
-        { label: t.value.participants, value: selected.value.participants },
-        { label: t.value.duration, value: copy(selected.value.id).duration },
-        { label: t.value.impact, value: copy(selected.value.id).impact },
+        { label: t.value.participants, value: figures(selected.value.id).participants },
+        { label: t.value.duration, value: tx(figures(selected.value.id).duration.en, figures(selected.value.id).duration.sw) },
+        { label: t.value.impact, value: tx(figures(selected.value.id).impact.en, figures(selected.value.id).impact.sw) },
       ]
     : []
 );

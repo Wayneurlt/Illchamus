@@ -24,6 +24,9 @@ const ERRORS: Record<string, string> = {
   password_too_long: "The new password is too long.",
   password_unchanged: "The new password must be different from the current one.",
   rate_limited: "Too many attempts. Please wait 15 minutes and try again.",
+  impact_text_required: "Every headline figure needs an English label.",
+  impact_number_invalid: "Figures must be whole numbers (no commas or symbols in the number box).",
+  impact_invalid: "Something is wrong with the figures. Please reload and try again.",
 };
 
 /** Readable message for an admin API error. */

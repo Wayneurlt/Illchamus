@@ -2,7 +2,11 @@
 export default defineEventHandler(async (event) => {
   await requireAdmin(event);
   const { resendApiKey, resendAudienceId, contactTo } = useRuntimeConfig();
-  const stored = await storedPassword();
+  const [stored, impact, mailResult] = await Promise.all([
+    storedPassword(),
+    prisma.setting.findUnique({ where: { key: "impact" }, select: { updatedAt: true } }),
+    lastMailResult(),
+  ]);
   return {
     mail: !!resendApiKey,
     audience: !!(resendApiKey && resendAudienceId),
@@ -10,5 +14,7 @@ export default defineEventHandler(async (event) => {
     passwordSource: stored ? ("custom" as const) : ("server" as const),
     passwordChangedAt: stored?.changedAt || null,
     minPasswordLength: MIN_PASSWORD_LENGTH,
+    impactUpdatedAt: impact?.updatedAt.toISOString() || null,
+    lastMail: mailResult,
   };
 });

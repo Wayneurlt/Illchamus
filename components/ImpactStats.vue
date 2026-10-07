@@ -1,7 +1,7 @@
 <template>
   <dl ref="root" class="grid grid-cols-2 lg:grid-cols-4 border-t border-ink/15">
     <div
-      v-for="(stat, i) in impactStats"
+      v-for="(stat, i) in stats"
       :key="i"
       class="pt-6 pb-2 pr-4 lg:px-6 first:lg:pl-0"
       :class="[
@@ -10,13 +10,13 @@
         i > 1 ? 'border-t border-ink/15 lg:border-t-0 mt-0' : '',
       ]"
     >
-      <dt class="sr-only">{{ m.stats[i] }}</dt>
+      <dt class="sr-only">{{ tx(stat.label.en, stat.label.sw) }}</dt>
       <dd>
         <span class="block text-[2.25rem] sm:text-5xl font-extrabold tracking-tight text-ink tabular-nums">
-          {{ stat.prefix || "" }}{{ format(display[i] ?? 0) }}{{ stat.suffix }}
+          {{ formatStat(stat, display[i] ?? stat.value) }}
         </span>
         <span class="mt-2 block text-sm sm:text-[15px] font-medium leading-snug text-ink-soft max-w-[14rem]">
-          {{ m.stats[i] }}
+          {{ tx(stat.label.en, stat.label.sw) }}
         </span>
       </dd>
     </div>
@@ -24,14 +24,17 @@
 </template>
 
 <script setup lang="ts">
-import { impactStats } from "~/data/site";
+import { formatStat } from "~/data/impact";
 
-const { m } = useLang();
+const { tx } = useLang();
+// Figures and labels are editable in /admin → Impact & figures.
+const { data: impact } = await useImpact();
+const stats = computed(() => impact.value.stats);
 
 const root = ref<HTMLElement | null>(null);
 // Render final values on the server so the numbers are never wrong without JS.
-const display = ref(impactStats.map((s) => s.value));
-const format = (n: number) => Math.round(n).toLocaleString("en-US");
+const display = ref<number[]>(stats.value.map((s) => s.value));
+watch(stats, (now) => (display.value = now.map((s) => s.value)));
 
 let observer: IntersectionObserver | undefined;
 
@@ -41,7 +44,7 @@ const animate = () => {
   const tick = (now: number) => {
     const t = Math.min((now - start) / duration, 1);
     const eased = 1 - Math.pow(1 - t, 3);
-    display.value = impactStats.map((s) => s.value * eased);
+    display.value = stats.value.map((s) => s.value * eased);
     if (t < 1) requestAnimationFrame(tick);
   };
   requestAnimationFrame(tick);
@@ -51,7 +54,7 @@ onMounted(() => {
   if (!root.value || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   const rect = root.value.getBoundingClientRect();
   if (rect.top < window.innerHeight) return; // already visible: keep final values
-  display.value = impactStats.map(() => 0);
+  display.value = stats.value.map(() => 0);
   observer = new IntersectionObserver(
     ([entry]) => {
       if (entry?.isIntersecting) {
